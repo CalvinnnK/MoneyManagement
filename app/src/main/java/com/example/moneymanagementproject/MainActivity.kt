@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.activity.result.IntentSenderRequest
+import androidx.navigation.fragment.findNavController
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -25,7 +26,14 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+
 import kotlin.math.log
 import kotlin.math.sign
 
@@ -99,6 +107,11 @@ class MainActivity : AppCompatActivity() {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "signInWithCredential:success")
                                         val user = mAuth.currentUser
+
+//                                        binding.newTransaction.setOnClickListener {
+//                                            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+//                                        }
+
 //                            updateUI(user)
                                     } else {
                                         // If sign in fails, display a message to the user.
@@ -120,47 +133,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-//
-//        setSupportActionBar(binding.toolbar)
-//
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-
-//        setContentView(R.layout.activity_main)
-        val googleSignIn: Button = findViewById(R.id.button_transaction)
-
-        mAuth = Firebase.auth
-
-        oneTapClient = Identity.getSignInClient(this)
-
-        signInRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    // Your server's client ID, not your Android client ID.
-                    .setServerClientId(getString(R.string.web_client_id))
-                    // Only show accounts previously used to sign in.
-                    .setFilterByAuthorizedAccounts(false)
-                    .build()
-            )
-            .build()
-
-        googleSignIn.setOnClickListener {
-            Log.d(TAG, "onCreate: bankge")
-            displaySignIn()
-        }
-    }
-
+    //function to display onetap sign in
     private fun displaySignIn(){
         Log.d(TAG, "displaySignIn: ")
         oneTapClient.beginSignIn(signInRequest)
@@ -179,6 +152,90 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, e.localizedMessage)
             }
     }
+
+    private fun signOutAuth(){
+        Firebase.auth.signOut()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+//
+//        setSupportActionBar(binding.toolbar)
+//
+//        val navController = findNavController(R.id.nav_host_fragment_content_main)
+//        appBarConfiguration = AppBarConfiguration(navController.graph)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//
+//        binding.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+//        setContentView(R.layout.activity_main)
+        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
+        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
+
+        mAuth = Firebase.auth
+
+        oneTapClient = Identity.getSignInClient(this)
+
+        signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    // Your server's client ID, not your Android client ID.
+                    .setServerClientId(getString(R.string.web_client_id))
+                    // Only show accounts previously used to sign in.
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+            )
+            .build()
+
+        googleSignIn.setOnClickListener {
+            displaySignIn()
+        }
+
+        googleSignOut.setOnClickListener{
+            signOutAuth()
+        }
+
+    }
+
+    fun basicReadWrite() {
+
+        // [START write_message]
+        // Write a message to the database
+        val database = Firebase.database
+        val myRef = database.getReference("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app")
+
+        myRef.setValue("Hello, World!")
+        // [END write_message]
+
+        // [START read_message]
+        // Read from the database
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val value = dataSnapshot.getValue<String>()
+                Log.d(TAG, "Value is: $value")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+        })
+        // [END read_message]
+    }
+
+
+
+
+
+
 
 }
 
