@@ -1,29 +1,30 @@
 package com.example.moneymanagementproject
 
-import android.app.ProgressDialog
+import android.app.Fragment
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.*
 import androidx.activity.result.IntentSenderRequest
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -37,15 +38,14 @@ import com.google.firebase.ktx.Firebase
 import kotlin.math.log
 import kotlin.math.sign
 
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
-
+    private lateinit var bottomNav : BottomNavigationView
     private lateinit var mAuth: FirebaseAuth
-
-
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
     private var showOneTapUI = true
 
@@ -56,30 +56,31 @@ class MainActivity : AppCompatActivity() {
 //    private val binding get() = _binding!!
 
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.menu_main, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        return when (item.itemId) {
+//            R.id.action_settings -> true
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
+//    override fun onSupportNavigateUp(): Boolean {
+//        val navController = findNavController(R.id.fragmentContainer)
+//        return navController.navigateUp(appBarConfiguration)
+//                || super.onSupportNavigateUp()
+//    }
 
     public override fun onStart() {
         super.onStart()
+        mAuth = Firebase.auth
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = mAuth.currentUser
 //        updateUI(currentUser)
@@ -159,8 +160,49 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
+        loadFragment(home())
+
+        // default page
+        val fragmentManager = supportFragmentManager
+
+
+//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+//        val navController = findNavController(R.id.fragmentContainer)
+//        bottomNavigationView.setupWithNavController(navController)
+
+        // Bottom nav bar, navigating to another pages (fragments)
+        bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNav.setOnItemReselectedListener {
+            fragmentManager.commit {
+                setReorderingAllowed(true)
+
+                when (it.itemId) {
+                    R.id.home_ic -> {
+                        Log.d(TAG, "Frag 1 page")
+                        loadFragment(home())
+                        Log.d(TAG, "Frag 1 page : Done")
+                        return@setOnItemReselectedListener
+                    }
+
+                    R.id.transaction_ic -> {
+                        Log.d(TAG, "Frag 2 page")
+                        loadFragment(transaction())
+                        Log.d(TAG, "Frag 2 page: Done")
+                        return@setOnItemReselectedListener
+                    }
+
+                    R.id.stats_ic -> {
+                        Log.d(TAG, "Frag 3 page")
+                        loadFragment(Statistics())
+                        Log.d(TAG, "Frag 3 page: Done")
+                        return@setOnItemReselectedListener
+                    }
+                }
+            }
+
 
 //
 //        setSupportActionBar(binding.toolbar)
@@ -174,41 +216,53 @@ class MainActivity : AppCompatActivity() {
 //                .setAction("Action", null).show()
 //        }
 //        setContentView(R.layout.activity_main)
-        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
-        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
+//        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
+//        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
 
-        mAuth = Firebase.auth
 
-        oneTapClient = Identity.getSignInClient(this)
+            mAuth = Firebase.auth
 
-        signInRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    // Your server's client ID, not your Android client ID.
-                    .setServerClientId(getString(R.string.web_client_id))
-                    // Only show accounts previously used to sign in.
-                    .setFilterByAuthorizedAccounts(false)
-                    .build()
-            )
-            .build()
+            oneTapClient = Identity.getSignInClient(this)
 
-        googleSignIn.setOnClickListener {
-            displaySignIn()
+            signInRequest = BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(
+                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        // Your server's client ID, not your Android client ID.
+                        .setServerClientId(getString(R.string.web_client_id))
+                        // Only show accounts previously used to sign in.
+                        .setFilterByAuthorizedAccounts(false)
+                        .build()
+                )
+                .build()
+
+//        googleSignIn.setOnClickListener {
+//            displaySignIn()
+//        }
+//
+//        googleSignOut.setOnClickListener{
+//            signOutAuth()
+//        }
+
         }
-
-        googleSignOut.setOnClickListener{
-            signOutAuth()
-        }
-
     }
+
+
+    private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
+        val transc = supportFragmentManager.beginTransaction()
+        transc.replace(R.id.fragmentContainer, fragment)
+        transc.addToBackStack(null)
+        transc.commit()
+    }
+
 
     fun basicReadWrite() {
 
         // [START write_message]
         // Write a message to the database
         val database = Firebase.database
-        val myRef = database.getReference("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app")
+        val myRef =
+            database.getReference("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app")
 
         myRef.setValue("Hello, World!")
         // [END write_message]
@@ -230,12 +284,7 @@ class MainActivity : AppCompatActivity() {
         })
         // [END read_message]
     }
-
-
-
-
-
-
-
 }
+
+
 
