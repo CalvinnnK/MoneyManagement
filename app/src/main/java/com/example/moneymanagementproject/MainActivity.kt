@@ -1,22 +1,18 @@
 package com.example.moneymanagementproject
 
-import android.app.Fragment
+
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.activity.result.IntentSenderRequest
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -24,21 +20,14 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-
-import kotlin.math.log
-import kotlin.math.sign
-
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomNav : BottomNavigationView
     private lateinit var mAuth: FirebaseAuth
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
-    private var showOneTapUI = true
 
     private lateinit  var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
@@ -160,8 +148,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setContentView(R.layout.activity_main)
         loadFragment(home())
 
@@ -178,7 +166,6 @@ class MainActivity : AppCompatActivity() {
         bottomNav.setOnItemReselectedListener {
             fragmentManager.commit {
                 setReorderingAllowed(true)
-
                 when (it.itemId) {
                     R.id.home_ic -> {
                         Log.d(TAG, "Frag 1 page")
@@ -204,18 +191,19 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-//
-//        setSupportActionBar(binding.toolbar)
+//        setSupportActionBar(binding.addTransc)
 //
 //        val navController = findNavController(R.id.nav_host_fragment_content_main)
 //        appBarConfiguration = AppBarConfiguration(navController.graph)
 //        setupActionBarWithNavController(navController, appBarConfiguration)
-//
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-//        setContentView(R.layout.activity_main)
+
+            binding.addTransc.setOnClickListener {
+                Toast.makeText(this, "Replace with your own action", Toast.LENGTH_LONG).show()
+                Log.d(TAG, "Me pop up")
+            }
+
+            setContentView(R.layout.activity_main)
+
 //        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
 //        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
 
@@ -243,9 +231,9 @@ class MainActivity : AppCompatActivity() {
 //        googleSignOut.setOnClickListener{
 //            signOutAuth()
 //        }
-
         }
     }
+
 
 
     private fun loadFragment(fragment: androidx.fragment.app.Fragment) {

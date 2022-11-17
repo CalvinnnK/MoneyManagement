@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.moneymanagementproject.MainActivity">
 
     <item
         android:id="@+id/home_ic"
         android:title="home"
-        android:icon="@drawable/home_img"/>
+        android:icon="@drawable/home_img" />
 
     <item android:id="@+id/transaction_ic"
         android:title="Transaction"
-        android:icon="@drawable/books_img"/>
+        android:icon="@drawable/books_img" />
     <item
         android:id="@+id/stats_ic"
         android:title="Statistics"
-        android:icon="@drawable/arrow_up"/>
+        android:icon="@drawable/arrow_up" />
     <item
         android:id="@+id/settings_ic"
         android:title="settings"
-        android:icon="@drawable/home_img"/>
+        android:icon="@drawable/settings_img" />
 </menu>
