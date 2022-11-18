@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -40,31 +42,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit  var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
 
-//    private var _binding :ActivityMainBinding? = null
-//    private val binding get() = _binding!!
-
-
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.menu_main, menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.fragmentContainer)
-//        return navController.navigateUp(appBarConfiguration)
-//                || super.onSupportNavigateUp()
-//    }
 
     public override fun onStart() {
         super.onStart()
@@ -204,8 +181,27 @@ class MainActivity : AppCompatActivity() {
 
             setContentView(R.layout.activity_main)
 
+            //Finding ID in act main
+
 //        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
 //        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
+
+            
+            val newTransc: FloatingActionButton = findViewById(R.id.addTransc)
+            val botNav : BottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+
+
+            botNav.setOnClickListener{
+                Log.d(TAG, "onCreate: Oji")
+            }
+
+
+//            newTransc.setOnClickListener{
+//                Log.d(TAG,"masuk jozzz")
+//                val intent = Intent(this, AddTransaction::class.java)
+//                startActivity(intent)
+//            }
 
 
             mAuth = Firebase.auth
@@ -231,6 +227,7 @@ class MainActivity : AppCompatActivity() {
 //        googleSignOut.setOnClickListener{
 //            signOutAuth()
 //        }
+
         }
     }
 
@@ -271,6 +268,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
         // [END read_message]
+    }
+
+    fun popUpWindow(view: View) {
+        Log.d(TAG,"masuk jozzz")
+        val intent = Intent(this, AddTransaction::class.java)
+        startActivity(intent)
     }
 }
 
