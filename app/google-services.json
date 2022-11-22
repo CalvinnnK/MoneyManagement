@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "31602372563",
+    "firebase_url": "https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "money-management-app-9810f",
     "storage_bucket": "money-management-app-9810f.appspot.com"
   },
@@ -35,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "31602372563-o111145i6at7vu4n3e62i1qmnshd92fd.apps.googleusercontent.com",
+              "client_id": "31602372563-e0s86pjvcacr687bds9knogoflvljqpq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

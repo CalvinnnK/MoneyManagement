@@ -231,8 +231,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
         val transc = supportFragmentManager.beginTransaction()
         transc.replace(R.id.fragmentContainer, fragment)
@@ -240,35 +238,6 @@ class MainActivity : AppCompatActivity() {
         transc.commit()
     }
 
-
-    fun basicReadWrite() {
-
-        // [START write_message]
-        // Write a message to the database
-        val database = Firebase.database
-        val myRef =
-            database.getReference("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app")
-
-        myRef.setValue("Hello, World!")
-        // [END write_message]
-
-        // [START read_message]
-        // Read from the database
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                val value = dataSnapshot.getValue<String>()
-                Log.d(TAG, "Value is: $value")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
-        // [END read_message]
-    }
 
     fun popUpWindow(view: View) {
         Log.d(TAG,"masuk jozzz")
