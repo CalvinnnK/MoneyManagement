@@ -13,4 +13,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="databaseReference"> https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/ </string>
+
+    <string-array name="item_wallet">
+        <item>Asu</item>
+        <item>Kucing</item>
+    </string-array>
 </resources>

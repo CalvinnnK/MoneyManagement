@@ -166,7 +166,9 @@ class MainActivity : AppCompatActivity() {
         }
 
             binding.addTransc.setOnClickListener {
+                var popDialog = addTransactionDialog()
 
+                popDialog.show(supportFragmentManager,"add Transaction Dialog")
             }
 
 
