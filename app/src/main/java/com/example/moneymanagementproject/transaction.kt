@@ -34,6 +34,12 @@ class transaction : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerViewTransaction.adapter = adapter
+
+        binding.testingFAB.setOnClickListener{
+            addTransactionDialog().show(childFragmentManager, "")
+        }
+
+
     }
 
 

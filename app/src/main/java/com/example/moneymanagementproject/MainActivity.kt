@@ -6,14 +6,20 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
+import android.view.SurfaceControl
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
@@ -42,6 +48,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit  var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
 
+    // nav controller
+    private lateinit var navController: NavController
+
+
 //    Array list buat transaksi
     public lateinit var listTransaction: ArrayList<SaveData>
 
@@ -63,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        //buat login dan sign in
         val credential = oneTapClient.getSignInCredentialFromIntent(data)
         val idToken = credential.googleIdToken
         val username = credential.id
@@ -136,66 +147,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setContentView(R.layout.activity_main)
-        loadFragment(home())
 
-        // default page
-        val fragmentManager = supportFragmentManager
+        // default fragment
+        loadFragment(home())
 
         // Bottom nav bar, navigating to another pages (fragments)
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNav.setOnItemReselectedListener {
-            fragmentManager.commit {
-                setReorderingAllowed(true)
-                when (it.itemId) {
-                    R.id.home_ic -> {
-                        Log.d(TAG, "Frag 1 page")
-                        loadFragment(home())
-                        Log.d(TAG, "Frag 1 page : Done")
-                        return@setOnItemReselectedListener
-                    }
 
-                    R.id.transaction_ic -> {
-                        Log.d(TAG, "Frag 2 page")
-                        loadFragment(transaction())
-                        Log.d(TAG, "Frag 2 page: Done")
-                        return@setOnItemReselectedListener
-                    }
-
-                    R.id.stats_ic -> {
-                        Log.d(TAG, "Frag 3 page")
-                        loadFragment(Statistics())
-                        Log.d(TAG, "Frag 3 page: Done")
-                        return@setOnItemReselectedListener
-                    }
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.home_ic -> loadFragment(home())
+                R.id.transaction_ic -> loadFragment(transaction())
+                R.id.stats_ic -> loadFragment(Statistics())
+                else -> {
                 }
             }
-
-
-//        setSupportActionBar(binding.addTransc)
-//
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
+            true
+        }
 
             binding.addTransc.setOnClickListener {
-                Toast.makeText(this, "Replace with your own action", Toast.LENGTH_LONG).show()
-                Log.d(TAG, "Me pop up")
+
             }
 
-            setContentView(R.layout.activity_main)
 
             //Finding ID in act main
-
 //        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
 //        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
-
-            val newTransc: FloatingActionButton = findViewById(R.id.addTransc)
-            val botNav : BottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-            botNav.setOnClickListener{
-                Log.d(TAG, "onCreate: Oji")
-            }
 
 
             mAuth = Firebase.auth
@@ -221,12 +198,13 @@ class MainActivity : AppCompatActivity() {
 //        googleSignOut.setOnClickListener{
 //            signOutAuth()
 //        }
-        }
-
         readDatabase()
     }
 
-    private val childEveentListener = object: ChildEventListener{
+
+
+
+private val childEveentListener = object: ChildEventListener{
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
             val save = snapshot.getValue(SaveData::class.java)
             save?.id = snapshot.key
@@ -257,7 +235,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
+    private fun loadFragment(fragment: Fragment) {
         val transc = supportFragmentManager.beginTransaction()
         transc.replace(R.id.fragmentContainer, fragment)
         transc.addToBackStack(null)
