@@ -12,4 +12,5 @@
     <string name="web_client_id">31602372563-e0s86pjvcacr687bds9knogoflvljqpq.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="databaseReference"> https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/ </string>
 </resources>

@@ -11,6 +11,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -24,9 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -41,6 +41,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit  var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
+
+//    Array list buat transaksi
+    public lateinit var listTransaction: ArrayList<SaveData>
+
+    private val _result = MutableLiveData<Exception?>()
+    val result: LiveData<Exception?> get() = _result
+
+    private val _saveData = MutableLiveData<SaveData?>()
+    val savedata: LiveData<SaveData?> get() = _saveData
 
 
     public override fun onStart() {
@@ -133,11 +142,6 @@ class MainActivity : AppCompatActivity() {
         // default page
         val fragmentManager = supportFragmentManager
 
-
-//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-//        val navController = findNavController(R.id.fragmentContainer)
-//        bottomNavigationView.setupWithNavController(navController)
-
         // Bottom nav bar, navigating to another pages (fragments)
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setOnItemReselectedListener {
@@ -186,22 +190,12 @@ class MainActivity : AppCompatActivity() {
 //        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
 //        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
 
-            
             val newTransc: FloatingActionButton = findViewById(R.id.addTransc)
             val botNav : BottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-
 
             botNav.setOnClickListener{
                 Log.d(TAG, "onCreate: Oji")
             }
-
-
-//            newTransc.setOnClickListener{
-//                Log.d(TAG,"masuk jozzz")
-//                val intent = Intent(this, AddTransaction::class.java)
-//                startActivity(intent)
-//            }
 
 
             mAuth = Firebase.auth
@@ -227,8 +221,40 @@ class MainActivity : AppCompatActivity() {
 //        googleSignOut.setOnClickListener{
 //            signOutAuth()
 //        }
+        }
+
+        readDatabase()
+    }
+
+    private val childEveentListener = object: ChildEventListener{
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val save = snapshot.getValue(SaveData::class.java)
+            save?.id = snapshot.key
+            _saveData.value = save!!
 
         }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
+    private fun readDatabase() {
+        val ref = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
+
     }
 
     private fun loadFragment(fragment: androidx.fragment.app.Fragment) {

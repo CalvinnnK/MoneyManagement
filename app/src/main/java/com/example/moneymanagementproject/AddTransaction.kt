@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -25,6 +26,7 @@ class AddTransaction : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
     private lateinit var category: EditText
     private lateinit var savebtn: Button
 
+    private lateinit var viewModel : TransactionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class AddTransaction : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
         }
 
         savebtn.setOnClickListener{
-            saveTransaction()
+//            saveTransaction()
         }
 
         exit.setOnClickListener{

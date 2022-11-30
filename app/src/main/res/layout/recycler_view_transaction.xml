@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/trans_ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="gambar" />
+
+        <TextView
+            android:id="@+id/trans_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:text="tulisan" />
+
+        <TextView
+            android:id="@+id/trans_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kucing"
+            android:layout_marginStart="320dp"/>
+
+        1
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="#D5D5D5" />
+
+
+</LinearLayout>
