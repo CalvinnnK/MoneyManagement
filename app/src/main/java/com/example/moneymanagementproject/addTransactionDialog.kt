@@ -1,23 +1,32 @@
 package com.example.moneymanagementproject
 
+import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionDialogBinding
 import com.example.moneymanagementproject.databinding.FragmentTransactionBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
-class addTransactionDialog : DialogFragment() {
+class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     private var _binding: FragmentAddTransactionDialogBinding? = null
     private val binding get() = _binding!!
+    private lateinit var activity: Activity
 
     private lateinit var autoCompleteTextView: AutoCompleteTextView
 
+
 //    array list wallet
+
     var walletList = ArrayList<String>()
     var categoryList = ArrayList<String>()
 
@@ -51,12 +60,34 @@ class addTransactionDialog : DialogFragment() {
         binding.categoryAutoComplete.setAdapter(arrayAdapter2)
 
 
+
+
         return  binding.root
+    }
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        this.activity = activity
+    }
+
+    fun showDateDialog(){
+        val datePicker: DatePickerDialog = DatePickerDialog(activity,
+            this,
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        datePicker.show()
     }
 
 
     fun addWallet(input: String){
         this.walletList.add(input)
+    }
+
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        val selectedDate: String = "$p3/$p2/$p1"
+        binding.dateText.text = selectedDate
     }
 
 }

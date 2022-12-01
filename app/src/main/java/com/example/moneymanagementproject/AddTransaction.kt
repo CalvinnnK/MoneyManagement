@@ -80,7 +80,7 @@ class AddTransaction : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
             val saving = SaveData(dataID, a1, a2, a3, a4, a5)
 
             if (dataID != null) {
-                dataRef.child(dataID).setValue(saving).addOnCompleteListener{
+                dataRef.child("transaksi").child(dataID).setValue(saving).addOnCompleteListener{
                     Toast.makeText(applicationContext,"Transaction Saved", Toast.LENGTH_LONG).show()
                     backToMain()
                 }
@@ -126,7 +126,6 @@ class AddTransaction : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
             Calendar.getInstance().get(Calendar.MONTH),
             Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         );
-
         datePicker.show()
     }
 
