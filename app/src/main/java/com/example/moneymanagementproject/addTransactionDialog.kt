@@ -2,9 +2,11 @@ package com.example.moneymanagementproject
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionDialogBinding
 import com.example.moneymanagementproject.databinding.FragmentTransactionBinding
+import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -30,11 +33,11 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     //get all variable in add transaction fragment
     private lateinit var inputAmount: EditText
-    private lateinit var dateBtn: Button
     private lateinit var dateText: TextView
     private lateinit var inputWallet: AutoCompleteTextView
     private lateinit var inputCategory: AutoCompleteTextView
     private lateinit var inputNotes: EditText
+    private lateinit var saveBtn: Button
 
 //    array list wallet
 
@@ -55,17 +58,6 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         categoryList.add("Makan")
         categoryList.add("Necessities")
 
-        //set date text
-//        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-//        val current = LocalDateTime.now().format(formatter)
-        dateText.text = getCurrentDate()
-
-
-    }
-
-    fun getCurrentDate():String{
-        val sdf = SimpleDateFormat("yyyy/MM/dd")
-        return sdf.format(Date())
     }
 
     override fun onCreateView(
@@ -74,6 +66,13 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     ): View? {
         _binding = FragmentAddTransactionDialogBinding.inflate(inflater, container, false)
 
+        //setting id
+        inputAmount = binding.inputAmount
+        inputWallet = binding.walletAutoComplete
+        inputCategory = binding.categoryAutoComplete
+        inputNotes = binding.inputNotes
+        dateText = binding.dateText
+
 
         // Membuat menu drop list
         val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_wallet, walletList)
@@ -81,12 +80,18 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         binding.walletAutoComplete.setAdapter(arrayAdapter1)
         binding.categoryAutoComplete.setAdapter(arrayAdapter2)
 
+        // default date today
+        dateText.text = getCurrentDate()
+
 
         //show date dialog
         binding.dateBtn.setOnClickListener{
             showDateDialog()
         }
 
+        binding.addTransaction.setOnClickListener(){
+            saveTransaction()
+        }
 
         return  binding.root
     }
@@ -111,10 +116,48 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         this.walletList.add(input)
     }
 
+    private fun getCurrentDate():String{
+        val sdf = SimpleDateFormat("yyyy/MM/dd")
+        return sdf.format(Date())
+    }
+
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         val selectedDate: String = "$p3/$p2/$p1"
         binding.dateText.text = selectedDate
     }
+
+    fun saveTransaction(){
+        val a1 = inputAmount.text.toString().trim()
+        val a2 = dateText.text.toString().trim()
+        val a3 = inputWallet.text.toString().trim()
+        val a4 = inputCategory.text.toString().trim()
+        val a5 = inputNotes.text.toString().trim()
+        val dataID = UUID.randomUUID().toString()
+
+        Log.d(ContentValues.TAG, "saveTransaction:  " + dataID)
+
+        if(a1.isEmpty() || a3.isEmpty() ){
+            inputAmount.error = "Please input Amount"
+            inputWallet.error = "Please input wallet"
+            inputCategory.error = "Please Input Category"
+        }
+        else{
+            val dataRef = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
+
+            val saving = SaveData(dataID, a1, a2, a3, a4, a5)
+
+            if (dataID != null) {
+                dataRef.child("transaksi").child(dataID).setValue(saving).addOnCompleteListener{
+                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+
+
+
+
 
 }
 
