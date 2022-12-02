@@ -3,16 +3,20 @@ package com.example.moneymanagementproject
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.DatePicker
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionDialogBinding
 import com.example.moneymanagementproject.databinding.FragmentTransactionBinding
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,11 +28,19 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     private lateinit var autoCompleteTextView: AutoCompleteTextView
 
+    //get all variable in add transaction fragment
+    private lateinit var inputAmount: EditText
+    private lateinit var dateBtn: Button
+    private lateinit var dateText: TextView
+    private lateinit var inputWallet: AutoCompleteTextView
+    private lateinit var inputCategory: AutoCompleteTextView
+    private lateinit var inputNotes: EditText
 
 //    array list wallet
 
     var walletList = ArrayList<String>()
     var categoryList = ArrayList<String>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +55,17 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         categoryList.add("Makan")
         categoryList.add("Necessities")
 
+        //set date text
+//        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+//        val current = LocalDateTime.now().format(formatter)
+        dateText.text = getCurrentDate()
 
+
+    }
+
+    fun getCurrentDate():String{
+        val sdf = SimpleDateFormat("yyyy/MM/dd")
+        return sdf.format(Date())
     }
 
     override fun onCreateView(
@@ -60,6 +82,10 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         binding.categoryAutoComplete.setAdapter(arrayAdapter2)
 
 
+        //show date dialog
+        binding.dateBtn.setOnClickListener{
+            showDateDialog()
+        }
 
 
         return  binding.root
