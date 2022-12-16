@@ -27,7 +27,9 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     private var _binding: FragmentAddTransactionDialogBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var activity: Activity
+    private lateinit var transaction: transaction
 
     private lateinit var autoCompleteTextView: AutoCompleteTextView
 
@@ -40,7 +42,6 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     private lateinit var saveBtn: Button
 
 //    array list wallet
-
     var walletList = ArrayList<String>()
     var categoryList = ArrayList<String>()
 
@@ -147,10 +148,19 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
             val saving = SaveData(dataID, a1, a2, a3, a4, a5)
 
             if (dataID != null) {
+                //add to arraylist in adapter
+                transaction.addListTransaction(saving)
                 dataRef.child("transaksi").child(dataID).setValue(saving).addOnCompleteListener{
                     Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+                    back_to_main()
                 }
             }
+        }
+    }
+
+    fun back_to_main(){
+        if (dialog?.isShowing == true) {
+            dialog!!.dismiss()
         }
     }
 

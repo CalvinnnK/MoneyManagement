@@ -45,21 +45,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
 
+    // reference firebase database realtime
+//    val ref = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
+
     private lateinit  var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
 
     // nav controller
     private lateinit var navController: NavController
 
-
-//    Array list buat transaksi
+    //    Array list buat transaksi
     public lateinit var listTransaction: ArrayList<SaveData>
 
-    private val _result = MutableLiveData<Exception?>()
-    val result: LiveData<Exception?> get() = _result
-
-    private val _saveData = MutableLiveData<SaveData?>()
-    val savedata: LiveData<SaveData?> get() = _saveData
+//    private val _result = MutableLiveData<Exception?>()
+//    val result: LiveData<Exception?> get() = _result
+//
+//    private val _saveData = MutableLiveData<SaveData?>()
+//    val savedata: LiveData<SaveData?> get() = _saveData
 
 
     public override fun onStart() {
@@ -200,42 +202,40 @@ class MainActivity : AppCompatActivity() {
 //        googleSignOut.setOnClickListener{
 //            signOutAuth()
 //        }
-        readDatabase()
-    }
-
-
-
-
-private val childEveentListener = object: ChildEventListener{
-        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-            val save = snapshot.getValue(SaveData::class.java)
-            save?.id = snapshot.key
-            _saveData.value = save!!
-
-        }
-
-        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onChildRemoved(snapshot: DataSnapshot) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
-        }
 
     }
 
-    private fun readDatabase() {
-        val ref = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
 
-    }
+
+
+//private val childEventListener = object: ChildEventListener{
+//        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//            val save = snapshot.getValue(SaveData::class.java)
+//            save?.id = snapshot.key
+//            _saveData.value = save!!
+//
+//        }
+//
+//        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//            TODO("Not yet implemented")
+//        }
+//
+//        override fun onChildRemoved(snapshot: DataSnapshot) {
+//            TODO("Not yet implemented")
+//        }
+//
+//        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+//            TODO("Not yet implemented")
+//        }
+//
+//        override fun onCancelled(error: DatabaseError) {
+//            TODO("Not yet implemented")
+//        }
+//    }
+
+//    fun getRealtimeUpdate(){
+//        ref.addChildEventListener(childEventListener)
+//    }
 
     private fun loadFragment(fragment: Fragment) {
         val transc = supportFragmentManager.beginTransaction()
