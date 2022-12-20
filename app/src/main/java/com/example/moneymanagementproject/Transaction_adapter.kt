@@ -13,7 +13,7 @@ import com.example.moneymanagementproject.databinding.RecyclerViewTransactionBin
 import org.w3c.dom.Text
 import java.util.ArrayList
 
-class transactionAdapter(private val context: Context, private val arrayList: ArrayList<SaveData>) : BaseAdapter(){
+class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<SaveData>) : BaseAdapter(){
 
 
 //    var data = mutableListOf<SaveData>()

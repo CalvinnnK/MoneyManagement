@@ -151,15 +151,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // default fragment
-        loadFragment(home())
+        loadFragment(Home())
 
         // Bottom nav bar, navigating to another pages (fragments)
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.home_ic -> loadFragment(home())
-                R.id.transaction_ic -> loadFragment(transaction())
+                R.id.home_ic -> loadFragment(Home())
+                R.id.transaction_ic -> loadFragment(Transaction())
                 R.id.stats_ic -> loadFragment(Statistics())
                 else -> {
                 }
@@ -208,34 +208,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-//private val childEventListener = object: ChildEventListener{
-//        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-//            val save = snapshot.getValue(SaveData::class.java)
-//            save?.id = snapshot.key
-//            _saveData.value = save!!
-//
-//        }
-//
-//        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-//            TODO("Not yet implemented")
-//        }
-//
-//        override fun onChildRemoved(snapshot: DataSnapshot) {
-//            TODO("Not yet implemented")
-//        }
-//
-//        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-//            TODO("Not yet implemented")
-//        }
-//
-//        override fun onCancelled(error: DatabaseError) {
-//            TODO("Not yet implemented")
-//        }
-//    }
-
-//    fun getRealtimeUpdate(){
-//        ref.addChildEventListener(childEventListener)
-//    }
 
     private fun loadFragment(fragment: Fragment) {
         val transc = supportFragmentManager.beginTransaction()

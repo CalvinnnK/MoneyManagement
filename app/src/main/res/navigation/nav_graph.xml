@@ -7,24 +7,46 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.example.moneymanagementproject.home"
+        android:name="com.example.moneymanagementproject.Home"
         tools:layout="@layout/fragment_home">
 
         <action
             android:id="@+id/home_to_transaction"
             app:destination="@+id/transaction"/>
+        <action
+            android:id="@+id/home_to_statistics"
+            app:destination="@+id/statistics"/>
 
     </fragment>
 
     <fragment
         android:id="@+id/transaction"
-        android:name="com.example.moneymanagementproject.transaction"
+        android:name="com.example.moneymanagementproject.Transaction"
         tools:layout="@layout/fragment_transaction" >
 
         <action
-            android:id="@+id/transacntion_to_home"
+            android:id="@+id/transaction_to_home"
             app:destination="@+id/home"  />
+        <action
+            android:id="@+id/transaction_to_statistics"
+            app:destination="@+id/statistics"  />
         </fragment>
+
+    <fragment
+        android:id="@+id/statistics"
+        android:name="com.example.moneymanagementproject.Statistics"
+        tools:layout="@layout/fragment_transaction" >
+
+        <action
+            android:id="@+id/statistics_to_home"
+            app:destination="@+id/home"  />
+        <action
+            android:id="@+id/statistics_to_transaction"
+            app:destination="@+id/transaction"  />
+
+    </fragment>
+
+
 
 
 <!--    <fragment-->
