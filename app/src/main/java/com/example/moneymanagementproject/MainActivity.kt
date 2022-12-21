@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
@@ -48,20 +49,13 @@ class MainActivity : AppCompatActivity() {
     // reference firebase database realtime
 //    val ref = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
 
-    private lateinit  var oneTapClient: SignInClient
+    private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
 
-    // nav controller
-    private lateinit var navController: NavController
+    private var listWallet: ArrayList<Wallet> = ArrayList()
 
-    //    Array list buat transaksi
-    public lateinit var listTransaction: ArrayList<SaveData>
+    private lateinit var mainViewModel: MainViewModel
 
-//    private val _result = MutableLiveData<Exception?>()
-//    val result: LiveData<Exception?> get() = _result
-//
-//    private val _saveData = MutableLiveData<SaveData?>()
-//    val savedata: LiveData<SaveData?> get() = _saveData
 
 
     public override fun onStart() {
@@ -118,8 +112,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
+
 
     //function to display onetap sign in
     private fun displaySignIn(){
@@ -169,7 +163,6 @@ class MainActivity : AppCompatActivity() {
 
             binding.addTransc.setOnClickListener {
                 var popDialog = addTransactionDialog()
-
                 popDialog.show(supportFragmentManager,"add Transaction Dialog")
             }
 
@@ -203,11 +196,19 @@ class MainActivity : AppCompatActivity() {
 //            signOutAuth()
 //        }
 
+        listWallet.add(Wallet("Bank",0))
+        listWallet.add(Wallet("Go Pay",0))
+        listWallet.add(Wallet("OVO",0))
+        listWallet.add(Wallet("Shopee Pay",0))
+        listWallet.add(Wallet("Dana", 0))
+
+        Log.d("Home Array","" + listWallet[1].nameWallet)
+
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        mainViewModel.arrayListData.postValue(listWallet)
+
     }
-
-
-
-
 
     private fun loadFragment(fragment: Fragment) {
         val transc = supportFragmentManager.beginTransaction()
@@ -218,10 +219,15 @@ class MainActivity : AppCompatActivity() {
 
 
     fun popUpWindow(view: View) {
-        Log.d(TAG,"masuk jozzz")
         val intent = Intent(this, AddTransaction::class.java)
         startActivity(intent)
     }
+
+    fun getWallet() : ArrayList<Wallet>{
+        return this.listWallet
+    }
+
+
 }
 
 

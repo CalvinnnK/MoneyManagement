@@ -85,6 +85,6 @@ dependencies {
     // material
     implementation "com.google.android.material:material:$material_version"
 
-
+    implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
 
 }

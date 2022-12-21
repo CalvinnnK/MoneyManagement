@@ -24,16 +24,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
-            android:text="tulisan" />
+            android:text="notes" />
 
         <TextView
             android:id="@+id/trans_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="320dp"
-            android:text="kucing" />
+            android:text="total" />
 
-        1
+        <TextView
+            android:id="@+id/trans_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="220dp"
+            android:text="date" />
+
+
     </RelativeLayout>
 
     <View

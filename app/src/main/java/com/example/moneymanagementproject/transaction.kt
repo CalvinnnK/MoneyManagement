@@ -18,11 +18,8 @@ import java.util.*
 
 class Transaction : Fragment() {
 
-private var _binding: FragmentTransactionBinding? = null
+    private var _binding: FragmentTransactionBinding? = null
     private val binding get() = _binding!!
-
-    //create object class transactionviewmodel
-    private lateinit var viewModel: TransactionViewModel
 
     //ambil kelas adapter
     private var adapter : TransactionAdapter? = null
@@ -54,23 +51,20 @@ private var _binding: FragmentTransactionBinding? = null
 
         binding.ListViewTransaction.adapter = adapter
 
-
-
         return binding.root
     }
-
-
 
 
     private fun childEventListenerRecycler() {
 
 //        val key = databaseReference.child("transaksi").push().key
 
-        val context = this
+        val myQuery = databaseReference.orderByChild("date")
+
         // [START child_event_listener_recycler]
-        val childEventListener = object : ChildEventListener {
+        myQuery.addChildEventListener( object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(TAG, "Check added:" + dataSnapshot.key!!)
+//                Log.d(TAG, "Check added:" + dataSnapshot.key!!)
 
                     for(snap: DataSnapshot in dataSnapshot.children){
                         val id =  snap.child("id").value.toString()
@@ -118,8 +112,10 @@ private var _binding: FragmentTransactionBinding? = null
 //                Toast.makeText(context, "Failed to load comments.",
 //                    Toast.LENGTH_SHORT).show()
             }
-        }
-        databaseReference.addChildEventListener(childEventListener)
+        })
+
+
+//        databaseReference.addChildEventListener(childEventListener)
         // [END child_event_listener_recycler]
     }
 
@@ -127,7 +123,6 @@ private var _binding: FragmentTransactionBinding? = null
 
     fun addListTransaction(data: SaveData){
         this.arrayListTransaction.add(data)
-        childEventListenerRecycler()
         checkDataIsChanged()
     }
 

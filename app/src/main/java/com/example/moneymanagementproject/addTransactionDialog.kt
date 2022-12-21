@@ -16,6 +16,8 @@ import androidx.fragment.app.DialogFragment
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionDialogBinding
 import com.example.moneymanagementproject.databinding.FragmentTransactionBinding
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -42,9 +44,10 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     private lateinit var saveBtn: Button
 
 //    array list wallet
-    var walletList = ArrayList<String>()
-    var categoryList = ArrayList<String>()
+    var walletList = ArrayList<Wallet>()
+    var categoryList = ArrayList<Category>()
 
+    var database = Firebase.database.reference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,13 +55,14 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
 
         //list wallet list
-        walletList.add("Bank")
-        walletList.add("Gopay")
-        walletList.add("OVO")
+        walletList.add(Wallet("Bank",0))
+        walletList.add(Wallet("Go Pay",0))
+        walletList.add(Wallet("OVO",0))
+        walletList.add(Wallet("Shopee Pay",0))
 
-        categoryList.add("Makan")
-        categoryList.add("Necessities")
-
+        categoryList.add(Category("Food",0))
+        categoryList.add(Category("Clothes", 0))
+        categoryList.add(Category("Groceries", 0))
     }
 
     override fun onCreateView(
@@ -76,7 +80,7 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
 
         // Membuat menu drop list
-        val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_wallet, walletList)
+        val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_category, walletList)
         val arrayAdapter2 = ArrayAdapter(requireContext(), R.layout.item_category, categoryList)
         binding.walletAutoComplete.setAdapter(arrayAdapter1)
         binding.categoryAutoComplete.setAdapter(arrayAdapter2)
@@ -113,12 +117,12 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     }
 
 
-    fun addWallet(input: String){
-        this.walletList.add(input)
-    }
+//    fun addWallet(input: String){
+//        this.walletList.add(input)
+//    }
 
     private fun getCurrentDate():String{
-        val sdf = SimpleDateFormat("yyyy/MM/dd")
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
         return sdf.format(Date())
     }
 
@@ -133,9 +137,9 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         val a3 = inputWallet.text.toString().trim()
         val a4 = inputCategory.text.toString().trim()
         val a5 = inputNotes.text.toString().trim()
-        val dataID = UUID.randomUUID().toString()
+        val id = Firebase.database.reference.push().key
 
-        Log.d(ContentValues.TAG, "saveTransaction:  " + dataID)
+        Log.d(ContentValues.TAG, "saveTransaction:  " + id)
 
         if(a1.isEmpty() || a3.isEmpty() ){
             inputAmount.error = "Please input Amount"
@@ -145,13 +149,13 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         else{
             val dataRef = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
 
-            val saving = SaveData(dataID, a1, a2, a3, a4, a5)
+            val saving = SaveData(id, a1, a2, a3, a4, a5)
 
-            if (dataID != null) {
+            if (id != null) {
                 //add to arraylist in adapter
                 transaction.addListTransaction(saving)
 
-                dataRef.child("transaksi").child(dataID).setValue(saving).addOnCompleteListener{
+                dataRef.child("transaksi").child(id).setValue(saving).addOnCompleteListener{
                     Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
                     back_to_main()
                 }
@@ -166,8 +170,6 @@ class addTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
             dialog!!.dismiss()
         }
     }
-
-
 
 
 

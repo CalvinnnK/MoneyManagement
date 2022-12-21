@@ -26,8 +26,6 @@ class AddTransaction : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
     private lateinit var category: EditText
     private lateinit var savebtn: Button
 
-    private lateinit var viewModel : TransactionViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_transaction)
