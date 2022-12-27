@@ -133,11 +133,6 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
 
                 val saving = SaveIncome("Income",a1.toLong(),a2, a3, a5)
 
-                Log.d("key111", "" + key)
-
-
-
-//                Log.d("key wallet", "" + dataRef.child("wallet").child("listWallet").child(key).child("saldo").get().toString())
 
                 dataRef.child("transaksi").child("listIncome").child(id).setValue(saving).addOnCompleteListener{
                     Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()

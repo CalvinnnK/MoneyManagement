@@ -88,7 +88,7 @@ class AddTransactionTransfer : Fragment(), DatePickerDialog.OnDateSetListener {
         val a1 = binding.inputAmount.text.toString().trim()
         val a2 = binding.dateText.text.toString().trim()
         val a3 = binding.walletFromAutoComplete.text.toString().trim()
-        val a4 = binding.walletFromAutoComplete.text.toString().trim()
+        val a4 = binding.walletToAutoComplete.text.toString().trim()
         val a5 = binding.inputNotes.text.toString().trim()
         val id = Firebase.database.reference.push().key
 
@@ -103,6 +103,41 @@ class AddTransactionTransfer : Fragment(), DatePickerDialog.OnDateSetListener {
         }
         else{
             val dataRef = databaseReference
+
+            var addIncome: Long = 0
+            var key: String = ""
+
+            val changeData = object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
+                        //Nyari child database utk wallet asal
+                        if(snap.child("nameWallet").value.toString() == a3){
+                            //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
+                            addIncome = snap.child("saldo").value.toString().toLong() - a1.toLong()
+                            key = snap.key.toString()
+                            Log.d("key", "" + key)
+                            if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                            else{
+                                Log.d("key", "FAILED")
+                            }
+                        }
+                        else if(snap.child("nameWallet").value.toString() == a4){
+                            //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
+                            addIncome = snap.child("saldo").value.toString().toLong() + a1.toLong()
+                            key = snap.key.toString()
+                            Log.d("key", "" + key)
+                            if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                            else{
+                                Log.d("key", "FAILED")
+                            }
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            }
+            dataRef.addListenerForSingleValueEvent(changeData)
 
             val saving = SaveTransfer("Transfer",a1.toLong(),a2,a3,a4,a5)
 

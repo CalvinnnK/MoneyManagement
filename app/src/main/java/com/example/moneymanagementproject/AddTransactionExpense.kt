@@ -108,6 +108,30 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
         else{
             val dataRef = databaseReference
 
+            var addIncome: Long = 0
+            var key: String = ""
+
+            val changeData = object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
+                        if(snap.child("nameWallet").value.toString() == a3){
+                            //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
+                            addIncome = snap.child("saldo").value.toString().toLong() - a1.toLong()
+                            key = snap.key.toString()
+                            Log.d("key", "" + key)
+                            if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                            else{
+                                Log.d("key", "FAILED")
+                            }
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            }
+            dataRef.addListenerForSingleValueEvent(changeData)
+
             val saving = SaveData("Expense", a1.toLong(), a2, a3, a4, a5)
 
             if (id != null) {
