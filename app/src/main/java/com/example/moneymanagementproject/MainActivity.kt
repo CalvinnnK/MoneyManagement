@@ -12,15 +12,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
@@ -34,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
@@ -46,17 +36,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
 
-    // reference firebase database realtime
-//    val ref = FirebaseDatabase.getInstance("https://money-management-app-9810f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference()
-
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
-
-    private var listWallet: ArrayList<Wallet> = ArrayList()
-
-    private lateinit var mainViewModel: MainViewModel
-
-
 
     public override fun onStart() {
         super.onStart()
@@ -161,11 +142,12 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-            binding.addTransc.setOnClickListener {
-                var popDialog = addTransactionDialog()
-                popDialog.show(supportFragmentManager,"add Transaction Dialog")
-            }
-
+        // Pop up window add transaction
+        binding.addTransc.setOnClickListener {
+            val intent = Intent(this, AddTransaction::class.java)
+            // start your next activity
+            startActivity(intent)
+        }
 
             //Finding ID in act main
 //        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
@@ -173,9 +155,7 @@ class MainActivity : AppCompatActivity() {
 
 
             mAuth = Firebase.auth
-
             oneTapClient = Identity.getSignInClient(this)
-
             signInRequest = BeginSignInRequest.builder()
                 .setGoogleIdTokenRequestOptions(
                     BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
@@ -196,17 +176,6 @@ class MainActivity : AppCompatActivity() {
 //            signOutAuth()
 //        }
 
-        listWallet.add(Wallet("Bank",0))
-        listWallet.add(Wallet("Go Pay",0))
-        listWallet.add(Wallet("OVO",0))
-        listWallet.add(Wallet("Shopee Pay",0))
-        listWallet.add(Wallet("Dana", 0))
-
-        Log.d("Home Array","" + listWallet[1].nameWallet)
-
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        mainViewModel.arrayListData.postValue(listWallet)
 
     }
 
@@ -217,15 +186,6 @@ class MainActivity : AppCompatActivity() {
         transc.commit()
     }
 
-
-    fun popUpWindow(view: View) {
-        val intent = Intent(this, AddTransaction::class.java)
-        startActivity(intent)
-    }
-
-    fun getWallet() : ArrayList<Wallet>{
-        return this.listWallet
-    }
 
 
 }

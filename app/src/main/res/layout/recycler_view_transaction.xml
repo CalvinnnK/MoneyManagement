@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="15dp">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <RelativeLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="12dp">
 
         <TextView
@@ -19,29 +21,44 @@
             android:layout_height="wrap_content"
             android:text="gambar" />
 
-        <TextView
-            android:id="@+id/trans_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
-            android:text="notes" />
 
-        <TextView
-            android:id="@+id/trans_amount"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="320dp"
-            android:text="total" />
+            android:orientation="vertical"
+            android:paddingHorizontal="25dp">
+
+            <TextView
+                android:id="@+id/trans_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="200dp"
+                android:text="notes" />
+
+            <TextView
+                android:id="@+id/trans_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="total" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
 
         <TextView
             android:id="@+id/trans_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
-            android:text="date" />
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:text="gambar wallet" />
 
 
-    </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <View
         android:layout_width="match_parent"

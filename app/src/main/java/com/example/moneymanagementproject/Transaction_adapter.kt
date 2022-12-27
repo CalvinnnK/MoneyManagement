@@ -36,11 +36,9 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
         convertView = LayoutInflater.from(context).inflate(R.layout.recycler_view_transaction, parent, false)
         row_text = convertView.findViewById(R.id.trans_text)
         row_amount = convertView.findViewById(R.id.trans_amount)
-        row_dates = convertView.findViewById(R.id.trans_date)
 
         row_text.text = " " + arrayList[position].notes
-        row_amount.text = arrayList[position].amount
-        row_dates.text = arrayList[position].date
+        row_amount.text = arrayList[position].amount.toString()
 
         return convertView
     }

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".addTransactionDialog">
-
-     <TextView
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:text="Add Transaction"
-         android:textAlignment="center"/>
+    tools:context=".AddTransactionIncome">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -77,7 +71,7 @@
         >
 
         <AutoCompleteTextView
-            android:id="@+id/walletAutoComplete"
+            android:id="@+id/walletFromAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
@@ -91,15 +85,15 @@
         android:padding="10dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         >
-
         <AutoCompleteTextView
-            android:id="@+id/categoryAutoComplete"
+            android:id="@+id/walletToAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            android:hint="Select Category"/>
+            android:hint="Select Wallet"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -120,6 +114,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:text="Add Transaction" />
+        android:text="Add Income" />
 
-</LinearLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

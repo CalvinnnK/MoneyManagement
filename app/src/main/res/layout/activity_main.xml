@@ -43,7 +43,6 @@
         android:id="@+id/addTransc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="popUpWindow"
         app:layout_anchor="@+id/bottomNavigationView"
         app:layout_anchorGravity="top|center"
         app:srcCompat="@android:drawable/ic_dialog_email" />

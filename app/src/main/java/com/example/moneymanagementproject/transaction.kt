@@ -37,7 +37,8 @@ class Transaction : Fragment() {
 
         databaseReference = Firebase.database.reference
 
-        childEventListenerRecycler()
+//        childEventListenerRecycler()
+        addPostEventListener(databaseReference.child("transaksi"))
         checkDataIsChanged()
 
     }
@@ -55,27 +56,47 @@ class Transaction : Fragment() {
     }
 
 
+    private fun addPostEventListener(postReference: DatabaseReference) {
+        // [START post_value_event_listener]
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // clean the array to avoid duplicates
+                arrayListTransaction.clear()
+                // Get Post object and use the values to update the UI
+                for(snap : DataSnapshot in dataSnapshot.child("listTransaction").children){
+                    val post = snap.getValue<SaveData>()!!
+                    addListTransaction(post)
+//                    Log.d("onDataChange", "" + post)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        postReference.addValueEventListener(postListener)
+        // [END post_value_event_listener]
+    }
+
+
     private fun childEventListenerRecycler() {
 
-//        val key = databaseReference.child("transaksi").push().key
-
-        val myQuery = databaseReference.orderByChild("date")
-
+        val myQuery = FirebaseDatabase.getInstance().reference.child("transaksi").child("listTransaction").orderByChild("date")
         // [START child_event_listener_recycler]
         myQuery.addChildEventListener( object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d(TAG, "Check added:" + dataSnapshot.key!!)
-
-                    for(snap: DataSnapshot in dataSnapshot.children){
-                        val id =  snap.child("id").value.toString()
-                        val amount =  snap.child("amount").value.toString()
-                        val wallet =  snap.child("wallet").value.toString()
-                        val date =  snap.child("date").value.toString()
-                        val notes =  snap.child("notes").value.toString()
-                        val cate =  snap.child("cate").value.toString()
-
-                        addListTransaction(SaveData(id,amount,date,wallet,cate,notes))
+                for(snap: DataSnapshot in dataSnapshot.children){
+                    val id =  snap.child("id").value.toString()
+                    val amount =  snap.child("amount").value.toString()
+                    val wallet =  snap.child("wallet").value.toString()
+                    val date =  snap.child("date").value.toString()
+                    val notes =  snap.child("notes").value.toString()
+                    val cate =  snap.child("cate").value.toString()
+                    if(id != "null"){
+                        addListTransaction(SaveData(id,amount.toLong(),date,wallet,cate,notes))
                     }
+                }
+
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
