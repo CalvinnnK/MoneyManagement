@@ -129,7 +129,7 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
                     }
 
                 }
-                dataRef.addValueEventListener(changeData)
+                dataRef.addListenerForSingleValueEvent(changeData)
 
                 val saving = SaveIncome("Income",a1.toLong(),a2, a3, a5)
 
