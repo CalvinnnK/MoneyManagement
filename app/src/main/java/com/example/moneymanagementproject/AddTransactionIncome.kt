@@ -3,7 +3,6 @@ package com.example.moneymanagementproject
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
-import com.example.moneymanagementproject.databinding.FragmentAddTransactionExpenseBinding
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionIncomeBinding
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -45,7 +43,7 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
 //        childEventListenerRecycler()
 
         // Setting adapter dengan array wallet
-        var arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_category, walletList)
+        val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_category, walletList)
         binding.walletAutoComplete.setAdapter(arrayAdapter1)
 
         // default date today
@@ -66,12 +64,12 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     fun showDateDialog(){
-        val datePicker: DatePickerDialog = DatePickerDialog(requireContext(),
+        val datePicker = DatePickerDialog(requireContext(),
             this,
             Calendar.getInstance().get(Calendar.YEAR),
             Calendar.getInstance().get(Calendar.MONTH),
             Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        );
+        )
         datePicker.show()
     }
 
@@ -81,12 +79,12 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-        val selectedDate: String = "$p3/$p2/$p1"
+        val selectedDate = "$p3/$p2/$p1"
         binding.dateText.text = selectedDate
     }
 
     private fun saveTransaction(){
-        var a1 = binding.inputAmount.text.toString().trim()
+        val a1 = binding.inputAmount.text.toString().trim()
         val a2 = binding.dateText.text.toString().trim()
         val a3 = binding.walletAutoComplete.text.toString().trim()
         val a5 = binding.inputNotes.text.toString().trim()
@@ -107,7 +105,7 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
             }
             else{
                 var addIncome: Long = 0
-                var key: String = ""
+                var key = ""
 
                 val changeData = object : ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -163,61 +161,5 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
         postReference.addValueEventListener(postListener)
         // [END post_value_event_listener]
     }
-
-    private fun childEventListenerRecycler() {
-
-        val myQuery = FirebaseDatabase.getInstance().reference.orderByChild("nameWallet")
-        myQuery.addChildEventListener( object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(ContentValues.TAG, "Check added:" + dataSnapshot.key!!)
-
-                for(snap: DataSnapshot in dataSnapshot.child("listWallet").children){
-                    val name =  snap.child("nameWallet").value.toString()
-                    if(name != "null"){
-                        walletList.add(name)
-                    }
-                    Log.d("datasnap","" + name + " " + walletList.count())
-                }
-            }
-
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(ContentValues.TAG, "onChildChanged: ${dataSnapshot.key}")
-                val dataRef = dataSnapshot.child("transaksi")
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                val newComment = dataRef.value
-                val commentKey = dataRef.key
-
-            }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                Log.d(ContentValues.TAG, "onChildRemoved:" + dataSnapshot.key!!)
-                val dataRef = dataSnapshot.child("transaksi")
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                val commentKey = dataRef.key
-
-            }
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(ContentValues.TAG, "onChildMoved:" + dataSnapshot.key!!)
-                val dataRef = dataSnapshot.child("transaksi")
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                val movedComment = dataRef.getValue<SaveData>()
-                val commentKey = dataRef.key
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.w(TAG, "postComments:onCancelled", databaseError.toException())
-//                Toast.makeText(context, "Failed to load comments.",
-//                    Toast.LENGTH_SHORT).show()
-            }
-        })
-
-
-    }
-
 }
 
