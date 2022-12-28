@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".addTransactionDialog">
+    tools:context=".AddTransaction">
 
     <LinearLayout
         android:id="@+id/header_add_transaction_activity"
