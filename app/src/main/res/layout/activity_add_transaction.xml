@@ -23,7 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Transaction"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+        />
 
     </LinearLayout>
 
@@ -45,6 +49,7 @@
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
+        android:background="#ECECEC"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout"
         app:layout_constraintStart_toStartOf="parent"/>
 

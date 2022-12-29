@@ -78,6 +78,7 @@
             tools:listitem="@layout/item_wallet">
 
         </GridView>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/wallet_add"
             android:layout_width="wrap_content"
