@@ -25,7 +25,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/left_arrow_ic"
-            android:background="transparent"
+
             />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -43,18 +43,15 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/right_arrow_ic"
-            android:background="transparent"
             />
 
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <ListView
         android:id="@+id/stat_wallet_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_stat_wallet"/>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

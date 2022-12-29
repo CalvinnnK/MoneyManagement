@@ -8,6 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,10 +33,6 @@ class Home : Fragment() {
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,6 +50,11 @@ class Home : Fragment() {
         adapterW = WalletAdapter(context,listWalletF)
         binding.walletGrid.adapter = adapterW
         adapterW?.notifyDataSetChanged()
+        binding.walletGrid.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
+            Toast.makeText(
+                requireContext(), listWalletF[i].nameWallet + " selected",
+                Toast.LENGTH_SHORT
+            ).show()  }
 
         addPostEventListener(databaseReference.child("wallet"))
 
