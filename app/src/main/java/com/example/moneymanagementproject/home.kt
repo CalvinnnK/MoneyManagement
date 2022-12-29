@@ -8,6 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +19,9 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Home : Fragment() {
@@ -25,15 +31,11 @@ class Home : Fragment() {
     private var adapterW : WalletAdapter? = null
     //Array kosong buat manggil array dari Activity Main
     private var listWalletF: ArrayList<Wallet> = ArrayList<Wallet>()
+    private var TotalBalance: Long = 0
 
-    private lateinit var mainViewModel: MainViewModel
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,12 +52,20 @@ class Home : Fragment() {
 //        Adapter Wallet
         adapterW = WalletAdapter(context,listWalletF)
         binding.walletGrid.adapter = adapterW
+
+
+
         adapterW?.notifyDataSetChanged()
+        binding.walletGrid.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
+            Toast.makeText(
+                requireContext(), listWalletF[i].nameWallet + " selected",
+                Toast.LENGTH_SHORT
+            ).show()  }
 
         addPostEventListener(databaseReference.child("wallet"))
 
-//        childEventListenerRecycler()
         checkDataIsChanged()
+
         return binding.root
     }
 
@@ -69,12 +79,15 @@ class Home : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // clean the array to avoid duplicates
                 listWalletF.clear()
+
                 // Get Post object and use the values to update the UI
                 for(snap : DataSnapshot in dataSnapshot.child("listWallet").children){
                     val post = snap.getValue<Wallet>()!!
                     addWallet(post)
-                    Log.d("onDataChange", "" + post + " " + listWalletF.count())
+                    TotalBalance += snap.child("saldo").value.toString().toLong()
+                    binding.totalAmount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(TotalBalance)
                 }
+                listWalletF.add(Wallet("Add Wallet",0))
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Post failed, log a message

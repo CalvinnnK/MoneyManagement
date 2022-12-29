@@ -17,7 +17,7 @@
         android:title="Statistics"
         android:icon="@drawable/arrow_up" />
     <item
-        android:id="@+id/settings_ic"
-        android:title="settings"
-        android:icon="@drawable/settings_img" />
+        android:id="@+id/stats_wallet_ic"
+        android:title="Wallet"
+        android:icon="@drawable/wallet_img" />
 </menu>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/progress_bar_bg">
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp"/>
+            <solid android:color="#CAE7D3"/>
+        </shape>
+    </item>
+    <item android:id="@+id/progress_bar_scale">
+        <scale android:scaleWidth="100%">
+            <shape android:shape="rectangle">
+                <corners android:radius="5dp"/>
+                <solid android:color="#90B99B"/>
+            </shape>
+        </scale>
+    </item>
+</layer-list>

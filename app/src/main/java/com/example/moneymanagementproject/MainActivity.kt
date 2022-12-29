@@ -136,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.home_ic -> loadFragment(Home())
                 R.id.transaction_ic -> loadFragment(Transaction())
                 R.id.stats_ic -> loadFragment(Statistics())
+                R.id.stats_wallet_ic -> loadFragment(StatisticWallet())
                 else -> {
                 }
             }

@@ -5,9 +5,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".addTransactionDialog"
     android:paddingHorizontal="40dp"
-    android:paddingTop="20dp">
+    android:paddingTop="20dp"
+    tools:context=".AddTransactionExpense"
+    >
 
     <!--Amount-->
     <TextView

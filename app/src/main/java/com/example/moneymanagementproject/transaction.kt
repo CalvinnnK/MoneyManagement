@@ -28,14 +28,13 @@ class Transaction : Fragment() {
     private var arrayListTransaction: ArrayList<SaveData> = ArrayList()
     lateinit var listView: ListView
 
-    private lateinit var databaseReference: DatabaseReference
+    private var databaseReference: DatabaseReference = Firebase.database.reference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = TransactionAdapter(context, arrayListTransaction)
 
-        databaseReference = Firebase.database.reference
 
 //        childEventListenerRecycler()
         addPostEventListener(databaseReference.child("transaksi"))
