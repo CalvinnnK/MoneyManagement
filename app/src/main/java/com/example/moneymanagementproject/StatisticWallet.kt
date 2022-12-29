@@ -43,9 +43,6 @@ class StatisticWallet : Fragment() {
         binding.statWalletListView.adapter = adapter
 
 
-
-
-
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -67,33 +64,33 @@ class StatisticWallet : Fragment() {
                     name = ""
                     income = 0
                     expense = 0
-                    Log.d("AAA loop wallet","" + snap.child("nameWallet").value.toString())
+//                    Log.d("AAA loop wallet","" + snap.child("nameWallet").value.toString())
                     name =  snap.child("nameWallet").value.toString()
 
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
                         if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()){
                             expense += snap1.child("amount").value.toString().toLong()
-                            Log.d("AAA loop transaksi","" + snap1.child("notes").value.toString())
+//                            Log.d("AAA loop transaksi","" + snap1.child("notes").value.toString())
                         }
                     }
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listIncome").children){
                         if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()){
                             income += snap1.child("amount").value.toString().toLong()
-                            Log.d("AAA loop income","" + snap1.child("notes").value.toString())
+//                            Log.d("AAA loop income","" + snap1.child("notes").value.toString())
                         }
                     }
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransfer").children){
                         if(snap1.child("walletFrom").value.toString() == snap.child("nameWallet").value.toString()){
                             expense += snap1.child("amount").value.toString().toLong()
-                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
+//                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
                         }
                         else if(snap1.child("walletTo").value.toString() == snap.child("nameWallet").value.toString()){
                             income += snap1.child("amount").value.toString().toLong()
-                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
+//                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
                         }
                     }
                     addStatWallet(StatWallet(name,income-expense,income, expense))
-                    Log.d("AAA onDataChange", "" + name + " " + income + " " + expense + " " + listStatWallet.size)
+//                    Log.d("AAA onDataChange", "" + name + " " + income + " " + expense + " " + listStatWallet.size)
 
                 }
             }
@@ -108,7 +105,6 @@ class StatisticWallet : Fragment() {
     }
     fun addStatWallet(data: StatWallet){
         this.listStatWallet.add(data)
-        Log.d("StatWalletAdapter","isi Array : " + listStatWallet.size)
         checkDataIsChanged()
     }
 

@@ -39,9 +39,6 @@ class WalletAdapter(private val context: Context?,  private val arrayList: Array
         nameWallet.text = arrayList[position].nameWallet
         saldoWallet.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].saldo)
 
-        Log.d("walletAdapter","namaWallet" + nameWallet)
-
-
 
         return listItemView
     }
