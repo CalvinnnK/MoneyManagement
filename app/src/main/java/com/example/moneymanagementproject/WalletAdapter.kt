@@ -9,7 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.TextView
 import kotlinx.coroutines.NonDisposableHandle.parent
-import java.util.ArrayList
+import java.text.NumberFormat
+import java.util.*
 
 class WalletAdapter(private val context: Context?,  private val arrayList: ArrayList<Wallet>) :
     BaseAdapter() {
@@ -32,11 +33,11 @@ class WalletAdapter(private val context: Context?,  private val arrayList: Array
         }
 
 
-        val nameWallet : TextView= listItemView!!.findViewById<TextView>(R.id.name_wallet)
-        val saldoWallet : TextView= listItemView!!.findViewById<TextView>(R.id.saldo_wallet)
+        val nameWallet : TextView= listItemView!!.findViewById(R.id.name_wallet)
+        val saldoWallet : TextView= listItemView!!.findViewById(R.id.saldo_wallet)
 
         nameWallet.text = arrayList[position].nameWallet
-        saldoWallet.text = arrayList[position].saldo.toString()
+        saldoWallet.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].saldo)
 
         Log.d("walletAdapter","namaWallet" + nameWallet)
 

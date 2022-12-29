@@ -1,12 +1,14 @@
 package com.example.moneymanagementproject
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import java.util.ArrayList
+import java.text.NumberFormat
+import java.util.*
 
 class StatWalletAdapter(private val context: Context?, private val arrayList: ArrayList<StatWallet>) : BaseAdapter() {
 
@@ -14,6 +16,7 @@ class StatWalletAdapter(private val context: Context?, private val arrayList: Ar
     private lateinit var saldo: TextView
     private lateinit var income: TextView
     private lateinit var expense: TextView
+
 
     override fun getCount(): Int {
         return arrayList.size
@@ -32,13 +35,18 @@ class StatWalletAdapter(private val context: Context?, private val arrayList: Ar
         convertView = LayoutInflater.from(context).inflate(R.layout.item_stat_wallet, parent, false)
         name = convertView.findViewById(R.id.item_stat_nameWallet)
         saldo = convertView.findViewById(R.id.item_stat_saldoWallet)
-        income = convertview!!.findViewById(R.id.item_stat_income)
-        expense = convertview!!.findViewById(R.id.item_stat_expense)
+        income = convertView.findViewById(R.id.item_stat_income)
+        expense = convertView.findViewById(R.id.item_stat_expense)
+
+
 
         name.text = arrayList[position].nameWallet
-        saldo.text = arrayList[position].saldo.toString()
-        income.text = arrayList[position].income.toString()
-        expense.text = arrayList[position].expense.toString()
+        saldo.text = "Rp " + NumberFormat.getNumberInstance(Locale.US).format(arrayList[position].saldo)
+        income.text = "Rp " + NumberFormat.getNumberInstance(Locale.US).format(arrayList[position].income)
+        expense.text = "Rp " + NumberFormat.getNumberInstance(Locale.US).format(arrayList[position].expense)
+
+        Log.d("StatWalletAdapter","" + arrayList[position].nameWallet)
+
 
         return convertView
     }

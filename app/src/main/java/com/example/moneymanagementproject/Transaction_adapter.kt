@@ -1,17 +1,15 @@
 package com.example.moneymanagementproject
 
 import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
+
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.example.moneymanagementproject.databinding.RecyclerViewTransactionBinding
-import org.w3c.dom.Text
-import java.util.ArrayList
+import java.text.NumberFormat
+import java.util.*
 
 class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<SaveData>) : BaseAdapter(){
 
@@ -38,7 +36,7 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
         row_amount = convertView.findViewById(R.id.trans_amount)
 
         row_text.text = " " + arrayList[position].notes
-        row_amount.text = arrayList[position].amount.toString()
+        row_amount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].amount)
 
         return convertView
     }

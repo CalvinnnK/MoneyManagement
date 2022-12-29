@@ -19,12 +19,15 @@ class StatisticWallet : Fragment() {
     private var _binding: FragmentStatisticWalletBinding? = null
     private val binding get() = _binding!!
 
-    private var listStatWallet = ArrayList<StatWallet>()
+    private var listStatWallet: ArrayList<StatWallet> = ArrayList()
 
     private val databaseReference: DatabaseReference = Firebase.database.reference
+    private var adapter : StatWalletAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        adapter = StatWalletAdapter(context,listStatWallet)
 
     }
 
@@ -34,11 +37,14 @@ class StatisticWallet : Fragment() {
     ): View? {
         _binding = FragmentStatisticWalletBinding.inflate(inflater, container, false)
 
-        var adapter = StatWalletAdapter(context,listStatWallet)
+        addPostEventListener(databaseReference)
+        checkDataIsChanged()
+
         binding.statWalletListView.adapter = adapter
 
-        addPostEventListener(databaseReference)
-        adapter.notifyDataSetChanged()
+
+
+
 
         // Inflate the layout for this fragment
         return binding.root
@@ -49,12 +55,12 @@ class StatisticWallet : Fragment() {
         var income: Long = 0
         var expense: Long = 0
 
+
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-
                 // clean the array to avoid duplicates
-                listStatWallet.clear()
+//                listStatWallet.clear()
 
                 // Get Post object and use the values to update the UI
                 for(snap : DataSnapshot in dataSnapshot.child("wallet").child("listWallet").children){
@@ -86,8 +92,9 @@ class StatisticWallet : Fragment() {
                             Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
                         }
                     }
-                    listStatWallet.add(StatWallet(name,income-expense,income, expense))
-                    Log.d("AAA onDataChange", "" + name + " " + income + " " + expense + listStatWallet.count())
+                    addStatWallet(StatWallet(name,income-expense,income, expense))
+                    Log.d("AAA onDataChange", "" + name + " " + income + " " + expense + " " + listStatWallet.size)
+
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -95,8 +102,18 @@ class StatisticWallet : Fragment() {
                 Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
             }
         }
-        postReference.addListenerForSingleValueEvent(postListener)
+
+        postReference.addValueEventListener(postListener)
         // [END post_value_event_listener]
+    }
+    fun addStatWallet(data: StatWallet){
+        this.listStatWallet.add(data)
+        Log.d("StatWalletAdapter","isi Array : " + listStatWallet.size)
+        checkDataIsChanged()
+    }
+
+    fun checkDataIsChanged(){
+        adapter?.notifyDataSetChanged()
     }
 
 
