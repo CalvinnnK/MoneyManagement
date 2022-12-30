@@ -25,6 +25,8 @@
             android:text="nameWallet"
             android:gravity="center"
             android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             />
 
         <TextView
@@ -33,6 +35,8 @@
             android:layout_height="50dp"
             android:text="Rp 1000000"
             android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -46,12 +50,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Expense"/>
+            android:text="Expense"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Income"/>
+            android:text="Income"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
