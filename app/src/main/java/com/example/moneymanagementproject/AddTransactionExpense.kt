@@ -108,18 +108,40 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
 
             val changeData = object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
+
+                    // condition untuk nambahin saldo wallet
                     for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
                         if(snap.child("nameWallet").value.toString() == a3){
-                            //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
+                            //Ngambil value dari database lalu ditambah saldo wallet berdasarkan input transaksiIncome yang baru
                             addIncome = snap.child("saldo").value.toString().toLong() - a1.toLong()
                             key = snap.key.toString()
-                            Log.d("key", "" + key)
+
                             if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
                             else{
                                 Log.d("key", "FAILED")
                             }
                         }
                     }
+
+                    //condition untuk nambahin saldo category
+                    for(snap: DataSnapshot in snapshot.child("category").child("listCategory").children){
+                        // condition untuk nambahin saldo wallet
+                        if(snap.child("nameCategory").value.toString() == a4){
+                            //Ngambil value dari database lalu ditambah saldo category berdasarkan input transaksiIncome yang baru
+                            addIncome = snap.child("expense").value.toString().toLong() + a1.toLong()
+                            key = snap.key.toString()
+
+//                            Log.d("AddTransactionKey", "" + key + " " + snap.child("expense").value.toString() + " " + a1)
+
+                            if(key != "") dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
+                            else{
+                                Log.d("key", "FAILED")
+                            }
+                        }
+                    }
+                    //Ini buat masukin data ke dalam total expense overall
+                    dataRef.child("category").child("TotalExpense").child("expense").setValue(addIncome)
+
                 }
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")

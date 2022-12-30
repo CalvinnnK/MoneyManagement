@@ -59,7 +59,7 @@ class StatWalletAdapter(private val context: Context?, private val arrayList: Ar
         else{
             value = arrayList[position].expense.toDouble() / arrayList[position].income.toDouble() * 100
         }
-        Log.d("CurrentProg", "" + value.toString() + " " + arrayList[position].nameWallet + " " + arrayList[position].income)
+//        Log.d("CurrentProg", "" + value.toString() + " " + arrayList[position].nameWallet + " " + arrayList[position].income)
 
         progress.progress = value.toInt()
 

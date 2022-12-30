@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    >
+
+    <TextView
+        android:id="@+id/item_stat_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="Img"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/item_stat_nameCategory"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="nameCategory"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/item_stat_percentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "percentage"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/item_stat_expense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="textEnd"
+        android:text="Rp 0"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        tools:ignore="RtlCompat" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

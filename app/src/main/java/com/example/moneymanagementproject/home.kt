@@ -44,9 +44,14 @@ class Home : Fragment() {
 
 
         //Memunculkan add wallet dialog
-        binding.walletAdd.setOnClickListener{
-            val popupWindow = AddWalletDialog()
-            popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Wallet" )
+//        binding.walletAdd.setOnClickListener{
+//            val popupWindow = AddWalletDialog()
+//            popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Wallet" )
+//        }
+
+        binding.homeTransactionSeeMore.setOnClickListener{
+            val popupWindow = AddCategoryName()
+            popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Category" )
         }
 
 //        Adapter Wallet
@@ -57,10 +62,18 @@ class Home : Fragment() {
 
         adapterW?.notifyDataSetChanged()
         binding.walletGrid.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
-            Toast.makeText(
-                requireContext(), listWalletF[i].nameWallet + " selected",
-                Toast.LENGTH_SHORT
-            ).show()  }
+
+            if(i == listWalletF.size - 1){
+                val popupWindow = AddWalletDialog()
+                popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Wallet" )
+            }
+            else{
+                Toast.makeText(
+                    requireContext(), listWalletF[i].nameWallet + "selected" + i ,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
         addPostEventListener(databaseReference.child("wallet"))
 
@@ -77,8 +90,9 @@ class Home : Fragment() {
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // clean the array to avoid duplicates
+                // clean the array to avoid duplicates and also reset balance too
                 listWalletF.clear()
+                TotalBalance = 0
 
                 // Get Post object and use the values to update the UI
                 for(snap : DataSnapshot in dataSnapshot.child("listWallet").children){
@@ -93,6 +107,7 @@ class Home : Fragment() {
                 // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
             }
+
         }
         postReference.addValueEventListener(postListener)
         // [END post_value_event_listener]
