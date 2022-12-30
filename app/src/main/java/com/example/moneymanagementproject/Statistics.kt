@@ -1,59 +1,95 @@
 package com.example.moneymanagementproject
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moneymanagementproject.databinding.FragmentHomeBinding
+import com.example.moneymanagementproject.databinding.FragmentStatisticsBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Statistics.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Statistics : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentStatisticsBinding? = null
+    private val binding get() = _binding!!
+
+    private var listStatCategory: ArrayList<Category> = ArrayList()
+    private val databaseReference: DatabaseReference = Firebase.database.reference
+
+    private var adapter : StatisticsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentStatisticsBinding.inflate(inflater,container, false)
+
+        addPostEventListener(databaseReference)
+
+        adapter = StatisticsAdapter(context,listStatCategory)
+        binding.statCateListView.adapter = adapter
+
+
+        checkDataIsChanged()
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Statistics.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Statistics().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun addPostEventListener(postReference: DatabaseReference) {
+        var name = ""
+        var balancePerCategory: Long = 0
+
+        // [START post_value_event_listener]
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // clean the array to avoid duplicates
+
+                //Ngitung expense tiap category
+                for(snap : DataSnapshot in dataSnapshot.child("category").child("listCategory").children){
+                    balancePerCategory = 0
+                    name = snap.child("nameCategory").value.toString()
+                    for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
+                        if(name == snap1.child("cate").value.toString()){
+                            balancePerCategory += snap1.child("amount").value.toString().toLong()
+                        }
+                    }
+                    addStatCate(Category(name, balancePerCategory))
+                    Log.d("Stat", "" + listStatCategory.size)
+
                 }
+
             }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+
+        }
+
+        postReference.addValueEventListener(postListener)
+
+        // [END post_value_event_listener]
     }
+    fun addStatCate(data: Category){
+        this.listStatCategory.add(data)
+        checkDataIsChanged()
+    }
+
+    fun checkDataIsChanged(){
+        adapter?.notifyDataSetChanged()
+    }
+
+
 }

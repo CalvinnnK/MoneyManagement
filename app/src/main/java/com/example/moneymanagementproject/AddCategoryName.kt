@@ -1,18 +1,20 @@
 package com.example.moneymanagementproject
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.example.moneymanagementproject.databinding.AddWalletDialogBinding
+import com.example.moneymanagementproject.databinding.FragmentAddCategoryNameBinding
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class AddWalletDialog: DialogFragment() {
-    private var _binding : AddWalletDialogBinding? = null
+
+class AddCategoryName : DialogFragment() {
+    private var _binding : FragmentAddCategoryNameBinding? = null
     private val binding get() = _binding!!
 
 
@@ -23,31 +25,30 @@ class AddWalletDialog: DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = AddWalletDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentAddCategoryNameBinding.inflate(inflater, container, false)
 
-        // Add wallet button
-        binding.addWallet.setOnClickListener{
-            addWallet()
+
+        binding.addCategory.setOnClickListener{
+            addCategory()
         }
-
+        // Inflate the layout for this fragment
         return binding.root
     }
 
-    private fun addWallet(){
-        val a = binding.walletNameInput.text.toString()
+    private fun addCategory(){
+        val a = binding.categoryNameInput.text.toString()
         val id = Firebase.database.reference.push().key
         val dataRef = Firebase.database.reference
 
         if (a.isEmpty() || id.isNullOrEmpty()){
-            binding.walletNameInput.error = "Please input wallet name!"
+            binding.categoryNameInput.error = "Please input category name!"
         }
         else{
-            dataRef.child("wallet").child("listWallet").child(id).setValue(Wallet(a,0)).addOnCompleteListener {
-                Toast.makeText(activity,"Wallet Added", Toast.LENGTH_LONG).show()
+            dataRef.child("category").child("listCategory").child(id).setValue(Category(a,0)).addOnCompleteListener {
+                Toast.makeText(activity,"Category Added", Toast.LENGTH_LONG).show()
                 back_to_main()
             }
         }
@@ -58,4 +59,5 @@ class AddWalletDialog: DialogFragment() {
             dialog!!.dismiss()
         }
     }
+
 }

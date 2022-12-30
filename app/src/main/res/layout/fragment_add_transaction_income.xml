@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:inputType="number"
             android:shadowRadius="10"
             android:background="@drawable/input_box"
             android:paddingVertical="10dp"
