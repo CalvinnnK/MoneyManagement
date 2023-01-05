@@ -20,6 +20,7 @@ class StatisticsAdapter(private val context: Context?, private val arrayList: Ar
     private lateinit var percent: TextView
     private lateinit var balance: TextView
     private var total: Double = 0.0
+    var p:Double = 0.0
 
     private val databaseReference = Firebase.database.reference
 
@@ -38,38 +39,29 @@ class StatisticsAdapter(private val context: Context?, private val arrayList: Ar
     override fun getView(position: Int, convertview: View?, parent: ViewGroup?): View {
         var convertView = convertview
         convertView = LayoutInflater.from(context).inflate(R.layout.item_stat_category, parent, false)
-
-
+        total = 0.0
 
         name = convertView.findViewById(R.id.item_stat_nameCategory)
         percent = convertView.findViewById(R.id.item_stat_percentage)
         balance = convertView.findViewById(R.id.item_stat_expense)
 
-        var p:Double = 0.0
+
+        arrayList.forEach {
+            total += it.expense
+        }
+
+        Log.d("StatAdapter","p = " + p + " total = " + total)
+
+        p = arrayList[position].expense * 100 / total
+        if( p.isNaN()) p = 0.0
+        // Pembulatan 2 desimal untuk percentage
+        val solution:Double = String.format("%.2f", p).toDouble()
 
         name.text = arrayList[position].nameCategory
-        var listener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                total = snapshot.child("category"). child("TotalExpense").child("expense").value.toString().toDouble()
-
-                if(arrayList[position].expense.toInt() == 0){
-                    p = 0.0
-                }else{
-                    p = arrayList[position].expense * 100 / total
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        }
-        databaseReference.addListenerForSingleValueEvent(listener)
-
-        percent.text = p.toString() + "%"
-//        Log.d("StatAdapter", "" + arrayList[position].nameCategory  + " " + arrayList[position].expense)
+        percent.text = solution.toString() + "%"
         balance.text = arrayList[position].expense.toString()
 
         return convertView
     }
+
 }

@@ -63,11 +63,6 @@ class StatWalletAdapter(private val context: Context?, private val arrayList: Ar
 
         progress.progress = value.toInt()
 
-
-
-
-
-
         return convertView
     }
 }

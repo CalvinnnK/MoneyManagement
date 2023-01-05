@@ -16,14 +16,16 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
+class AddTransactionIncome : Fragment(){
     private var _binding: FragmentAddTransactionIncomeBinding? = null
     private val binding get() = _binding!!
 
     var walletList = ArrayList<String>()
+    val sdf = SimpleDateFormat("d/M/yyyy")
 
     val databaseReference: DatabaseReference = Firebase.database.reference
 
@@ -50,9 +52,21 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
         binding.dateText.text = getCurrentDate()
 
         //show date dialog
+        var c = Calendar.getInstance()
+        var y = c.get(Calendar.YEAR)
+        var m = c.get(Calendar.MONTH)
+        var d = c.get(Calendar.DAY_OF_MONTH)
+
         binding.dateBtn.setOnClickListener{
-            showDateDialog()
+            var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
+                    view, year, month, day ->
+                var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
+
+                binding.dateText.text = "" + day + "/" + a + "/" + year
+            }, y, m, d)
+            datePicker.show()
         }
+
 
         binding.addTransaction.setOnClickListener(){
             saveTransaction()
@@ -63,24 +77,8 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
         return binding.root
     }
 
-    fun showDateDialog(){
-        val datePicker = DatePickerDialog(requireContext(),
-            this,
-            Calendar.getInstance().get(Calendar.YEAR),
-            Calendar.getInstance().get(Calendar.MONTH),
-            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
     private fun getCurrentDate():String{
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
         return sdf.format(Date())
-    }
-
-    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-        val selectedDate = "$p3/$p2/$p1"
-        binding.dateText.text = selectedDate
     }
 
     private fun saveTransaction(){
@@ -89,6 +87,8 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
         val a3 = binding.walletAutoComplete.text.toString().trim()
         val a5 = binding.inputNotes.text.toString().trim()
         val id = Firebase.database.reference.push().key!!
+
+        var dateLong: Long = sdf.parse(a2).time
 
 
         if(a1.isEmpty() || a3.isEmpty() ){
@@ -129,7 +129,7 @@ class AddTransactionIncome : Fragment(), DatePickerDialog.OnDateSetListener {
                 }
                 dataRef.addListenerForSingleValueEvent(changeData)
 
-                val saving = SaveIncome("Income",a1.toLong(),a2, a3, a5)
+                val saving = SaveIncome("Income",a1.toLong(),dateLong, a3, a5)
 
 
                 dataRef.child("transaksi").child("listIncome").child(id).setValue(saving).addOnCompleteListener{

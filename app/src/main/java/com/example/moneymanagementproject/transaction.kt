@@ -13,6 +13,8 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -89,10 +91,11 @@ class Transaction : Fragment() {
                     val amount =  snap.child("amount").value.toString()
                     val wallet =  snap.child("wallet").value.toString()
                     val date =  snap.child("date").value.toString()
-                    val notes =  snap.child("notes").value.toString()
                     val cate =  snap.child("cate").value.toString()
+                    val notes =  snap.child("notes").value.toString()
+
                     if(id != "null"){
-                        addListTransaction(SaveData(id,amount.toLong(),date,wallet,cate,notes))
+                        addListTransaction(SaveData(id,amount.toLong(),date.toLong(),wallet,cate,notes))
                     }
                 }
 

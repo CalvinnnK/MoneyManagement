@@ -7,12 +7,129 @@
     android:orientation="vertical"
     tools:context=".Statistics">
 
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum="2">-->
+
+<!--    <org.eazegraph.lib.charts.PieChart-->
+<!--        android:id="@+id/piechart"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="150dp"-->
+<!--        android:padding="6dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:layout_marginLeft="15dp"-->
+<!--        android:layout_marginBottom="15dp"-->
+
+<!--        />-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:gravity="center_vertical"-->
+<!--        >-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_gravity="center_vertical">-->
+
+<!--            &lt;!&ndash;View to display the yellow color icon&ndash;&gt;-->
+<!--            <View-->
+<!--                android:layout_width="19dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@color/R" />-->
+
+<!--            &lt;!&ndash;Text view to display R &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="R"-->
+<!--                android:paddingLeft="10dp"/>-->
+
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash;Linear layout to display Python&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginTop="5dp">-->
+
+<!--            &lt;!&ndash;View to display the green color icon&ndash;&gt;-->
+<!--            <View-->
+<!--                android:layout_width="15dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@color/Python"/>-->
+
+<!--            &lt;!&ndash;Text view to display python text &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Python"-->
+<!--                android:paddingLeft="10dp"/>-->
+
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash;Linear layout to display C++&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginTop="5dp">-->
+
+<!--            &lt;!&ndash;View to display the red color icon&ndash;&gt;-->
+<!--            <View-->
+<!--                android:layout_width="15dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@color/CPP"/>-->
+
+<!--            &lt;!&ndash;Text view to display C++ text &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="C++"-->
+<!--                android:paddingLeft="10dp"/>-->
+
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash;Linear layout to display Java&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginTop="5dp">-->
+
+<!--            &lt;!&ndash;View to display the blue color icon&ndash;&gt;-->
+<!--            <View-->
+<!--                android:layout_width="15dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@color/Java"/>-->
+
+<!--            &lt;!&ndash;Text view to display Java text &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Java"-->
+<!--                android:paddingLeft="10dp"/>-->
+
+<!--        </LinearLayout>-->
+
+<!--    </LinearLayout>-->
+
+<!--    </LinearLayout>-->
+
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Wallet"
+        android:text="Category"
         android:textSize="28dp"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -21,7 +138,7 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/stat_wallet_left"
+            android:id="@+id/stat_cate_left"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/left_arrow_ic"
@@ -29,7 +146,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/stat_wallet_date"
+            android:id="@+id/stat_cate_date"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="Tanggal"
@@ -39,7 +156,7 @@
 
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/stat_wallet_right"
+            android:id="@+id/stat_cate_right"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/right_arrow_ic"

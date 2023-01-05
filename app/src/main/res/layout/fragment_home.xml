@@ -49,14 +49,6 @@
                 android:textColor="@color/black"
                 />
 
-             <androidx.appcompat.widget.AppCompatButton-->
-                android:id="@+id/wallet_add"-->
-                android:layout_width="wrap_content"-->
-                android:layout_height="wrap_content"-->
-                android:text="Add Wallet"-->
-                app:layout_constraintTop_toBottomOf="@+id/wallet_grid"-->
-                app:layout_constraintEnd_toEndOf="parent"/> -->
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,6 +107,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="@+id/wallet_home_layout"
+                app:layout_constraintStart_toStartOf="parent"
                 />
 
             <GridView
@@ -139,6 +132,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

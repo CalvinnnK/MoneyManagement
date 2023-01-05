@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<SaveData>) : BaseAdapter(){
@@ -34,9 +35,16 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
         convertView = LayoutInflater.from(context).inflate(R.layout.recycler_view_transaction, parent, false)
         row_text = convertView.findViewById(R.id.trans_text)
         row_amount = convertView.findViewById(R.id.trans_amount)
+        row_dates = convertView.findViewById(R.id.trans_date)
 
         row_text.text = " " + arrayList[position].notes
         row_amount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].amount)
+        var dateFormat = SimpleDateFormat("d/M/yyyy")
+        var value = dateFormat.format(arrayList[position].date)
+
+        Log.d("TransAdapter", "tgl : " + value + " " + arrayList[position].date)
+
+        row_dates.text = " " + value
 
         return convertView
     }

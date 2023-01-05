@@ -13,16 +13,19 @@ import com.example.moneymanagementproject.databinding.FragmentAddTransactionExpe
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
+class AddTransactionExpense : Fragment(){
 
     private var _binding: FragmentAddTransactionExpenseBinding? = null
     private val binding get() = _binding!!
 
     var walletList = ArrayList<String>()
     var categoryList = ArrayList<String>()
+
+    val sdf = SimpleDateFormat("d/M/yyyy")
 
     private val databaseReference : DatabaseReference = Firebase.database.reference
 
@@ -47,14 +50,26 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
 
 
         arrayAdapter1.notifyDataSetChanged()
+        arrayAdapter1.notifyDataSetChanged()
         arrayAdapter2.notifyDataSetChanged()
 
         // default date today
         binding.dateText.text = getCurrentDate()
 
         //show date dialog
+        var c = Calendar.getInstance()
+        var y = c.get(Calendar.YEAR)
+        var m = c.get(Calendar.MONTH)
+        var d = c.get(Calendar.DAY_OF_MONTH)
+
         binding.dateBtn.setOnClickListener{
-            showDateDialog()
+            var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
+                    view, year, month, day ->
+                var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
+
+                binding.dateText.text = "" + day + "/" + a + "/" + year
+            }, y, m, d)
+            datePicker.show()
         }
 
         binding.addTransaction.setOnClickListener(){
@@ -66,25 +81,10 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
 
-    fun showDateDialog(){
-        val datePicker = DatePickerDialog(requireContext(),
-            this,
-            Calendar.getInstance().get(Calendar.YEAR),
-            Calendar.getInstance().get(Calendar.MONTH),
-            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
     private fun getCurrentDate():String{
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
-        return sdf.format(Date())
+        return sdf.format(Calendar.getInstance().time)
     }
 
-    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-        val selectedDate = "$p3/$p2/$p1"
-        binding.dateText.text = selectedDate
-    }
 
     private fun saveTransaction(){
         val a1 = binding.inputAmount.text.toString().trim()
@@ -93,6 +93,13 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
         val a4 = binding.categoryAutoComplete.text.toString().trim()
         val a5 = binding.inputNotes.text.toString().trim()
         val id = Firebase.database.reference.push().key
+
+        //convert date to long
+
+        var dateLong: Long = sdf.parse(a2).time
+
+        var dateString: String = sdf.format(dateLong)
+
 
 
         if(a1.isEmpty() || a3.isEmpty() ){
@@ -131,7 +138,7 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
                             addIncome = snap.child("expense").value.toString().toLong() + a1.toLong()
                             key = snap.key.toString()
 
-//                            Log.d("AddTransactionKey", "" + key + " " + snap.child("expense").value.toString() + " " + a1)
+                            Log.d("AddTransactionloop2", "" + addIncome)
 
                             if(key != "") dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
                             else{
@@ -139,9 +146,25 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
                             }
                         }
                     }
+                    Log.d("AddTransactionluar", "" + addIncome)
                     //Ini buat masukin data ke dalam total expense overall
-                    dataRef.child("category").child("TotalExpense").child("expense").setValue(addIncome)
+                    for(snap: DataSnapshot in snapshot.child("category").child("listCategory").children){
+                        // condition untuk nambahin saldo wallet
+                        if(snap.child("nameCategory").value.toString() == a4){
+                            //Ngambil value dari database lalu ditambah saldo category berdasarkan input transaksiIncome yang baru
+                            addIncome = snap.child("expense").value.toString().toLong() + a1.toLong()
+                            key = snap.key.toString()
 
+                            Log.d("AddTransactionloop2", "" + addIncome)
+
+                            if(key != "") dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
+                            else{
+                                Log.d("key", "FAILED")
+                            }
+                        }
+                    }
+
+//                    dataRef.child("category").child("TotalExpense").child("expense").setValue(addIncome)
                 }
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -149,7 +172,7 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
             }
             dataRef.addListenerForSingleValueEvent(changeData)
 
-            val saving = SaveData("Expense", a1.toLong(), a2, a3, a4, a5)
+            val saving = SaveData("Expense", a1.toLong(), dateLong, a3, a4, a5)
 
             if (id != null) {
                 dataRef.child("transaksi").child("listTransaction").child(id).setValue(saving).addOnCompleteListener{
@@ -185,67 +208,5 @@ class AddTransactionExpense : Fragment(), DatePickerDialog.OnDateSetListener {
         // [END post_value_event_listener]
     }
 
-//    private fun childEventListenerRecycler() {
-//
-//        val myQuery = FirebaseDatabase.getInstance().reference.orderByChild("nameWallet")
-//        myQuery.addChildEventListener( object : ChildEventListener {
-//            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d(TAG, "Check added:" + dataSnapshot.key!!)
-//
-//                for(snap: DataSnapshot in dataSnapshot.child("listWallet").children){
-//                    val name =  snap.child("nameWallet").value.toString()
-//                    if(name != "null"){
-//                        walletList.add(name)
-//                    }
-//                    Log.d("datasnap","" + name + " " + walletList.count())
-//                }
-//
-//                for(snap: DataSnapshot in dataSnapshot.child("listCategory").children){
-//                    val name =  snap.child("nameCategory").value.toString()
-//                    if(name != "null"){
-//                        categoryList.add(name)
-//                    }
-//                    Log.d("datasnap","" + name + " " + categoryList.count())
-//                }
-//
-//
-//            }
-//
-//            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d(ContentValues.TAG, "onChildChanged: ${dataSnapshot.key}")
-//                val dataRef = dataSnapshot.child("transaksi")
-//                // A comment has changed, use the key to determine if we are displaying this
-//                // comment and if so displayed the changed comment.
-//                val newComment = dataRef.value
-//                val commentKey = dataRef.key
-//
-//            }
-//
-//            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-//                Log.d(ContentValues.TAG, "onChildRemoved:" + dataSnapshot.key!!)
-//                val dataRef = dataSnapshot.child("transaksi")
-//                // A comment has changed, use the key to determine if we are displaying this
-//                // comment and if so remove it.
-//                val commentKey = dataRef.key
-//
-//            }
-//
-//            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d(ContentValues.TAG, "onChildMoved:" + dataSnapshot.key!!)
-//                val dataRef = dataSnapshot.child("transaksi")
-//                // A comment has changed position, use the key to determine if we are
-//                // displaying this comment and if so move it.
-//                val movedComment = dataRef.getValue<SaveData>()
-//                val commentKey = dataRef.key
-//
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-////                Log.w(TAG, "postComments:onCancelled", databaseError.toException())
-////                Toast.makeText(context, "Failed to load comments.",
-////                    Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
 
 }

@@ -14,6 +14,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class StatisticWallet : Fragment() {
     private var _binding: FragmentStatisticWalletBinding? = null
@@ -23,6 +26,10 @@ class StatisticWallet : Fragment() {
 
     private val databaseReference: DatabaseReference = Firebase.database.reference
     private var adapter : StatWalletAdapter? = null
+
+    var calendar = Calendar.getInstance()
+    val dateFormat = SimpleDateFormat("MMMM yyyy")
+    private lateinit var dateInput : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +43,30 @@ class StatisticWallet : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentStatisticWalletBinding.inflate(inflater, container, false)
+
+        dateInput =  dateFormat.format(calendar.time)
+
+        binding.statWalletDate.text = dateInput
+
+
+        binding.statWalletLeft.setOnClickListener{
+            calendar.add(Calendar.MONTH, -1)
+            dateInput = dateFormat.format(calendar.time)
+            binding.statWalletDate.text = dateInput
+            listStatWallet.clear()
+
+            addPostEventListener(databaseReference)
+        }
+
+        binding.statWalletRight.setOnClickListener{
+            calendar.add(Calendar.MONTH, 1)
+            dateInput = dateFormat.format(calendar.time)
+            binding.statWalletDate.text = dateInput
+            listStatWallet.clear()
+
+            addPostEventListener(databaseReference)
+        }
+
 
         addPostEventListener(databaseReference)
         checkDataIsChanged()
@@ -56,8 +87,12 @@ class StatisticWallet : Fragment() {
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // clean the array to avoid duplicates
-//                listStatWallet.clear()
+                var datefrom: Long = dateFormat.parse(dateInput).time
+                calendar.add(Calendar.MONTH, 1)
+                var dateto: Long = dateFormat.parse(dateFormat.format(calendar.time)).time
+                calendar.add(Calendar.MONTH, -1)
+                Log.d("StatWallet", "" + datefrom + " " + dateto)
+
 
                 // Get Post object and use the values to update the UI
                 for(snap : DataSnapshot in dataSnapshot.child("wallet").child("listWallet").children){
@@ -68,30 +103,37 @@ class StatisticWallet : Fragment() {
                     name =  snap.child("nameWallet").value.toString()
 
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
-                        if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()){
+                        if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()
+                            && snap1.child("date").value.toString().toLong() > datefrom
+                            && snap1.child("date").value.toString().toLong() < dateto){
                             expense += snap1.child("amount").value.toString().toLong()
 //                            Log.d("AAA loop transaksi","" + snap1.child("notes").value.toString())
                         }
                     }
+
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listIncome").children){
-                        if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()){
+                        if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()
+                            && snap1.child("date").value.toString().toLong() > datefrom
+                            && snap1.child("date").value.toString().toLong() < dateto){
                             income += snap1.child("amount").value.toString().toLong()
 //                            Log.d("AAA loop income","" + snap1.child("notes").value.toString())
                         }
                     }
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransfer").children){
-                        if(snap1.child("walletFrom").value.toString() == snap.child("nameWallet").value.toString()){
+                        if(snap1.child("walletFrom").value.toString() == snap.child("nameWallet").value.toString()
+                            && snap1.child("date").value.toString().toLong() > datefrom
+                            && snap1.child("date").value.toString().toLong() < dateto){
                             expense += snap1.child("amount").value.toString().toLong()
 //                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
                         }
-                        else if(snap1.child("walletTo").value.toString() == snap.child("nameWallet").value.toString()){
+                        else if(snap1.child("walletTo").value.toString() == snap.child("nameWallet").value.toString()
+                            && snap1.child("date").value.toString().toLong() > datefrom
+                            && snap1.child("date").value.toString().toLong() < dateto){
                             income += snap1.child("amount").value.toString().toLong()
 //                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
                         }
                     }
                     addStatWallet(StatWallet(name,income-expense,income, expense))
-//                    Log.d("AAA onDataChange", "" + name + " " + income + " " + expense + " " + listStatWallet.size)
-
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
