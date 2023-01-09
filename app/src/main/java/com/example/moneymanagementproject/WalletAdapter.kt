@@ -28,16 +28,28 @@ class WalletAdapter(private val context: Context?,  private val arrayList: Array
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var listItemView = convertView
-        if(listItemView == null){
+        var listItemViewAddWallet = convertView
+//        if(listItemView == null || listItemViewAddWallet == null){
+//            listItemView = LayoutInflater.from(context).inflate(R.layout.item_wallet, parent, false)
+//            listItemViewAddWallet = LayoutInflater.from(context).inflate(R.layout.item_addwallet, parent, false)
+//        }
+//        Log.d("walletAdapterOuter", "" + position)
+
+        if(position < arrayList.size-1){
             listItemView = LayoutInflater.from(context).inflate(R.layout.item_wallet, parent, false)
+            var nameWallet : TextView= listItemView!!.findViewById(R.id.name_wallet)
+            var saldoWallet : TextView= listItemView!!.findViewById(R.id.saldo_wallet)
+            nameWallet.text = arrayList[position].nameWallet
+            saldoWallet.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].saldo)
+            Log.d("walletAdapterInner1", "" + position + " " + arrayList[position].nameWallet)
+        }
+        else{
+            listItemView = LayoutInflater.from(context).inflate(R.layout.item_addwallet, parent, false)
+            var nameWallet : TextView = listItemView!!.findViewById(R.id.addWalletButton)
+            nameWallet.text = arrayList[position].nameWallet
+            Log.d("walletAdapterInner2", "" + position + " " + arrayList[position].nameWallet)
         }
 
-
-        val nameWallet : TextView= listItemView!!.findViewById(R.id.name_wallet)
-        val saldoWallet : TextView= listItemView!!.findViewById(R.id.saldo_wallet)
-
-        nameWallet.text = arrayList[position].nameWallet
-        saldoWallet.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].saldo)
 
 
         return listItemView

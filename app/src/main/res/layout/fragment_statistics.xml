@@ -139,16 +139,16 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/stat_cate_left"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:src="@drawable/left_arrow_ic"
-
+            android:background="@null"
             />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/stat_cate_date"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:text="Tanggal"
             android:textAlignment="center"
             android:gravity="center"
@@ -157,12 +157,19 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/stat_cate_right"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:src="@drawable/right_arrow_ic"
+            android:background="@null"
             />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCD4D3" />
+
 
     <ListView
         android:id="@+id/stat_cate_list_view"

@@ -12,8 +12,8 @@
         android:padding="5dp">
         <TextView
             android:id="@+id/img_wallet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:text="img"
             android:padding="15dp"
             android:maxLines="1"
@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginVertical="2dp">
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center">
             <TextView
                 android:id="@+id/name_wallet"
                 android:layout_width="match_parent"

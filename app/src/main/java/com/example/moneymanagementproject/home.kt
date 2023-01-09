@@ -1,27 +1,29 @@
 package com.example.moneymanagementproject
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
-import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.moneymanagementproject.databinding.FragmentHomeBinding
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
 import java.text.NumberFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class Home : Fragment() {
@@ -33,8 +35,11 @@ class Home : Fragment() {
     private var listWalletF: ArrayList<Wallet> = ArrayList<Wallet>()
     private var TotalBalance: Long = 0
 
+    val storage = Firebase.storage.reference
+
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
+//    private var storageReference: DatabaseReference = Firebase.database.reference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +47,6 @@ class Home : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-
-        //Memunculkan add wallet dialog
-//        binding.walletAdd.setOnClickListener{
-//            val popupWindow = AddWalletDialog()
-//            popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Wallet" )
-//        }
 
         binding.homeTransactionSeeMore.setOnClickListener{
             val popupWindow = AddCategoryName()
@@ -57,8 +56,6 @@ class Home : Fragment() {
 //        Adapter Wallet
         adapterW = WalletAdapter(context,listWalletF)
         binding.walletGrid.adapter = adapterW
-
-
 
         adapterW?.notifyDataSetChanged()
         binding.walletGrid.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
@@ -76,6 +73,40 @@ class Home : Fragment() {
         }
 
         addPostEventListener(databaseReference.child("wallet"))
+
+//        var getImage = storageReference.child("image")
+
+        //link url download ini langsung bisa di display
+        var url: String = "https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FBCA.png?alt=media&token=b5689798-6f93-4055-b4fc-730c26eec9ad"
+
+
+        var url1 = "gs://money-management-app-9810f.appspot.com/wallet/BCA.png"
+//        var link = Firebase.storage.getReferenceFromUrl('gs://money-management-app-9810f.appspot.com/wallet/BCA.png')
+
+//        Picasso.get().load(url).into(binding.imageTest)
+
+        val storageReference = Firebase.storage.reference
+
+
+//        storageReference.child("wallet/BCA.png").getDownloadUrl().addOnSuccessListener(
+//            OnSuccessListener<Uri?> {
+//                // Got the download URL for 'users/me/profile.png'
+//                val downloadUri: Uri = taskSnapshot.getMetadata().getDownloadUrl()
+//                var generatedFilePath = downloadUri.toString() /// The string(file link) that you need
+//            }).addOnFailureListener(OnFailureListener {
+//            // Handle any errors
+//        })
+
+
+        storageReference.child("wallet/BCA.png").downloadUrl.addOnSuccessListener {
+
+                Log.d("imageee", "" + url1)
+
+        }
+
+
+        Glide.with(requireContext()).load(url1).into(binding.imageTest)
+
 
         checkDataIsChanged()
 
@@ -112,63 +143,6 @@ class Home : Fragment() {
         postReference.addValueEventListener(postListener)
         // [END post_value_event_listener]
     }
-
-
-//    private fun childEventListenerRecycler() {
-//        val myQuery = FirebaseDatabase.getInstance().reference.orderByChild("nameWallet")
-//        // [START child_event_listener_recycler]
-//        myQuery.addChildEventListener( object : ChildEventListener {
-//            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                for(snap : DataSnapshot in dataSnapshot.child("listWallet").children) {
-//                    val name = snap.child("nameWallet").value.toString()
-//                    val saldo = snap.child("saldo").value.toString()
-//                    if (name.isNotEmpty() && saldo.isNotEmpty()) {
-//                        addWallet(Wallet(name, saldo.toLong()))
-//                    }
-//
-//                }
-//            }
-//
-//            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d(ContentValues.TAG, "onChildChanged: ${dataSnapshot.key}")
-//                val dataRef = dataSnapshot.child("transaksi")
-//                // A comment has changed, use the key to determine if we are displaying this
-//                // comment and if so displayed the changed comment.
-//                val newComment = dataRef.value
-//                val commentKey = dataRef.key
-//
-//            }
-//
-//            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-//                Log.d(ContentValues.TAG, "onChildRemoved:" + dataSnapshot.key!!)
-//                val dataRef = dataSnapshot.child("transaksi")
-//                // A comment has changed, use the key to determine if we are displaying this
-//                // comment and if so remove it.
-//                val commentKey = dataRef.key
-//
-//            }
-//
-//            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d(ContentValues.TAG, "onChildMoved:" + dataSnapshot.key!!)
-//                val dataRef = dataSnapshot.child("transaksi")
-//                // A comment has changed position, use the key to determine if we are
-//                // displaying this comment and if so move it.
-//                val movedComment = dataRef.getValue<SaveData>()
-//                val commentKey = dataRef.key
-//
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-////                Log.w(TAG, "postComments:onCancelled", databaseError.toException())
-////                Toast.makeText(context, "Failed to load comments.",
-////                    Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//
-//
-////        databaseReference.addChildEventListener(childEventListener)
-//        // [END child_event_listener_recycler]
-//    }
 
     fun addWallet(data:Wallet){
         this.listWalletF.add(data)

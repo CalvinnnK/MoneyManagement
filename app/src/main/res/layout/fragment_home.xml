@@ -123,14 +123,6 @@
 
             </GridView>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/wallet_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Wallet"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_grid"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -162,6 +154,16 @@
                 android:text="See More"
                 app:layout_constraintTop_toBottomOf="@id/list_view_transaction_home"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/imageTest"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/wallet_img"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/home_transaction_see_more"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_view_transaction_home" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
