@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.NonDisposableHandle.parent
 import java.text.NumberFormat
 import java.util.*
@@ -39,8 +42,10 @@ class WalletAdapter(private val context: Context?,  private val arrayList: Array
             listItemView = LayoutInflater.from(context).inflate(R.layout.item_wallet, parent, false)
             var nameWallet : TextView= listItemView!!.findViewById(R.id.name_wallet)
             var saldoWallet : TextView= listItemView!!.findViewById(R.id.saldo_wallet)
+            var imgLink : ImageView = listItemView!!.findViewById(R.id.img_wallet)
             nameWallet.text = arrayList[position].nameWallet
             saldoWallet.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].saldo)
+            Glide.with(context!!).load(arrayList[position].imageLink).into(imgLink)
             Log.d("walletAdapterInner1", "" + position + " " + arrayList[position].nameWallet)
         }
         else{

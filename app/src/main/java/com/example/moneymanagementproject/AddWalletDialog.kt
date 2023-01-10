@@ -1,20 +1,34 @@
 package com.example.moneymanagementproject
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import com.example.moneymanagementproject.databinding.AddWalletDialogBinding
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.component1
+import com.google.firebase.storage.ktx.component2
+import com.google.firebase.storage.ktx.storage
+import java.util.ArrayList
 
 class AddWalletDialog: DialogFragment() {
     private var _binding : AddWalletDialogBinding? = null
     private val binding get() = _binding!!
 
+    private var storageReference = Firebase.storage.reference
+
+    private var iconWallet: ArrayList<String> = ArrayList<String>()
+    private var adapter : IconWalletAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,15 +43,71 @@ class AddWalletDialog: DialogFragment() {
     ): View? {
         _binding = AddWalletDialogBinding.inflate(inflater, container, false)
 
+        // Hardcode Link Image Wallet Icon
+        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FBCA.png?alt=media&token=b5689798-6f93-4055-b4fc-730c26eec9ad")
+        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2Fgopay.png?alt=media&token=84fff6e7-4b80-4f0f-90eb-6512d4651fd3")
+        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FOVO.png?alt=media&token=919616e0-0ca6-4708-a8a7-e31dac0229a0")
+        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FShopeePay.png?alt=media&token=985f3a02-df60-4209-9946-8e7b9cddaf5b")
+
+        adapter = IconWalletAdapter(requireContext(),iconWallet)
+        binding.iconWalletGV.adapter = adapter
+
+
+        var link = ""
+        binding.iconWalletGV.onItemClickListener = AdapterView.OnItemClickListener{_,_,i,_ ->
+            var position = i
+            position += 1
+            Toast.makeText(
+                requireContext(), "Icon " + position + " selected",
+                Toast.LENGTH_SHORT
+            ).show()
+            link = iconWallet[i]
+        }
+
+
+//        storageReference.child("wallet").listAll().addOnSuccessListener { (items, prefixes) ->
+//            prefixes.forEach { prefix ->
+//                // All the prefixes under listRef.
+//                // You may call listAll() recursively on them.
+//            }
+//
+//            items.forEach {
+//                Log.d("image", "" + it)
+//                it.downloadUrl.addOnSuccessListener(
+//                    OnSuccessListener<Uri?> {
+//                        var downloadLink = it.toString()
+//                        Log.d("imageURLS", "" + downloadLink )
+//                        Log.d("imageSize", ""+ iconWallet.size)
+//
+//                        addIconWallet(downloadLink)
+//
+////                        Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
+//                    }).addOnFailureListener(OnFailureListener {
+//                    // Handle any errors
+//                })
+//            }
+//        }.addOnFailureListener {
+//            // Uh-oh, an error occurred!
+//        }
+
         // Add wallet button
         binding.addWallet.setOnClickListener{
-            addWallet()
+            if(link != ""){
+                addWallet(link)
+            }
+            else{
+                binding.walletNameInput.error = "Please select an icon!!"
+            }
         }
 
         return binding.root
     }
 
-    private fun addWallet(){
+    private fun addIconWallet(downloadLink: String) {
+        iconWallet.add(downloadLink)
+    }
+
+    private fun addWallet(imgLink: String){
         val a = binding.walletNameInput.text.toString()
         val id = Firebase.database.reference.push().key
         val dataRef = Firebase.database.reference
@@ -46,7 +116,13 @@ class AddWalletDialog: DialogFragment() {
             binding.walletNameInput.error = "Please input wallet name!"
         }
         else{
-            dataRef.child("wallet").child("listWallet").child(id).setValue(Wallet(a,0)).addOnCompleteListener {
+//            if(a.equals("Bank",true)){ imgLink = iconWallet[0]}
+//            else if(a.equals("Go Pay",true)){imgLink = iconWallet[1]}
+//            else if(a.equals("OVO",true)) {imgLink = iconWallet[2]}
+//            else if(a.equals("Shopee Pay",true)){imgLink = iconWallet[3]}
+//            else {imgLink = iconWallet[0]}
+
+            dataRef.child("wallet").child("listWallet").child(id).setValue(Wallet(a,0,imgLink)).addOnCompleteListener {
                 Toast.makeText(activity,"Wallet Added", Toast.LENGTH_LONG).show()
                 back_to_main()
             }

@@ -36,6 +36,17 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <GridView
+        android:id="@+id/icon_wallet_GV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:layout_gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="4"
+        android:verticalSpacing="5dp"
+        tools:listitem="@layout/list_icon_wallet"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addWallet"
         android:layout_width="wrap_content"

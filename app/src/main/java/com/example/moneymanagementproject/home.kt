@@ -24,7 +24,8 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import java.text.NumberFormat
 import java.util.*
-
+import com.google.firebase.storage.ktx.component1
+import com.google.firebase.storage.ktx.component2
 
 class Home : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -74,38 +75,42 @@ class Home : Fragment() {
 
         addPostEventListener(databaseReference.child("wallet"))
 
-//        var getImage = storageReference.child("image")
-
-        //link url download ini langsung bisa di display
-        var url: String = "https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FBCA.png?alt=media&token=b5689798-6f93-4055-b4fc-730c26eec9ad"
-
-
-        var url1 = "gs://money-management-app-9810f.appspot.com/wallet/BCA.png"
-//        var link = Firebase.storage.getReferenceFromUrl('gs://money-management-app-9810f.appspot.com/wallet/BCA.png')
-
-//        Picasso.get().load(url).into(binding.imageTest)
 
         val storageReference = Firebase.storage.reference
+        var downloadLink: String = ""
 
 
-//        storageReference.child("wallet/BCA.png").getDownloadUrl().addOnSuccessListener(
+//        storageReference.child("wallet/BCA.png").downloadUrl.addOnSuccessListener(
 //            OnSuccessListener<Uri?> {
-//                // Got the download URL for 'users/me/profile.png'
-//                val downloadUri: Uri = taskSnapshot.getMetadata().getDownloadUrl()
-//                var generatedFilePath = downloadUri.toString() /// The string(file link) that you need
+//                downloadLink = it.toString()
+//                Log.d("imageeeOnsuccess", "" + downloadLink)
+//                Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
 //            }).addOnFailureListener(OnFailureListener {
 //            // Handle any errors
 //        })
 
 
-        storageReference.child("wallet/BCA.png").downloadUrl.addOnSuccessListener {
+        storageReference.child("wallet").listAll().addOnSuccessListener { (items, prefixes) ->
+            prefixes.forEach { prefix ->
+                // All the prefixes under listRef.
+                // You may call listAll() recursively on them.
+            }
 
-                Log.d("imageee", "" + url1)
+            items.forEach {
+//                Log.d("image", "" + it)
+                it.downloadUrl.addOnSuccessListener(
+                    OnSuccessListener<Uri?> {
+                        downloadLink = it.toString()
+//                        Log.d("imageURL", "" + downloadLink)
+                        Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
+                    }).addOnFailureListener(OnFailureListener {
+                    // Handle any errors
+                })
+            }
+        }.addOnFailureListener {
+                // Uh-oh, an error occurred!
+            }
 
-        }
-
-
-        Glide.with(requireContext()).load(url1).into(binding.imageTest)
 
 
         checkDataIsChanged()
