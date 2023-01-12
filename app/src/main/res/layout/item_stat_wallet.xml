@@ -11,10 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp">
 
-        <TextView
+        <ImageView
+            android:id="@+id/item_stat_imgWallet"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:text="Img"
+            android:src="@drawable/wallet_img"
             android:gravity="center"
             />
 

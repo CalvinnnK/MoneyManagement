@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="20dp"
     android:orientation="vertical">
 
@@ -34,6 +35,18 @@
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <GridView
+        android:id="@+id/category_GV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp"
+        android:layout_gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="4"
+        android:verticalSpacing="5dp"
+        tools:listitem="@layout/list_icon_wallet"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addCategory"

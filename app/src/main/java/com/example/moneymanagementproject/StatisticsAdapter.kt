@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -19,6 +21,8 @@ class StatisticsAdapter(private val context: Context?, private val arrayList: Ar
     private lateinit var name: TextView
     private lateinit var percent: TextView
     private lateinit var balance: TextView
+    private lateinit var img: ImageView
+
     private var total: Double = 0.0
     var p:Double = 0.0
 
@@ -44,13 +48,12 @@ class StatisticsAdapter(private val context: Context?, private val arrayList: Ar
         name = convertView.findViewById(R.id.item_stat_nameCategory)
         percent = convertView.findViewById(R.id.item_stat_percentage)
         balance = convertView.findViewById(R.id.item_stat_expense)
+        img = convertView.findViewById(R.id.item_stat_image)
 
 
         arrayList.forEach {
             total += it.expense
         }
-
-        Log.d("StatAdapter","p = " + p + " total = " + total)
 
         p = arrayList[position].expense * 100 / total
         if( p.isNaN()) p = 0.0
@@ -59,7 +62,9 @@ class StatisticsAdapter(private val context: Context?, private val arrayList: Ar
 
         name.text = arrayList[position].nameCategory
         percent.text = solution.toString() + "%"
-        balance.text = arrayList[position].expense.toString()
+        balance.text = "Rp " + arrayList[position].expense.toString()
+        Glide.with(context!!).load(arrayList[position].imgLink).into(img)
+        Log.d("StatAdapter", "" + arrayList[position].imgLink)
 
         return convertView
     }

@@ -93,6 +93,7 @@ class Statistics : Fragment() {
     private fun addPostEventListener(postReference: DatabaseReference) {
         var name = ""
         var expensePerCategory: Long = 0
+        var imgLink = ""
 
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
@@ -106,6 +107,7 @@ class Statistics : Fragment() {
                 for(snap : DataSnapshot in dataSnapshot.child("category").child("listCategory").children){
                     expensePerCategory = 0
                     name = snap.child("nameCategory").value.toString()
+                    imgLink = snap.child("imgLink").value.toString()
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
 
                         if(name == snap1.child("cate").value.toString() &&
@@ -114,7 +116,7 @@ class Statistics : Fragment() {
                             expensePerCategory += snap1.child("amount").value.toString().toLong()
                         }
                     }
-                    addStatCate(Category(name, expensePerCategory))
+                    addStatCate(Category(name, expensePerCategory, imgLink))
                 }
 
 

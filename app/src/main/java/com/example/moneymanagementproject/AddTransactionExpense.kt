@@ -92,12 +92,12 @@ class AddTransactionExpense : Fragment(){
         val a3 = binding.walletAutoComplete.text.toString().trim()
         val a4 = binding.categoryAutoComplete.text.toString().trim()
         val a5 = binding.inputNotes.text.toString().trim()
+        var imgLinkWallet = ""
+        var imgLinkCate = ""
         val id = Firebase.database.reference.push().key
 
         //convert date to long
-
         var dateLong: Long = sdf.parse(a2).time
-
         var dateString: String = sdf.format(dateLong)
 
 
@@ -113,6 +113,11 @@ class AddTransactionExpense : Fragment(){
             var addIncome: Long = 0
             var key = ""
 
+            val saving = SaveData("Expense", a1.toLong(), dateLong, a3, a4, a5, imgLinkWallet, imgLinkCate)
+            dataRef.child("transaksi").child("listTransaction").child(id!!).setValue(saving)
+
+            Log.d("IDDD outer", "" + id)
+
             val changeData = object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -123,7 +128,15 @@ class AddTransactionExpense : Fragment(){
                             addIncome = snap.child("saldo").value.toString().toLong() - a1.toLong()
                             key = snap.key.toString()
 
-                            if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                            imgLinkWallet = snap.child("imageLink").value.toString()
+
+//                            Log.d("icon", "wall : " + imgLinkWallet)
+
+                            if(key != "") {
+                                dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                                dataRef.child("transaksi").child("listTransaction").child(id).child("imgLinkWallet").setValue(imgLinkWallet)
+                                Log.d("IDDD", "" + id + " " + imgLinkWallet)
+                            }
                             else{
                                 Log.d("key", "FAILED")
                             }
@@ -137,34 +150,43 @@ class AddTransactionExpense : Fragment(){
                             //Ngambil value dari database lalu ditambah saldo category berdasarkan input transaksiIncome yang baru
                             addIncome = snap.child("expense").value.toString().toLong() + a1.toLong()
                             key = snap.key.toString()
+                            imgLinkCate = snap.child("imgLink").value.toString()
 
-                            Log.d("AddTransactionloop2", "" + addIncome)
+//                            Log.d("icon", "cate : " + imgLinkCate)
 
-                            if(key != "") dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
+                            if(key != ""){
+                                dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
+                                dataRef.child("transaksi").child("listTransaction").child(id).child("imgLinkCategory").setValue(imgLinkCate)
+                            }
                             else{
                                 Log.d("key", "FAILED")
                             }
                         }
                     }
-                    Log.d("AddTransactionluar", "" + addIncome)
+
+                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+                    activity?.finish()
+
                     //Ini buat masukin data ke dalam total expense overall
-                    for(snap: DataSnapshot in snapshot.child("category").child("listCategory").children){
-                        // condition untuk nambahin saldo wallet
-                        if(snap.child("nameCategory").value.toString() == a4){
-                            //Ngambil value dari database lalu ditambah saldo category berdasarkan input transaksiIncome yang baru
-                            addIncome = snap.child("expense").value.toString().toLong() + a1.toLong()
-                            key = snap.key.toString()
-
-                            Log.d("AddTransactionloop2", "" + addIncome)
-
-                            if(key != "") dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
-                            else{
-                                Log.d("key", "FAILED")
-                            }
-                        }
-                    }
+//                    for(snap: DataSnapshot in snapshot.child("category").child("listCategory").children){
+//                        // condition untuk nambahin saldo wallet
+//                        if(snap.child("nameCategory").value.toString() == a4){
+//                            //Ngambil value dari database lalu ditambah saldo category berdasarkan input transaksiIncome yang baru
+//                            addIncome = snap.child("expense").value.toString().toLong() + a1.toLong()
+//                            key = snap.key.toString()
+//
+////                            Log.d("AddTransactionloop2", "" + addIncome)
+//
+//                            if(key != "") dataRef.child("category").child("listCategory").child(key).child("expense").setValue(addIncome)
+//                            else{
+//                                Log.d("key", "FAILED")
+//                            }
+//                        }
+//                    }
 
 //                    dataRef.child("category").child("TotalExpense").child("expense").setValue(addIncome)
+
+
                 }
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -172,14 +194,13 @@ class AddTransactionExpense : Fragment(){
             }
             dataRef.addListenerForSingleValueEvent(changeData)
 
-            val saving = SaveData("Expense", a1.toLong(), dateLong, a3, a4, a5)
 
-            if (id != null) {
-                dataRef.child("transaksi").child("listTransaction").child(id).setValue(saving).addOnCompleteListener{
-                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
-                    activity?.finish()
-                }
-            }
+//            if (id != null) {
+//                dataRef.child("transaksi").child("listTransaction").child(id).setValue(saving).addOnCompleteListener{
+//                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+//                    activity?.finish()
+//                }
+//            }
         }
     }
 

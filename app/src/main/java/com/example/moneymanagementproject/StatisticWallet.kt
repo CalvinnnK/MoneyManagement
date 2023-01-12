@@ -79,7 +79,8 @@ class StatisticWallet : Fragment() {
     }
 
     private fun addPostEventListener(postReference: DatabaseReference) {
-        var name: String = ""
+        var name = ""
+        var imgLink = ""
         var income: Long = 0
         var expense: Long = 0
 
@@ -99,8 +100,9 @@ class StatisticWallet : Fragment() {
                     name = ""
                     income = 0
                     expense = 0
-//                    Log.d("AAA loop wallet","" + snap.child("nameWallet").value.toString())
+
                     name =  snap.child("nameWallet").value.toString()
+                    imgLink = snap.child("imageLink").value.toString()
 
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
                         if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()
@@ -133,7 +135,7 @@ class StatisticWallet : Fragment() {
 //                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
                         }
                     }
-                    addStatWallet(StatWallet(name,income-expense,income, expense))
+                    addStatWallet(StatWallet(name,income-expense,income, expense, imgLink))
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {

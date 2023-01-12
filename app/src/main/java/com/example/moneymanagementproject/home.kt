@@ -34,9 +34,8 @@ class Home : Fragment() {
     private var adapterW : WalletAdapter? = null
     //Array kosong buat manggil array dari Activity Main
     private var listWalletF: ArrayList<Wallet> = ArrayList<Wallet>()
+    private var listTransaction: ArrayList<SaveData> = ArrayList<SaveData>()
     private var TotalBalance: Long = 0
-
-    val storage = Firebase.storage.reference
 
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
@@ -73,7 +72,7 @@ class Home : Fragment() {
             }
         }
 
-        addPostEventListener(databaseReference.child("wallet"))
+        addPostEventListener(databaseReference)
 
 
         val storageReference = Firebase.storage.reference
@@ -102,7 +101,7 @@ class Home : Fragment() {
                     OnSuccessListener<Uri?> {
                         downloadLink = it.toString()
 //                        Log.d("imageURL", "" + downloadLink)
-                        Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
+//                        Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
                     }).addOnFailureListener(OnFailureListener {
                     // Handle any errors
                 })
@@ -131,13 +130,20 @@ class Home : Fragment() {
                 TotalBalance = 0
 
                 // Get Post object and use the values to update the UI
-                for(snap : DataSnapshot in dataSnapshot.child("listWallet").children){
+                for(snap : DataSnapshot in dataSnapshot.child("wallet").child("listWallet").children){
                     val post = snap.getValue<Wallet>()!!
                     addWallet(post)
                     TotalBalance += snap.child("saldo").value.toString().toLong()
                     binding.totalAmount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(TotalBalance)
                 }
                 listWalletF.add(Wallet("Add Wallet",0))
+
+                for(snap: DataSnapshot in dataSnapshot.child("transaksi").children){
+                    var post = snap.getValue<SaveData>()
+                    addTransaction(post!!)
+                    Log.d("TestingHome", "" + snap.value.toString())
+                }
+
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Post failed, log a message
@@ -153,4 +159,10 @@ class Home : Fragment() {
         this.listWalletF.add(data)
         checkDataIsChanged()
     }
+
+    fun addTransaction(data: SaveData){
+        this.listTransaction.add(data)
+        checkDataIsChanged()
+    }
+
 }

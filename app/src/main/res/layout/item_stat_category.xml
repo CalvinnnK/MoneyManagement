@@ -7,11 +7,11 @@
     android:padding="15dp"
     >
 
-    <TextView
+    <ImageView
         android:id="@+id/item_stat_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="Img"
+        android:src="@drawable/wallet_img"
         android:layout_gravity="center"/>
 
     <TextView
@@ -19,6 +19,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="nameCategory"
+        android:paddingLeft="15dp"
         android:layout_gravity="center"/>
     <TextView
         android:id="@+id/item_stat_percentage"

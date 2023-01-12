@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +18,8 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
 
     private lateinit var row_text : TextView
     private lateinit var row_amount : TextView
-    private lateinit var row_dates : TextView
+    private lateinit var row_wallet : ImageView
+    private lateinit var row_cate : ImageView
 
     override fun getCount(): Int {
         return arrayList.size
@@ -35,21 +38,18 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
         convertView = LayoutInflater.from(context).inflate(R.layout.recycler_view_transaction, parent, false)
         row_text = convertView.findViewById(R.id.trans_text)
         row_amount = convertView.findViewById(R.id.trans_amount)
-        row_dates = convertView.findViewById(R.id.trans_date)
+        row_wallet = convertView.findViewById(R.id.trans_wallet)
+        row_cate = convertView.findViewById(R.id.trans_ic)
 
+        row_text.text = arrayList[position].notes
         if(row_text.text == ""){
             row_text.text = arrayList[position].cate
-        }else{
-            row_text.text = " " + arrayList[position].notes
         }
 
-
         row_amount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].amount)
-        var dateFormat = SimpleDateFormat("d/M/yyyy")
-        var value = dateFormat.format(arrayList[position].date)
 
-
-        row_dates.text = " " + value
+        Glide.with(context!!).load(arrayList[position].imgLinkCategory).into(row_cate)
+        Glide.with(context!!).load(arrayList[position].imgLinkWallet).into(row_wallet)
 
         return convertView
     }

@@ -15,6 +15,7 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
+
         <ImageView
             android:id="@+id/trans_ic"
             android:layout_width="40dp"
@@ -51,13 +52,14 @@
             android:layout_weight="1" />
 
 
-        <TextView
-            android:id="@+id/trans_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/trans_wallet"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="right"
             android:gravity="right"
-            android:text="gambar wallet" />
+            android:src="@drawable/wallet_img"
+            />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
