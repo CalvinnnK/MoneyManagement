@@ -60,7 +60,7 @@ class StatWalletAdapter(private val context: Context?, private val arrayList: Ar
 
         var value: Double
         if(arrayList[position].income.toInt() == 0 || arrayList[position].expense.toInt() == 0){
-            value = 1.0
+            value = -1.0
         }
         else{
             value = arrayList[position].expense.toDouble() / arrayList[position].income.toDouble() * 100
