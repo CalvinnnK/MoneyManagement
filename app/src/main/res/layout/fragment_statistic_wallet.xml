@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StatisticWallet">
+    tools:context="Statistic.Wallet.StatisticWallet">
 
     <!-- TODO: Update blank fragment layout -->
 

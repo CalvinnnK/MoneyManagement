@@ -1,7 +1,6 @@
-package com.example.moneymanagementproject
+package Statistic.Wallet
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.example.moneymanagementproject.R
 import java.text.NumberFormat
 import java.util.*
 
@@ -60,7 +60,7 @@ class StatWalletAdapter(private val context: Context?, private val arrayList: Ar
 
         var value: Double
         if(arrayList[position].income.toInt() == 0 || arrayList[position].expense.toInt() == 0){
-            value = -1.0
+            value = 1.0
         }
         else{
             value = arrayList[position].expense.toDouble() / arrayList[position].income.toDouble() * 100

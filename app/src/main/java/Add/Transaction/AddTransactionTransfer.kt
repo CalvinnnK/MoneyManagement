@@ -1,4 +1,4 @@
-package com.example.moneymanagementproject
+package Add.Transaction
 
 import android.app.DatePickerDialog
 import android.content.ContentValues
@@ -9,13 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
 import android.widget.Toast
+import com.example.moneymanagementproject.R
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionTransferBinding
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,7 +86,8 @@ class AddTransactionTransfer : Fragment() {
         val a3 = binding.walletFromAutoComplete.text.toString().trim()
         val a4 = binding.walletToAutoComplete.text.toString().trim()
         val a5 = binding.inputNotes.text.toString().trim()
-        val id = Firebase.database.reference.push().key
+        var imgLinkWallet = ""
+        val id = Firebase.database.reference.push().key!!
 
         var dateLong: Long = sdf.parse(a2).time
 
@@ -106,6 +106,9 @@ class AddTransactionTransfer : Fragment() {
             var addIncome: Long = 0
             var key = ""
 
+            val saving = SaveTransfer(a1.toLong(),dateLong,a3,a4,a5,"","")
+            dataRef.child("transaksi").child("listTransfer").child(id).setValue(saving)
+
             val changeData = object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
@@ -114,8 +117,14 @@ class AddTransactionTransfer : Fragment() {
                             //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
                             addIncome = snap.child("saldo").value.toString().toLong() - a1.toLong()
                             key = snap.key.toString()
+
+                            imgLinkWallet = snap.child("imageLink").value.toString()
+
                             Log.d("key", "" + key)
-                            if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                            if(key != ""){
+                                dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                                dataRef.child("transaksi").child("listTransfer").child(id).child("imgLinkWalletFrom").setValue(imgLinkWallet)
+                            }
                             else{
                                 Log.d("key", "FAILED")
                             }
@@ -124,13 +133,22 @@ class AddTransactionTransfer : Fragment() {
                             //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
                             addIncome = snap.child("saldo").value.toString().toLong() + a1.toLong()
                             key = snap.key.toString()
+
+                            imgLinkWallet = snap.child("imageLink").value.toString()
+
                             Log.d("key", "" + key)
-                            if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                            if(key != ""){
+                                dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                                dataRef.child("transaksi").child("listTransfer").child(id).child("imgLinkWalletTo").setValue(imgLinkWallet)
+                            }
                             else{
                                 Log.d("key", "FAILED")
                             }
                         }
                     }
+
+                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+                    activity?.finish()
                 }
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -138,14 +156,7 @@ class AddTransactionTransfer : Fragment() {
             }
             dataRef.addListenerForSingleValueEvent(changeData)
 
-            val saving = SaveTransfer("Transfer",a1.toLong(),dateLong,a3,a4,a5)
 
-            if (id != null) {
-                dataRef.child("transaksi").child("listTransfer").child(id).setValue(saving).addOnCompleteListener{
-                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
-                    activity?.finish()
-                }
-            }
         }
     }
 

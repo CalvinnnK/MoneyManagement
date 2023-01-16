@@ -1,4 +1,4 @@
-package com.example.moneymanagementproject
+package Home
 
 class Wallet (
     var nameWallet: String = "",

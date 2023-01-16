@@ -1,23 +1,15 @@
-package com.example.moneymanagementproject
+package Home
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.example.moneymanagementproject.databinding.AddWalletDialogBinding
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.component1
-import com.google.firebase.storage.ktx.component2
 import com.google.firebase.storage.ktx.storage
 import java.util.ArrayList
 
@@ -63,32 +55,6 @@ class AddWalletDialog: DialogFragment() {
             ).show()
             link = iconWallet[i]
         }
-
-
-//        storageReference.child("wallet").listAll().addOnSuccessListener { (items, prefixes) ->
-//            prefixes.forEach { prefix ->
-//                // All the prefixes under listRef.
-//                // You may call listAll() recursively on them.
-//            }
-//
-//            items.forEach {
-//                Log.d("image", "" + it)
-//                it.downloadUrl.addOnSuccessListener(
-//                    OnSuccessListener<Uri?> {
-//                        var downloadLink = it.toString()
-//                        Log.d("imageURLS", "" + downloadLink )
-//                        Log.d("imageSize", ""+ iconWallet.size)
-//
-//                        addIconWallet(downloadLink)
-//
-////                        Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
-//                    }).addOnFailureListener(OnFailureListener {
-//                    // Handle any errors
-//                })
-//            }
-//        }.addOnFailureListener {
-//            // Uh-oh, an error occurred!
-//        }
 
         // Add wallet button
         binding.addWallet.setOnClickListener{

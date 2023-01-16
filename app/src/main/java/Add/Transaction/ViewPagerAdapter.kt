@@ -1,9 +1,11 @@
-package com.example.moneymanagementproject
+package Add.Transaction
 
+import Add.Transaction.AddTransactionExpense
+import Add.Transaction.AddTransactionIncome
+import Add.Transaction.AddTransactionTransfer
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
 
 class ViewPagerAdapter(fm: FragmentManager ) : FragmentPagerAdapter(fm)  {
     override fun getCount(): Int {

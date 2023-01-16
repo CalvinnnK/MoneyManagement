@@ -1,18 +1,13 @@
-package com.example.moneymanagementproject
+package Home
 
-import android.net.Uri
+import Statistics.Category.Category
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.example.moneymanagementproject.databinding.FragmentAddCategoryNameBinding
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -22,7 +17,9 @@ class AddCategoryName : DialogFragment() {
     private var _binding : FragmentAddCategoryNameBinding? = null
     private val binding get() = _binding!!
 
-    private var arrayList: ArrayList<String> = ArrayList()
+    private var listCategory: ArrayList<String> = ArrayList()
+
+    private var adapter: IconCategoryAdapter? = null
 
     private var storageReference = Firebase.storage.reference
 
@@ -39,32 +36,35 @@ class AddCategoryName : DialogFragment() {
     ): View? {
         _binding = FragmentAddCategoryNameBinding.inflate(inflater, container, false)
 
-            var downloadLink = ""
-            storageReference.child("wallet").listAll().addOnSuccessListener{ (items, prefixes) ->
-                prefixes.forEach { prefix ->
-                    // All the prefixes under listRef.
-                    // You may call listAll() recursively on them.
-                }
-                items.forEach {
-//                Log.d("image", "" + it)
-                    it.downloadUrl.addOnSuccessListener(
-                        OnSuccessListener<Uri?> {
-                            downloadLink = it.toString()
-//                        Log.d("imageURL", "" + downloadLink)
-//                        Glide.with(requireContext()).load(downloadLink).into(binding.imageTest)
-                        }).addOnFailureListener(OnFailureListener {
-                        // Handle any errors
-                    })
-                }
-            }.addOnFailureListener {
-                // Uh-oh, an error occurred!
+        var downloadLink = ""
+        storageReference.child("wallet").listAll().addOnSuccessListener{
+            it.items.forEach(){
+                var links = it.downloadUrl.toString()
+                listCategory.add(links)
             }
+        }
+
+        adapter = IconCategoryAdapter(context,listCategory)
+        binding.categoryGV.adapter = adapter
+
+
+
+
+        //            var storeRef = Firebase.storage.reference
+//            storeRef.child("Category").listAll().addOnSuccessListener {
+//                it.items.forEach(){
+//                    Log.d("storeREf", ""+it.downloadUrl.toString())
+//                }
+//            }
+
 
 
         binding.addCategory.setOnClickListener{
             addCategory()
         }
         // Inflate the layout for this fragment
+
+        adapter!!.notifyDataSetChanged()
         return binding.root
     }
 

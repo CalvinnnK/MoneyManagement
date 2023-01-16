@@ -1,4 +1,4 @@
-package com.example.moneymanagementproject
+package Statistic.Wallet
 
 import android.content.ContentValues
 import android.os.Bundle

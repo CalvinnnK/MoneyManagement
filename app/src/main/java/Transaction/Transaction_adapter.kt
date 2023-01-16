@@ -1,8 +1,8 @@
 package com.example.moneymanagementproject
 
+import Add.Transaction.SaveData
 import android.content.Context
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<SaveData>) : BaseAdapter(){

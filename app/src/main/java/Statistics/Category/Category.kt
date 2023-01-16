@@ -1,4 +1,4 @@
-package com.example.moneymanagementproject
+package Statistics.Category
 
 class Category(
     val nameCategory: String = "",

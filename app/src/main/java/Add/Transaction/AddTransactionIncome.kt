@@ -1,7 +1,8 @@
-package com.example.moneymanagementproject
+package Add.Transaction
 
 import android.app.DatePickerDialog
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,14 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
 import android.widget.Toast
+import com.example.moneymanagementproject.R
 import com.example.moneymanagementproject.databinding.FragmentAddTransactionIncomeBinding
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import java.text.DateFormat
+import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,6 +69,24 @@ class AddTransactionIncome : Fragment(){
         }
 
 
+        var storeRef = Firebase.storage.reference
+
+
+//        storeRef.child("Category").listAll().addOnSuccessListener {
+//            it.items.forEach(){
+//                it.downloadUrl.addOnSuccessListener {
+//                    var a = it.toString()
+//                    Log.d("storeREf", "" + a)
+//                }
+//            }
+//        }
+
+        var a = storeRef.child("Category").child("Bonus.png").downloadUrl.toString()
+
+
+        Log.d("storeREf", "" + storeRef.child("Category").child("Bonus.png").downloadUrl.toString())
+
+
         binding.addTransaction.setOnClickListener(){
             saveTransaction()
         }
@@ -85,8 +104,11 @@ class AddTransactionIncome : Fragment(){
         val a1 = binding.inputAmount.text.toString().trim()
         val a2 = binding.dateText.text.toString().trim()
         val a3 = binding.walletAutoComplete.text.toString().trim()
-        val a5 = binding.inputNotes.text.toString().trim()
+        val a4 = binding.inputNotes.text.toString().trim()
+        var imgLinkWallet = ""
         val id = Firebase.database.reference.push().key!!
+
+        var defaultImg = "https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/Category%2FBonus.png?alt=media&token=5e0a41ee-833e-42e0-8113-57099595d20b"
 
         var dateLong: Long = sdf.parse(a2).time
 
@@ -107,6 +129,9 @@ class AddTransactionIncome : Fragment(){
                 var addIncome: Long = 0
                 var key = ""
 
+                val saving = SaveIncome(a1.toLong(),dateLong, a3, a4, defaultImg)
+                dataRef.child("transaksi").child("listIncome").child(id).setValue(saving)
+
                 val changeData = object : ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
@@ -114,13 +139,22 @@ class AddTransactionIncome : Fragment(){
                                 //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
                                 addIncome = snap.child("saldo").value.toString().toLong() + a1.toLong()
                                 key = snap.key.toString()
+
+                                imgLinkWallet = snap.child("imageLink").value.toString()
+
                                 Log.d("key", "" + key)
-                                if(key != "") dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                                if(key != ""){
+                                    dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
+                                    dataRef.child("transaksi").child("listIncome").child(id).child("imgLinkWallet").setValue(imgLinkWallet)
+                                }
                                 else{
                                     Log.d("key", "FAILED")
                                 }
                             }
                         }
+
+                        Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+                        activity?.finish()
                     }
                     override fun onCancelled(error: DatabaseError) {
                         TODO("Not yet implemented")
@@ -128,14 +162,6 @@ class AddTransactionIncome : Fragment(){
 
                 }
                 dataRef.addListenerForSingleValueEvent(changeData)
-
-                val saving = SaveIncome("Income",a1.toLong(),dateLong, a3, a5)
-
-
-                dataRef.child("transaksi").child("listIncome").child(id).setValue(saving).addOnCompleteListener{
-                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
-                    activity?.finish()
-                }
 
 
             }

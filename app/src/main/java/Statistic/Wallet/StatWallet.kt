@@ -1,4 +1,4 @@
-package com.example.moneymanagementproject
+package Statistic.Wallet
 
 class StatWallet(
     val nameWallet: String = "",
