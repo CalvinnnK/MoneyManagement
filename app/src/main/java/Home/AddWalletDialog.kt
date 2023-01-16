@@ -1,6 +1,7 @@
 package Home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,11 +36,14 @@ class AddWalletDialog: DialogFragment() {
     ): View? {
         _binding = AddWalletDialogBinding.inflate(inflater, container, false)
 
-        // Hardcode Link Image Wallet Icon
-        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FBCA.png?alt=media&token=b5689798-6f93-4055-b4fc-730c26eec9ad")
-        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2Fgopay.png?alt=media&token=84fff6e7-4b80-4f0f-90eb-6512d4651fd3")
-        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FOVO.png?alt=media&token=919616e0-0ca6-4708-a8a7-e31dac0229a0")
-        addIconWallet("https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/wallet%2FShopeePay.png?alt=media&token=985f3a02-df60-4209-9946-8e7b9cddaf5b")
+        storageReference.child("wallet").listAll().addOnSuccessListener{
+            it.items.forEach(){
+                it.downloadUrl.addOnSuccessListener {
+                    addlistWallet(it.toString())
+                    checkDataIsChanged()
+                }
+            }
+        }
 
         adapter = IconWalletAdapter(requireContext(),iconWallet)
         binding.iconWalletGV.adapter = adapter
@@ -82,11 +86,6 @@ class AddWalletDialog: DialogFragment() {
             binding.walletNameInput.error = "Please input wallet name!"
         }
         else{
-//            if(a.equals("Bank",true)){ imgLink = iconWallet[0]}
-//            else if(a.equals("Go Pay",true)){imgLink = iconWallet[1]}
-//            else if(a.equals("OVO",true)) {imgLink = iconWallet[2]}
-//            else if(a.equals("Shopee Pay",true)){imgLink = iconWallet[3]}
-//            else {imgLink = iconWallet[0]}
 
             dataRef.child("wallet").child("listWallet").child(id).setValue(Wallet(a,0,imgLink)).addOnCompleteListener {
                 Toast.makeText(activity,"Wallet Added", Toast.LENGTH_LONG).show()
@@ -100,4 +99,13 @@ class AddWalletDialog: DialogFragment() {
             dialog!!.dismiss()
         }
     }
+
+    fun addlistWallet(input: String){
+        this.iconWallet.add(input)
+    }
+
+    fun checkDataIsChanged(){
+        adapter!!.notifyDataSetChanged()
+    }
+
 }

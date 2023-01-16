@@ -8,5 +8,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/wallet_img"
+        android:layout_gravity="center"
         />
 </androidx.cardview.widget.CardView>
