@@ -5,6 +5,6 @@ class SaveIncome(
     val date: Long = 0,
     val wallet:String = "",
     val notes: String = "",
-    val imgLinkCate: String = "",
+    val imgLinkCategory: String = "",
     val imgLinkWallet: String = "") {
 }

@@ -1,6 +1,7 @@
 package com.example.moneymanagementproject
 
 import Add.Transaction.SaveData
+import Home.TransactionDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,7 @@ class Transaction : Fragment() {
     private var adapter : TransactionAdapter? = null
 
     //Arraylist transaksi
-    private var arrayListTransaction: ArrayList<SaveData> = ArrayList()
+    private var arrayListTransaction: ArrayList<TransactionDialog> = ArrayList()
     lateinit var listView: ListView
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
@@ -38,7 +39,7 @@ class Transaction : Fragment() {
 
 
 //        childEventListenerRecycler()
-        addPostEventListener(databaseReference.child("transaksi"))
+        addPostEventListenerTransaction(databaseReference.child("transaksi"))
         checkDataIsChanged()
 
     }
@@ -56,34 +57,83 @@ class Transaction : Fragment() {
     }
 
 
-    private fun addPostEventListener(postReference: DatabaseReference) {
+    private fun addPostEventListenerTransaction(postReference: DatabaseReference) {
+        var amount: Long = 0
+        var date: Long = 0
+        var wallet = ""
+        var cate = ""
+        var notes = ""
+        var imgWallet = ""
+        var imgCate = ""
+
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // clean the array to avoid duplicates
+                // clean the array to avoid duplicates and also reset balance too
                 arrayListTransaction.clear()
-                // Get Post object and use the values to update the UI
+
+                // Income
+                for(snap : DataSnapshot in dataSnapshot.child("listIncome").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("wallet").value.toString()
+                    cate = "Income"
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWallet").value.toString()
+                    imgCate = snap.child("imgLinkCategory").value.toString()
+
+                    addTransaction(TransactionDialog("income", amount, date, wallet, cate, notes, imgWallet, imgCate))
+
+                }
+
                 for(snap : DataSnapshot in dataSnapshot.child("listTransaction").children){
-                    val post = snap.getValue<SaveData>()!!
-                    addListTransaction(post)
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("wallet").value.toString()
+                    cate = snap.child("cate").value.toString()
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWallet").value.toString()
+                    imgCate = snap.child("imgLinkCategory").value.toString()
+
+                    addTransaction(TransactionDialog("expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
+
+                }
+
+                for(snap : DataSnapshot in dataSnapshot.child("listTransfer").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("walletFrom").value.toString()
+                    cate = snap.child("walletTo").value.toString()
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWalletFrom").value.toString()
+                    imgCate = snap.child("imgLinkWalletTo").value.toString()
+
+                    addTransaction(TransactionDialog("transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
+
+                    sortArray()
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
             }
+
         }
-        postReference.addListenerForSingleValueEvent(postListener)
-        // [END post_value_event_listener]
+        postReference.addValueEventListener(postListener)
     }
 
-    fun addListTransaction(data: SaveData){
+
+    fun addTransaction(data: TransactionDialog){
         this.arrayListTransaction.add(data)
         checkDataIsChanged()
     }
 
     fun checkDataIsChanged(){
         adapter?.notifyDataSetChanged()
+    }
+
+    fun sortArray(){
+        this.arrayListTransaction.sortByDescending { it.date }
     }
 
 

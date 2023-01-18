@@ -1,30 +1,22 @@
 package com.example.moneymanagementproject
 
-import Add.Transaction.SaveData
 import Home.*
 import android.content.ContentValues.TAG
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.moneymanagementproject.databinding.FragmentHomeBinding
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import java.text.NumberFormat
 import java.util.*
-import com.google.firebase.storage.ktx.component1
-import com.google.firebase.storage.ktx.component2
 
 class Home : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -34,12 +26,11 @@ class Home : Fragment() {
     private var adapterT : HomeTransactionAdapter? = null
     //Array kosong buat manggil array dari Activity Main
     private var listWalletF: ArrayList<Wallet> = ArrayList<Wallet>()
-    private var listTransaction: ArrayList<HomeTransaction> = ArrayList<HomeTransaction>()
+    private var listTransaction: ArrayList<TransactionDialog> = ArrayList<TransactionDialog>()
     private var TotalBalance: Long = 0
 
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
-//    private var storageReference: DatabaseReference = Firebase.database.reference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,14 +55,19 @@ class Home : Fragment() {
                 popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Wallet" )
             }
             else{
-                Toast.makeText(
-                    requireContext(), listWalletF[i].nameWallet + "selected" + i ,
-                    Toast.LENGTH_SHORT
-                ).show()
+//                val popupWindow = EditWalletDialog()
+//                popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
             }
         }
-        addPostEventListenerWallet(databaseReference.child("wallet").child("listWallet"))
 
+
+
+
+        binding.listViewTransactionHome.onItemClickListener = AdapterView.OnItemClickListener{ _, _, i, _ ->
+            popUpEditDialog(i)
+        }
+
+        addPostEventListenerWallet(databaseReference.child("wallet").child("listWallet"))
 
 
         //Adapter Transaction
@@ -81,11 +77,8 @@ class Home : Fragment() {
 
         addPostEventListenerTransaction(databaseReference.child("transaksi"))
 
-
-
-
-
         checkDataIsChanged()
+
 
         return binding.root
     }
@@ -111,6 +104,7 @@ class Home : Fragment() {
                     binding.totalAmount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(TotalBalance)
                 }
                 listWalletF.add(Wallet("Add Wallet",0))
+
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -145,12 +139,38 @@ class Home : Fragment() {
                     cate = "Income"
                     notes = snap.child("notes").value.toString()
                     imgWallet = snap.child("imgLinkWallet").value.toString()
-                    imgCate = snap.child("imgLinkCate").value.toString()
+                    imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(HomeTransaction("income", amount, date, wallet, cate, notes, imgWallet, imgCate))
-                    Log.d("Home check", "" + listTransaction.size)
+                    addTransaction(TransactionDialog("income", amount, date, wallet, cate, notes, imgWallet, imgCate))
+
                 }
 
+                for(snap : DataSnapshot in dataSnapshot.child("listTransaction").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("wallet").value.toString()
+                    cate = snap.child("cate").value.toString()
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWallet").value.toString()
+                    imgCate = snap.child("imgLinkCategory").value.toString()
+
+                    addTransaction(TransactionDialog("expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
+
+                }
+
+                for(snap : DataSnapshot in dataSnapshot.child("listTransfer").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("walletFrom").value.toString()
+                    cate = snap.child("walletTo").value.toString()
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWalletFrom").value.toString()
+                    imgCate = snap.child("imgLinkWalletTo").value.toString()
+
+                    addTransaction(TransactionDialog("transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
+
+                    sortArray()
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Post failed, log a message
@@ -167,9 +187,21 @@ class Home : Fragment() {
         checkDataIsChanged()
     }
 
-    fun addTransaction(data: HomeTransaction){
+    fun addTransaction(data: TransactionDialog){
         this.listTransaction.add(data)
         checkDataIsChanged()
+    }
+
+    fun sortArray(){
+        this.listTransaction.sortByDescending { it.date }
+        while(this.listTransaction.size > 5){
+            this.listTransaction.removeAt(listTransaction.size-1)
+        }
+    }
+
+    private fun popUpEditDialog(i : Int) {
+        val popupWindow = ViewTransactionDialog(this.listTransaction[i])
+        popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
     }
 
 }

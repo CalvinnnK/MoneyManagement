@@ -85,7 +85,7 @@ class AddTransactionTransfer : Fragment() {
         val a2 = binding.dateText.text.toString().trim()
         val a3 = binding.walletFromAutoComplete.text.toString().trim()
         val a4 = binding.walletToAutoComplete.text.toString().trim()
-        val a5 = binding.inputNotes.text.toString().trim()
+        var a5 = binding.inputNotes.text.toString().trim()
         var imgLinkWallet = ""
         val id = Firebase.database.reference.push().key!!
 
@@ -106,6 +106,8 @@ class AddTransactionTransfer : Fragment() {
             var addIncome: Long = 0
             var key = ""
 
+            if(a5 == "") a5 = "Transfer"
+
             val saving = SaveTransfer(a1.toLong(),dateLong,a3,a4,a5,"","")
             dataRef.child("transaksi").child("listTransfer").child(id).setValue(saving)
 
@@ -124,6 +126,7 @@ class AddTransactionTransfer : Fragment() {
                             if(key != ""){
                                 dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
                                 dataRef.child("transaksi").child("listTransfer").child(id).child("imgLinkWalletFrom").setValue(imgLinkWallet)
+                                dataRef.child("transaksi").child("listTransfer").child(id).child("walletFrom").setValue(key)
                             }
                             else{
                                 Log.d("key", "FAILED")
@@ -140,6 +143,8 @@ class AddTransactionTransfer : Fragment() {
                             if(key != ""){
                                 dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
                                 dataRef.child("transaksi").child("listTransfer").child(id).child("imgLinkWalletTo").setValue(imgLinkWallet)
+                                dataRef.child("transaksi").child("listTransfer").child(id).child("walletTo").setValue(key)
+
                             }
                             else{
                                 Log.d("key", "FAILED")

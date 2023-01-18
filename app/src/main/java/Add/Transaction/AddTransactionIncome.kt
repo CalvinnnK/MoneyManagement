@@ -62,29 +62,10 @@ class AddTransactionIncome : Fragment(){
             var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
                     view, year, month, day ->
                 var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
-
                 binding.dateText.text = "" + day + "/" + a + "/" + year
             }, y, m, d)
             datePicker.show()
         }
-
-
-        var storeRef = Firebase.storage.reference
-
-
-//        storeRef.child("Category").listAll().addOnSuccessListener {
-//            it.items.forEach(){
-//                it.downloadUrl.addOnSuccessListener {
-//                    var a = it.toString()
-//                    Log.d("storeREf", "" + a)
-//                }
-//            }
-//        }
-
-        var a = storeRef.child("Category").child("Bonus.png").downloadUrl.toString()
-
-
-        Log.d("storeREf", "" + storeRef.child("Category").child("Bonus.png").downloadUrl.toString())
 
 
         binding.addTransaction.setOnClickListener(){
@@ -104,12 +85,11 @@ class AddTransactionIncome : Fragment(){
         val a1 = binding.inputAmount.text.toString().trim()
         val a2 = binding.dateText.text.toString().trim()
         val a3 = binding.walletAutoComplete.text.toString().trim()
-        val a4 = binding.inputNotes.text.toString().trim()
+        var a4 = binding.inputNotes.text.toString().trim()
         var imgLinkWallet = ""
         val id = Firebase.database.reference.push().key!!
 
         var defaultImg = "https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/Category%2FBonus.png?alt=media&token=5e0a41ee-833e-42e0-8113-57099595d20b"
-
         var dateLong: Long = sdf.parse(a2).time
 
 
@@ -129,6 +109,7 @@ class AddTransactionIncome : Fragment(){
                 var addIncome: Long = 0
                 var key = ""
 
+                if(a4 == "") a4 = "Income"
                 val saving = SaveIncome(a1.toLong(),dateLong, a3, a4, defaultImg)
                 dataRef.child("transaksi").child("listIncome").child(id).setValue(saving)
 
@@ -142,10 +123,11 @@ class AddTransactionIncome : Fragment(){
 
                                 imgLinkWallet = snap.child("imageLink").value.toString()
 
-                                Log.d("key", "" + key)
+
                                 if(key != ""){
                                     dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
                                     dataRef.child("transaksi").child("listIncome").child(id).child("imgLinkWallet").setValue(imgLinkWallet)
+                                    dataRef.child("transaksi").child("listIncome").child(id).child("wallet").setValue(key)
                                 }
                                 else{
                                     Log.d("key", "FAILED")

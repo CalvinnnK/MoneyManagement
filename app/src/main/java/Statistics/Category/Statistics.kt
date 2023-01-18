@@ -89,6 +89,7 @@ class Statistics : Fragment() {
     }
 
     private fun addPostEventListener(postReference: DatabaseReference) {
+        var id = ""
         var name = ""
         var expensePerCategory: Long = 0
         var imgLink = ""
@@ -104,16 +105,22 @@ class Statistics : Fragment() {
                 //Ngitung expense tiap category
                 for(snap : DataSnapshot in dataSnapshot.child("category").child("listCategory").children){
                     expensePerCategory = 0
+                    id = snap.key.toString()
                     name = snap.child("nameCategory").value.toString()
                     imgLink = snap.child("imgLink").value.toString()
+
                     for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
 
-                        if(name == snap1.child("cate").value.toString() &&
+                        if(id == snap1.child("cate").value.toString() &&
                             snap1.child("date").value.toString().toLong() >=  datefrom &&
                             snap1.child("date").value.toString().toLong() <= dateto){
                             expensePerCategory += snap1.child("amount").value.toString().toLong()
                         }
+                        Log.d("Statistics inner", "" + expensePerCategory + " " + name)
                     }
+
+                    Log.d("Statistics outer", "" + snap.child("expense").value.toString() + " " + name)
+
                     addStatCate(Category(name, expensePerCategory, imgLink))
                 }
 

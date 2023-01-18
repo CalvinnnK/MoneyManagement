@@ -1,6 +1,7 @@
 package com.example.moneymanagementproject
 
 import Add.Transaction.SaveData
+import Home.TransactionDialog
 import android.content.Context
 
 import android.view.LayoutInflater
@@ -13,7 +14,7 @@ import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import java.util.*
 
-class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<SaveData>) : BaseAdapter(){
+class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>) : BaseAdapter(){
 
     private lateinit var row_text : TextView
     private lateinit var row_amount : TextView
@@ -47,8 +48,8 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
 
         row_amount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].amount)
 
-        Glide.with(context!!).load(arrayList[position].imgLinkCategory).into(row_cate)
-        Glide.with(context!!).load(arrayList[position].imgLinkWallet).into(row_wallet)
+        Glide.with(context!!).load(arrayList[position].imageLinkCategory).into(row_cate)
+        Glide.with(context!!).load(arrayList[position].imageLinkWallet).into(row_wallet)
 
         return convertView
     }

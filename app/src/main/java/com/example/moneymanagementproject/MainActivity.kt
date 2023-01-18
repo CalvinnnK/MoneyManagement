@@ -2,6 +2,7 @@ package com.example.moneymanagementproject
 
 
 import Add.Transaction.AddTransaction
+import Add.Transaction.SaveIncome
 import Statistic.Wallet.StatisticWallet
 import Statistics.Category.Statistics
 import android.content.ContentValues.TAG
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
+    private var myArrayList: ArrayList<SaveIncome> = ArrayList()
 
     public override fun onStart() {
         super.onStart()

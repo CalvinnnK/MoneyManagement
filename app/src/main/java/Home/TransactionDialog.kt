@@ -1,6 +1,9 @@
 package Home
 
-class HomeTransaction   (
+import android.os.Parcel
+import android.os.Parcelable
+
+class TransactionDialog(
     val id: String? = "",
     val amount: Long = 0,
     val date: Long = 0,
@@ -8,5 +11,5 @@ class HomeTransaction   (
     val cate: String = "",
     val notes: String = "",
     val imageLinkWallet: String = "",
-    val imageLinkCate: String = "") {
+    val imageLinkCategory: String = "") {
 }

@@ -91,7 +91,7 @@ class AddTransactionExpense : Fragment(){
         val a2 = binding.dateText.text.toString().trim()
         val a3 = binding.walletAutoComplete.text.toString().trim()
         val a4 = binding.categoryAutoComplete.text.toString().trim()
-        val a5 = binding.inputNotes.text.toString().trim()
+        var a5 = binding.inputNotes.text.toString().trim()
         var imgLinkWallet = ""
         var imgLinkCate = ""
         val id = Firebase.database.reference.push().key
@@ -113,6 +113,7 @@ class AddTransactionExpense : Fragment(){
             var addIncome: Long = 0
             var key = ""
 
+            if(a5 == "") a5 = a4
             val saving = SaveData( a1.toLong(), dateLong, a3, a4, a5, imgLinkWallet, imgLinkCate)
             dataRef.child("transaksi").child("listTransaction").child(id!!).setValue(saving)
 

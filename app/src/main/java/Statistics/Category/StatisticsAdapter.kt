@@ -62,7 +62,7 @@ class StatisticsAdapter(private val context: Context?, private val arrayList: Ar
         percent.text = solution.toString() + "%"
         balance.text = "Rp " + arrayList[position].expense.toString()
         Glide.with(context!!).load(arrayList[position].imgLink).into(img)
-        Log.d("StatAdapter", "" + arrayList[position].imgLink)
+        Log.d("StatAdapter", "" + arrayList[position].expense)
 
         return convertView
     }

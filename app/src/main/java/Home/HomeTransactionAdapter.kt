@@ -1,6 +1,5 @@
 package Home
 
-import Add.Transaction.SaveData
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,7 @@ import com.example.moneymanagementproject.R
 import java.text.NumberFormat
 import java.util.*
 
-class HomeTransactionAdapter(private val context: Context?, private val arrayList: ArrayList<HomeTransaction>) : BaseAdapter(){
+class HomeTransactionAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>) : BaseAdapter(){
 
     private lateinit var notes : TextView
     private lateinit var amount : TextView
@@ -41,13 +40,9 @@ class HomeTransactionAdapter(private val context: Context?, private val arrayLis
         cate = convertView.findViewById(R.id.trans_ic)
 
         notes.text = arrayList[position].notes
-        if(notes.text == ""){
-            notes.text = arrayList[position].cate
-        }
-
         amount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].amount)
 
-        Glide.with(context!!).load(arrayList[position].imageLinkCate).into(cate)
+        Glide.with(context!!).load(arrayList[position].imageLinkCategory).into(cate)
         Glide.with(context!!).load(arrayList[position].imageLinkWallet).into(wallet)
 
         return convertView
