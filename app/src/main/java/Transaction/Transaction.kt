@@ -1,6 +1,5 @@
-package com.example.moneymanagementproject
+package Transaction
 
-import Add.Transaction.SaveData
 import Home.TransactionDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -8,12 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.example.moneymanagementproject.databinding.FragmentTransactionBinding
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
@@ -24,24 +21,18 @@ class Transaction : Fragment() {
     private val binding get() = _binding!!
 
     //ambil kelas adapter
-    private var adapter : TransactionAdapter? = null
-
-    //Arraylist transaksi
-    private var arrayListTransaction: ArrayList<TransactionDialog> = ArrayList()
-    lateinit var listView: ListView
+    private var adapter : Transaction_Adapter? = null
 
     private var databaseReference: DatabaseReference = Firebase.database.reference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = TransactionAdapter(context, arrayListTransaction)
+        adapter = Transaction_Adapter(context, arrayListTransaction)
 
+//        addPostEventListenerTransaction(databaseReference.child("transaksi"))
 
-//        childEventListenerRecycler()
-        addPostEventListenerTransaction(databaseReference.child("transaksi"))
         checkDataIsChanged()
-
     }
 
     override fun onCreateView(
@@ -53,7 +44,12 @@ class Transaction : Fragment() {
 
         binding.ListViewTransaction.adapter = adapter
 
+
         return binding.root
+    }
+
+    companion object{
+        var arrayListTransaction: ArrayList<TransactionDialog> = ArrayList()
     }
 
 
@@ -70,7 +66,7 @@ class Transaction : Fragment() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // clean the array to avoid duplicates and also reset balance too
-                arrayListTransaction.clear()
+//                arrayListTransaction.clear()
 
                 // Income
                 for(snap : DataSnapshot in dataSnapshot.child("listIncome").children){
@@ -82,8 +78,7 @@ class Transaction : Fragment() {
                     imgWallet = snap.child("imgLinkWallet").value.toString()
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(TransactionDialog("income", amount, date, wallet, cate, notes, imgWallet, imgCate))
-
+                    addTransaction(TransactionDialog(snap.key!!, "income", amount, date, wallet, cate, notes, imgWallet, imgCate))
                 }
 
                 for(snap : DataSnapshot in dataSnapshot.child("listTransaction").children){
@@ -95,7 +90,7 @@ class Transaction : Fragment() {
                     imgWallet = snap.child("imgLinkWallet").value.toString()
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(TransactionDialog("expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionDialog(snap.key!!,"expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
 
                 }
 
@@ -108,7 +103,7 @@ class Transaction : Fragment() {
                     imgWallet = snap.child("imgLinkWalletFrom").value.toString()
                     imgCate = snap.child("imgLinkWalletTo").value.toString()
 
-                    addTransaction(TransactionDialog("transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionDialog(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
 
                     sortArray()
                 }
@@ -124,7 +119,7 @@ class Transaction : Fragment() {
 
 
     fun addTransaction(data: TransactionDialog){
-        this.arrayListTransaction.add(data)
+        arrayListTransaction.add(data)
         checkDataIsChanged()
     }
 
@@ -133,7 +128,7 @@ class Transaction : Fragment() {
     }
 
     fun sortArray(){
-        this.arrayListTransaction.sortByDescending { it.date }
+        arrayListTransaction.sortByDescending { it.date }
     }
 
 

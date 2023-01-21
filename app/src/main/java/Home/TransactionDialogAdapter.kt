@@ -12,7 +12,7 @@ import com.example.moneymanagementproject.R
 import java.text.NumberFormat
 import java.util.*
 
-class HomeTransactionAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>) : BaseAdapter(){
+class TransactionDialogAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>, private val limit: Int) : BaseAdapter(){
 
     private lateinit var notes : TextView
     private lateinit var amount : TextView
@@ -34,6 +34,9 @@ class HomeTransactionAdapter(private val context: Context?, private val arrayLis
     override fun getView(position: Int, convertview: View?, parent: ViewGroup?): View {
         var convertView = convertview
         convertView = LayoutInflater.from(context).inflate(R.layout.recycler_view_transaction, parent, false)
+
+        if(position == limit) return convertView
+
         notes = convertView.findViewById(R.id.trans_text)
         amount = convertView.findViewById(R.id.trans_amount)
         wallet = convertView.findViewById(R.id.trans_wallet)

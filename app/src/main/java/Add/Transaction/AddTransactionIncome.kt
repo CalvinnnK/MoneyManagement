@@ -4,9 +4,11 @@ import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -49,22 +51,12 @@ class AddTransactionIncome : Fragment(){
         val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_category, walletList)
         binding.walletAutoComplete.setAdapter(arrayAdapter1)
 
-        // default date today
-        binding.dateText.text = getCurrentDate()
 
-        //show date dialog
-        var c = Calendar.getInstance()
-        var y = c.get(Calendar.YEAR)
-        var m = c.get(Calendar.MONTH)
-        var d = c.get(Calendar.DAY_OF_MONTH)
-
-        binding.dateBtn.setOnClickListener{
-            var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
-                    view, year, month, day ->
-                var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
-                binding.dateText.text = "" + day + "/" + a + "/" + year
-            }, y, m, d)
-            datePicker.show()
+        binding.dateText.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                showCalendar()
+            }
+            true
         }
 
 
@@ -75,6 +67,25 @@ class AddTransactionIncome : Fragment(){
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    private fun showCalendar(){
+        // default date today
+        binding.dateText.text = Editable.Factory.getInstance().newEditable(getCurrentDate())
+
+        //show date dialog
+        var c = Calendar.getInstance()
+        var y = c.get(Calendar.YEAR)
+        var m = c.get(Calendar.MONTH)
+        var d = c.get(Calendar.DAY_OF_MONTH)
+
+        var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
+                view, year, month, day ->
+            var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
+
+            binding.dateText.text = Editable.Factory.getInstance().newEditable("" + day + "/" + a + "/" + year)
+        }, y, m, d)
+        datePicker.show()
     }
 
     private fun getCurrentDate():String{

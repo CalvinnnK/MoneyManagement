@@ -90,7 +90,7 @@ class AddCategoryName : DialogFragment() {
             binding.categoryNameInput.error = "Please input category name!"
         }
         else{
-            dataRef.child("category").child("listCategory").child(id).setValue(Category(a,0, imgLink)).addOnCompleteListener {
+            dataRef.child("category").child("listCategory").child(id).setValue(Category(id, a,0, imgLink)).addOnCompleteListener {
                 Toast.makeText(activity,"Category Added", Toast.LENGTH_LONG).show()
                 back_to_main()
             }

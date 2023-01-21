@@ -31,16 +31,21 @@
                     android:id="@+id/edit_transaction_img"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/wallet_img" />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_transaction_notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="15dp"
-                    android:text="Notes" />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edit_transaction_notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="13dp"
+                        android:paddingLeft="10dp"
+                        android:inputType="number"
+                        android:text="Notes" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -72,14 +77,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:text="Date:         " />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_transaction_date"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="1 jan 1972" />
+                    android:orientation="vertical"
+                    android:shadowRadius="10"
+                    app:hintEnabled="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTransactionDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:paddingVertical="10dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -92,14 +109,27 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:text="Wallet:      " />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_transaction_wallet"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="" />
+                    android:background="@drawable/input_box"
+                    android:shadowRadius="10"
+                    app:hintEnabled="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/walletAutoComplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="Select a Wallet"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -114,14 +144,29 @@
                     android:layout_height="wrap_content"
                     android:text="Category: " />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_transaction_category"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="" />
+                    android:background="@drawable/input_box"
+                    android:shadowRadius="10"
+                    app:boxStrokeWidth="0dp"
+                    app:hintEnabled="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/categoryAutoComplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        android:hint="Select a Category"
+                        android:background="@android:color/transparent"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
             <LinearLayout
                 android:id="@+id/edit_transaction_layout_top_bar"
@@ -142,7 +187,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/edit_transaction_delete"
+                    android:id="@+id/edit_transaction_done"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"

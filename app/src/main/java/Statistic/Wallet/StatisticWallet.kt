@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.moneymanagementproject.MainActivity
 import com.example.moneymanagementproject.databinding.FragmentStatisticWalletBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -55,7 +56,8 @@ class StatisticWallet : Fragment() {
             binding.statWalletDate.text = dateInput
             listStatWallet.clear()
 
-            addPostEventListener(databaseReference)
+//            addPostEventListener(databaseReference)
+            calculateStatWallet()
         }
 
         binding.statWalletRight.setOnClickListener{
@@ -64,13 +66,13 @@ class StatisticWallet : Fragment() {
             binding.statWalletDate.text = dateInput
             listStatWallet.clear()
 
-            addPostEventListener(databaseReference)
+//            addPostEventListener(databaseReference)
+            calculateStatWallet()
         }
 
-
-        addPostEventListener(databaseReference)
+//        addPostEventListener(databaseReference)
+        calculateStatWallet()
         checkDataIsChanged()
-
         binding.statWalletListView.adapter = adapter
 
 
@@ -78,75 +80,56 @@ class StatisticWallet : Fragment() {
         return binding.root
     }
 
-    private fun addPostEventListener(postReference: DatabaseReference) {
-        var name = ""
-        var imgLink = ""
+    private fun calculateStatWallet(){
+        this.listStatWallet.clear()
+
+        var datefrom: Long = dateFormat.parse(dateInput).time
+        calendar.add(Calendar.MONTH, 1)
+        var dateto: Long = dateFormat.parse(dateFormat.format(calendar.time)).time
+        calendar.add(Calendar.MONTH, -1)
+        Log.d("StatWallet", "" + datefrom + " " + dateto)
+
         var income: Long = 0
         var expense: Long = 0
 
+        Home.Home.listWallet.forEach{  w ->
+            if(w.nameWallet == "Add Wallet"){
+                return@forEach
+            }
 
-        // [START post_value_event_listener]
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var datefrom: Long = dateFormat.parse(dateInput).time
-                calendar.add(Calendar.MONTH, 1)
-                var dateto: Long = dateFormat.parse(dateFormat.format(calendar.time)).time
-                calendar.add(Calendar.MONTH, -1)
-                Log.d("StatWallet", "" + datefrom + " " + dateto)
+            income = 0
+            expense = 0
 
-
-                // Get Post object and use the values to update the UI
-                for(snap : DataSnapshot in dataSnapshot.child("wallet").child("listWallet").children){
-                    name = ""
-                    income = 0
-                    expense = 0
-
-                    name =  snap.child("nameWallet").value.toString()
-                    imgLink = snap.child("imageLink").value.toString()
-
-                    for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
-                        if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()
-                            && snap1.child("date").value.toString().toLong() > datefrom
-                            && snap1.child("date").value.toString().toLong() < dateto){
-                            expense += snap1.child("amount").value.toString().toLong()
-//                            Log.d("AAA loop transaksi","" + snap1.child("notes").value.toString())
-                        }
+            MainActivity.arrayListTransactionMain.forEach { t ->
+                //condition to check transaction happened in desired month
+                if(t.date >= datefrom && t.date <= dateto && ( t.wallet == w.id || t.cate == w.id)){
+                    //calculate income per month for each wallet
+                    if(t.type == "income"){
+                        income += t.amount
                     }
-
-                    for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listIncome").children){
-                        if(snap1.child("wallet").value.toString() == snap.child("nameWallet").value.toString()
-                            && snap1.child("date").value.toString().toLong() > datefrom
-                            && snap1.child("date").value.toString().toLong() < dateto){
-                            income += snap1.child("amount").value.toString().toLong()
-//                            Log.d("AAA loop income","" + snap1.child("notes").value.toString())
-                        }
+                    //calculate expense per month for each wallet
+                    else if(t.type == "expense"){
+                        expense += t.amount
                     }
-                    for(snap1 : DataSnapshot in dataSnapshot.child("transaksi").child("listTransfer").children){
-                        if(snap1.child("walletFrom").value.toString() == snap.child("nameWallet").value.toString()
-                            && snap1.child("date").value.toString().toLong() > datefrom
-                            && snap1.child("date").value.toString().toLong() < dateto){
-                            expense += snap1.child("amount").value.toString().toLong()
-//                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
+                    //calculate transfer per month for each wallet
+                    else if(t.type == "transfer"){
+                        if(t.wallet == w.id){
+                            expense += t.amount
                         }
-                        else if(snap1.child("walletTo").value.toString() == snap.child("nameWallet").value.toString()
-                            && snap1.child("date").value.toString().toLong() > datefrom
-                            && snap1.child("date").value.toString().toLong() < dateto){
-                            income += snap1.child("amount").value.toString().toLong()
-//                            Log.d("AAA loop transfer","" + snap1.child("notes").value.toString())
+                        else if(t.cate == w.id){
+                            income += t.amount
                         }
+                        Log.d("StatW", "${w.nameWallet} ${w.id} wallet: ${t.wallet} cate: ${t.cate} " )
                     }
-                    addStatWallet(StatWallet(name,income-expense,income, expense, imgLink))
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
-            }
-        }
 
-        postReference.addValueEventListener(postListener)
-        // [END post_value_event_listener]
+            addStatWallet(StatWallet(w.nameWallet,income-expense,income, expense, w.imageLink))
+            Log.d("StatWallet", "" + w.nameWallet + " " + income + " " + expense  )
+        }
     }
+
+
     fun addStatWallet(data: StatWallet){
         this.listStatWallet.add(data)
         checkDataIsChanged()

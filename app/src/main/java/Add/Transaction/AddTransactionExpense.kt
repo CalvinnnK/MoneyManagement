@@ -3,9 +3,11 @@ package Add.Transaction
 import android.app.DatePickerDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -22,8 +24,8 @@ class AddTransactionExpense : Fragment(){
     private var _binding: FragmentAddTransactionExpenseBinding? = null
     private val binding get() = _binding!!
 
-    var walletList = ArrayList<String>()
-    var categoryList = ArrayList<String>()
+    private var walletList = ArrayList<String>()
+    private var categoryList = ArrayList<String>()
 
     val sdf = SimpleDateFormat("d/M/yyyy")
 
@@ -42,35 +44,32 @@ class AddTransactionExpense : Fragment(){
 
         // Setting adapter dengan array wallet dan category
 //        childEventListenerRecycler()
-        addPostEventListener(databaseReference)
+        showList(databaseReference)
         val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_category, walletList)
         val arrayAdapter2 = ArrayAdapter(requireContext(), R.layout.item_category, categoryList)
         binding.walletAutoComplete.setAdapter(arrayAdapter1)
         binding.categoryAutoComplete.setAdapter(arrayAdapter2)
 
-
-        arrayAdapter1.notifyDataSetChanged()
         arrayAdapter1.notifyDataSetChanged()
         arrayAdapter2.notifyDataSetChanged()
 
-        // default date today
-        binding.dateText.text = getCurrentDate()
 
-        //show date dialog
-        var c = Calendar.getInstance()
-        var y = c.get(Calendar.YEAR)
-        var m = c.get(Calendar.MONTH)
-        var d = c.get(Calendar.DAY_OF_MONTH)
-
-        binding.dateBtn.setOnClickListener{
-            var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
-                    view, year, month, day ->
-                var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
-
-                binding.dateText.text = "" + day + "/" + a + "/" + year
-            }, y, m, d)
-            datePicker.show()
+        binding.inputAmount.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                // code to execute when the EditText gains focus
+            } else {
+                // code to execute when the EditText loses focus
+            }
         }
+
+
+        binding.dateText.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                showCalendar()
+            }
+            true
+        }
+
 
         binding.addTransaction.setOnClickListener(){
             saveTransaction()
@@ -83,6 +82,25 @@ class AddTransactionExpense : Fragment(){
 
     private fun getCurrentDate():String{
         return sdf.format(Calendar.getInstance().time)
+    }
+
+    private fun showCalendar(){
+        // default date today
+        binding.dateText.text = Editable.Factory.getInstance().newEditable(getCurrentDate())
+
+        //show date dialog
+        var c = Calendar.getInstance()
+        var y = c.get(Calendar.YEAR)
+        var m = c.get(Calendar.MONTH)
+        var d = c.get(Calendar.DAY_OF_MONTH)
+
+        var datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener{
+                view, year, month, day ->
+            var a = month+1 // Tambah satu karena Calendar.Month januari dimulai dari 0
+
+            binding.dateText.text = Editable.Factory.getInstance().newEditable("" + day + "/" + a + "/" + year)
+        }, y, m, d)
+        datePicker.show()
     }
 
 
@@ -178,7 +196,7 @@ class AddTransactionExpense : Fragment(){
         }
     }
 
-    private fun addPostEventListener(postReference: DatabaseReference) {
+    private fun showList(postReference: DatabaseReference) {
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

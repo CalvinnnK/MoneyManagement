@@ -1,4 +1,4 @@
-package com.example.moneymanagementproject
+package Transaction
 
 import Add.Transaction.SaveData
 import Home.TransactionDialog
@@ -11,10 +11,11 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.example.moneymanagementproject.R
 import java.text.NumberFormat
 import java.util.*
 
-class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>) : BaseAdapter(){
+class Transaction_Adapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>) : BaseAdapter() {
 
     private lateinit var row_text : TextView
     private lateinit var row_amount : TextView
@@ -53,6 +54,4 @@ class TransactionAdapter(private val context: Context?, private val arrayList: A
 
         return convertView
     }
-
-
 }

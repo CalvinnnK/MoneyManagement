@@ -87,7 +87,7 @@ class AddWalletDialog: DialogFragment() {
         }
         else{
 
-            dataRef.child("wallet").child("listWallet").child(id).setValue(Wallet(a,0,imgLink)).addOnCompleteListener {
+            dataRef.child("wallet").child("listWallet").child(id).setValue(Wallet(id, a,0,imgLink)).addOnCompleteListener {
                 Toast.makeText(activity,"Wallet Added", Toast.LENGTH_LONG).show()
                 back_to_main()
             }
