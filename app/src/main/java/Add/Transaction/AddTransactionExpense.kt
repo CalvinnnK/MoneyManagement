@@ -77,6 +77,7 @@ class AddTransactionExpense : Fragment(){
             }
             true
         }
+        binding.dateText.text = Editable.Factory.getInstance().newEditable(getCurrentDate())
 
 
         binding.addTransaction.setOnClickListener(){

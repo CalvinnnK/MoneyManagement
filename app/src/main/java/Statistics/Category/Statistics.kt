@@ -1,5 +1,6 @@
 package Statistics.Category
 
+import Home.AddCategoryName
 import Transaction.Transaction
 import android.content.ContentValues
 import android.os.Bundle
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.moneymanagementproject.MainActivity
 import com.example.moneymanagementproject.databinding.FragmentStatisticsBinding
 import com.google.firebase.database.DataSnapshot
@@ -77,14 +79,19 @@ class Statistics : Fragment() {
             calendar.add(Calendar.MONTH, -1)
             Log.d("Date", "" + datefrom + " " + dateto)
 
-//            addPostEventListener(databaseReference)
             calculateExpense()
         }
 
-//        addPostEventListener(databaseReference)
+        binding.addCategory.setOnClickListener{
+            val popupWindow = AddCategoryName()
+            popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Category" )
+        }
+
         calculateExpense()
         adapter = StatisticsAdapter(context,listStatCategory)
         binding.statCateListView.adapter = adapter
+
+
 
 
         checkDataIsChanged()

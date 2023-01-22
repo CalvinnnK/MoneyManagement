@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.moneymanagementproject.MainActivity
+import com.example.moneymanagementproject.R
 import com.example.moneymanagementproject.databinding.FragmentHomeBinding
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -39,9 +40,15 @@ class Home : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         binding.homeTransactionSeeMore.setOnClickListener{
-            val popupWindow = AddCategoryName()
-            popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Category" )
+            val targetFragment = Transaction()
+            val fragmentManager = parentFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.fragmentContainer, targetFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
         }
+
+
 
 //        Adapter Wallet
         adapterW = WalletAdapter(context,listWallet)
@@ -85,6 +92,47 @@ class Home : Fragment() {
         var listWallet: ArrayList<Wallet> = ArrayList<Wallet>()
         var listCategory: ArrayList<Category> = ArrayList<Category>()
         var listTransaction: ArrayList<TransactionDialog> = ArrayList<TransactionDialog>()
+
+        fun syncTransactionDatabase(data: TransactionDialog){
+            var type = ""
+            if(data.type == "income") type = "listIncome"
+            else if (data.type == "expense") type = "listTransaction"
+            else if(data.type == "transfer") type = "listTransfer"
+
+            var ref = Firebase.database.reference.child("transaksi").child(type).child(data.id)
+
+            ref.child("amount").setValue(data.amount)
+            ref.child("date").setValue(data.date)
+
+            if(type == "listTransfer") ref.child("walletFrom").setValue(data.wallet)
+            else ref.child("wallet").setValue(data.wallet)
+
+            if(type == "listTransfer") ref.child("walletTo").setValue(data.cate)
+            else ref.child("cate").setValue(data.cate)
+
+            ref.child("notes").setValue(data.notes)
+
+            if(type == "listTransfer") ref.child("imgLinkWalletFrom").setValue(data.imageLinkWallet)
+            else ref.child("imgLinkWallet").setValue(data.imageLinkWallet)
+
+            if(type == "listTransfer") ref.child("imgLinkWalletTo").setValue(data.imageLinkCategory)
+            else ref.child("imgLinkCategory").setValue(data.imageLinkCategory)
+
+        }
+
+        fun syncWalletDatabase(data: Wallet){
+            var ref = Firebase.database.reference.child("wallet").child("listWallet").child(data.id)
+            ref.child("saldo").setValue(data.saldo)
+
+        }
+
+        fun syncCategoryDatabase(data: Category){
+            var ref = Firebase.database.reference.child("category").child("listCategory").child(data.id)
+            ref.child("saldo").setValue(data.expense)
+
+        }
+
+
     }
 
     private fun calculateTotalWallet() {
@@ -220,7 +268,7 @@ class Home : Fragment() {
     }
 
     private fun popUpEditDialog(i : Int) {
-        val popupWindow = ViewTransactionDialog(listTransaction[i])
+        val popupWindow = ViewTransactionDialog(listTransaction[i], i)
         popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
         checkDataIsChanged()
     }

@@ -17,7 +17,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ViewTransactionDialog(private val list: TransactionDialog) : DialogFragment() {
+class ViewTransactionDialog(private val list: TransactionDialog, private var position: Int) : DialogFragment() {
 
     private var _binding : FragmentViewTransactionDialogBinding? = null
     private val binding get() = _binding!!
@@ -90,7 +90,7 @@ class ViewTransactionDialog(private val list: TransactionDialog) : DialogFragmen
     }
 
     private fun editData() {
-        val popupWindow = EditTransactionDialog(this.list)
+        val popupWindow = EditTransactionDialog(this.list, position)
         dismiss()
         popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
     }
@@ -102,9 +102,9 @@ class ViewTransactionDialog(private val list: TransactionDialog) : DialogFragmen
                 if(it.id == list.wallet){
                     amount = it.saldo - list.amount
                     databaseReference.child("wallet").child("listWallet").child(it.id).child("saldo").setValue(amount)
-                    databaseReference.child("transaksi").child("listIncome").child(list.id).removeValue()
                 }
             }
+            databaseReference.child("transaksi").child("listIncome").child(list.id).removeValue()
         }
         else if(list.type == "expense"){
             Home.listWallet.forEach {
@@ -133,6 +133,7 @@ class ViewTransactionDialog(private val list: TransactionDialog) : DialogFragmen
                     databaseReference.child("wallet").child("listWallet").child(it.id).child("saldo").setValue(amount)
                 }
             }
+            databaseReference.child("transaksi").child("listTransfer").child(list.id).removeValue()
         }
 
         Toast.makeText(context,"Transaction Deleted", Toast.LENGTH_LONG).show()
