@@ -73,10 +73,6 @@ class AddWalletDialog: DialogFragment() {
         return binding.root
     }
 
-    private fun addIconWallet(downloadLink: String) {
-        iconWallet.add(downloadLink)
-    }
-
     private fun addWallet(imgLink: String){
         val a = binding.walletNameInput.text.toString()
         val id = Firebase.database.reference.push().key

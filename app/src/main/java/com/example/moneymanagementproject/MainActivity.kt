@@ -53,24 +53,16 @@ class MainActivity : AppCompatActivity() {
     public override fun onStart() {
         super.onStart()
         readDatabase(databaseReference)
+
     }
 
 
     private fun readDatabase(postReference: DatabaseReference) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Transaction.arrayListTransaction.clear()
+                arrayListTransactionMain.clear()
                 // Get Post object and use the values to update the UI
-//                for(snap : DataSnapshot in dataSnapshot.child("wallet").child("listWallet").children){
-//                    val post = snap.getValue<Wallet>()!!
-//                    addWallet(post)
-//                }
-//                Home.listWallet.add(Wallet("Add Wallet",0))
-//
-//                for(snap : DataSnapshot in dataSnapshot.child("category").child("listCategory").children){
-//                    val post = snap.getValue<Category>()!!
-//                    addCategory(post)
-//                }
-
                 var amount: Long = 0
                 var date: Long = 0
                 var wallet = ""
@@ -102,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
                     addTransaction(TransactionDialog(snap.key!!,"expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
-
                 }
 
                 for(snap : DataSnapshot in dataSnapshot.child("transaksi").child("listTransfer").children){
@@ -117,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                     addTransaction(TransactionDialog(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
                 }
 
-                sortTransaction()
+
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -127,10 +118,6 @@ class MainActivity : AppCompatActivity() {
 
         }
         postReference.addValueEventListener(postListener)
-    }
-
-    private fun sortTransaction() {
-        Transaction.arrayListTransaction.sortByDescending { it.date }
     }
 
 
@@ -179,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
     fun addTransaction(data: TransactionDialog){
         arrayListTransactionMain.add(data)
-        Transaction.arrayListTransaction.add(data)
+        Transaction.addTransaction(data)
     }
 
 }

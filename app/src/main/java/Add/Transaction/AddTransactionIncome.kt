@@ -1,5 +1,6 @@
 package Add.Transaction
 
+import Home.Home
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.net.Uri
@@ -43,9 +44,11 @@ class AddTransactionIncome : Fragment(){
     ): View? {
         _binding = FragmentAddTransactionIncomeBinding.inflate(inflater,container,false)
 
-        addPostEventListener(databaseReference)
-
-//        childEventListenerRecycler()
+        // For drop down list
+        Home.listWallet.forEachIndexed{ index, w ->
+            if(index == Home.listWallet.size-1) return@forEachIndexed
+            this.walletList.add(w.nameWallet)
+        }
 
         // Setting adapter dengan array wallet
         val arrayAdapter1 = ArrayAdapter(requireContext(), R.layout.item_category, walletList)
@@ -93,9 +96,9 @@ class AddTransactionIncome : Fragment(){
     }
 
     private fun saveTransaction(){
-        val a1 = binding.inputAmount.text.toString().trim()
-        val a2 = binding.dateText.text.toString().trim()
-        val a3 = binding.walletAutoComplete.text.toString().trim()
+        var a1 = binding.inputAmount.text.toString().trim()
+        var a2 = binding.dateText.text.toString().trim()
+        var a3 = binding.walletAutoComplete.text.toString().trim()
         var a4 = binding.inputNotes.text.toString().trim()
         var imgLinkWallet = ""
         val id = Firebase.database.reference.push().key!!
@@ -118,67 +121,26 @@ class AddTransactionIncome : Fragment(){
             }
             else{
                 var addIncome: Long = 0
-                var key = ""
-
                 if(a4 == "") a4 = "Income"
-                val saving = SaveIncome(a1.toLong(),dateLong, a3, a4, defaultImg)
+
+                Home.listWallet.forEach { w->
+                    if(w.nameWallet == a3){
+                        addIncome = w.saldo + a1.toLong()
+                        a3 = w.id
+                        imgLinkWallet = w.imageLink
+                    }
+                }
+
+                dataRef.child("wallet").child("listWallet").child(a3).child("saldo").setValue(addIncome)
+                val saving = SaveIncome(id, a1.toLong(),dateLong, a3, a4, defaultImg, imgLinkWallet)
                 dataRef.child("transaksi").child("listIncome").child(id).setValue(saving)
 
-                val changeData = object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
-                            if(snap.child("nameWallet").value.toString() == a3){
-                                //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
-                                addIncome = snap.child("saldo").value.toString().toLong() + a1.toLong()
-                                key = snap.key.toString()
-
-                                imgLinkWallet = snap.child("imageLink").value.toString()
-
-
-                                if(key != ""){
-                                    dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
-                                    dataRef.child("transaksi").child("listIncome").child(id).child("imgLinkWallet").setValue(imgLinkWallet)
-                                    dataRef.child("transaksi").child("listIncome").child(id).child("wallet").setValue(key)
-                                }
-                                else{
-                                    Log.d("key", "FAILED")
-                                }
-                            }
-                        }
-
-                        Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
-                        activity?.finish()
-                    }
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                }
-                dataRef.addListenerForSingleValueEvent(changeData)
-
+                Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
+                activity?.finish()
 
             }
         }
     }
 
-    private fun addPostEventListener(postReference: DatabaseReference) {
-        // [START post_value_event_listener]
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Get Post object and use the values to update the UI
-                for(snap : DataSnapshot in dataSnapshot.child("wallet").child("listWallet").children){
-                    val post = snap.child("nameWallet").value.toString()
-                    walletList.add(post)
-//                    Log.d("onDataChangeWall", "" + post)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
-            }
-        }
-        postReference.addValueEventListener(postListener)
-        // [END post_value_event_listener]
-    }
 }
 

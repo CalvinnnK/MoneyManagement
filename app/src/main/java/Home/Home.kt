@@ -56,6 +56,7 @@ class Home : Fragment() {
             else{
 //                val popupWindow = EditWalletDialog()
 //                popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
+                checkDataIsChanged()
             }
         }
 
@@ -203,9 +204,11 @@ class Home : Fragment() {
 
     fun addWallet(data: Wallet){
         Home.listWallet.add(data)
+        checkDataIsChanged()
     }
     fun addCategory(data: Category){
         Home.listCategory.add(data)
+        checkDataIsChanged()
     }
 
 
@@ -219,6 +222,7 @@ class Home : Fragment() {
     private fun popUpEditDialog(i : Int) {
         val popupWindow = ViewTransactionDialog(listTransaction[i])
         popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
+        checkDataIsChanged()
     }
 
 }
