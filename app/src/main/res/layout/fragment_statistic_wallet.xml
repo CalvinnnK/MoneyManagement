@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StatisticWallet">
+    tools:context="Statistic.Wallet.StatisticWallet">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:paddingVertical="15dp"
         android:text="Wallet"
         android:textSize="28dp"/>
 
@@ -22,16 +24,16 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/stat_wallet_left"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:src="@drawable/left_arrow_ic"
-
+            android:background="@null"
             />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/stat_wallet_date"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:text="Tanggal"
             android:textAlignment="center"
             android:gravity="center"
@@ -40,18 +42,24 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/stat_wallet_right"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:src="@drawable/right_arrow_ic"
+            android:background="@null"
             />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCD4D3" />
 
     <ListView
         android:id="@+id/stat_wallet_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_stat_category"/>
+        tools:listitem="@layout/item_stat_wallet"/>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

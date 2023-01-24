@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         app:layout_anchor="@+id/bottomNavigationView"
         app:layout_anchorGravity="top|center"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 
 

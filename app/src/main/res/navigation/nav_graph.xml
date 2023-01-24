@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/statistics"
-        android:name="com.example.moneymanagementproject.Statistics"
+        android:name="Statistics.Category.Statistics"
         tools:layout="@layout/fragment_transaction" >
 
         <action

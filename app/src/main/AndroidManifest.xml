@@ -14,7 +14,7 @@
         android:theme="@style/Theme.MoneyManagementProject"
         tools:targetApi="31">
         <activity
-            android:name=".AddTransaction"
+            android:name="Add.Transaction.AddTransaction"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -27,5 +27,7 @@
             </intent-filter>
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

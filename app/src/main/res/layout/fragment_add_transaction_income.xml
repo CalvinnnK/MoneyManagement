@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".AddTransactionIncome"
+    tools:context="Add.Transaction.AddTransactionIncome"
     android:paddingHorizontal="40dp"
     android:paddingTop="20dp">
 
@@ -22,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        app:hintEnabled="false"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >
 
@@ -31,6 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:inputType="number"
+            android:hint="Input Amount"
             android:shadowRadius="10"
             android:background="@drawable/input_box"
             android:paddingVertical="10dp"
@@ -50,35 +53,23 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp">
-        <LinearLayout
+        android:orientation="vertical"
+        android:shadowRadius="10"
+        app:hintEnabled="false"
+        android:layout_margin="10dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/input_box">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/dateBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginVertical="5dp"
-                android:background="@drawable/calendar_img"
-                style=""
-                />
-
-            <TextView
-                android:id="@+id/dateText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=""
-                android:gravity="center"
-                android:shadowRadius="10"
-                android:paddingRight="50dp"
-                />
-
-        </LinearLayout>
-
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:hint="Input date"
+            android:inputType="none"
+            android:paddingVertical="10dp"
+            android:shadowRadius="10"
+            android:drawableStart="@drawable/calendar_img"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,6 +89,7 @@
         android:layout_margin="10dp"
         android:background="@drawable/input_box"
         android:shadowRadius="10"
+        app:hintEnabled="false"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         >
 
@@ -106,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            android:hint=""
+            android:hint="Select a Wallet"
             android:background="@android:color/transparent"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -125,13 +117,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        app:hintEnabled="false"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint=""
+            android:hint="Input Notes"
             android:inputType="text"
             android:gravity="center_horizontal"
             android:shadowRadius="10"

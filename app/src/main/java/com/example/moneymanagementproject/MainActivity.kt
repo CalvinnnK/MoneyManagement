@@ -1,124 +1,125 @@
 package com.example.moneymanagementproject
 
 
+import Add.Transaction.AddTransaction
+import Add.Transaction.SaveIncome
+import Home.Home
+import Home.TransactionDialog
+import Home.Wallet
+import Statistic.Wallet.StatisticWallet
+import Statistics.Category.Category
+import Statistics.Category.Statistics
+import Transaction.Transaction
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
-import android.view.SurfaceControl
-import android.view.View
-import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import java.text.NumberFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNav : BottomNavigationView
     private lateinit var mAuth: FirebaseAuth
-    private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
+    private val databaseReference = Firebase.database.reference
 
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
 
+
+
+
     public override fun onStart() {
         super.onStart()
-        mAuth = Firebase.auth
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = mAuth.currentUser
-//        updateUI(currentUser)
+        readDatabase(databaseReference)
+
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        //buat login dan sign in
-        val credential = oneTapClient.getSignInCredentialFromIntent(data)
-        val idToken = credential.googleIdToken
-        val username = credential.id
-        val password = credential.password
+    private fun readDatabase(postReference: DatabaseReference) {
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Transaction.arrayListTransaction.clear()
+                arrayListTransactionMain.clear()
+                // Get Post object and use the values to update the UI
+                var amount: Long = 0
+                var date: Long = 0
+                var wallet = ""
+                var cate = ""
+                var notes = ""
+                var imgWallet = ""
+                var imgCate = ""
 
-        when (requestCode) {
-            REQ_ONE_TAP -> {
-                try {
-                    when {
-                        idToken != null -> {
-                            // Got an ID token from Google. Use it to authenticate
-                            // with Firebase.
-                            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                            mAuth.signInWithCredential(firebaseCredential)
-                                .addOnCompleteListener(this) { task ->
-                                    if (task.isSuccessful) {
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d(TAG, "signInWithCredential:success")
-                                        val user = mAuth.currentUser
+                // Income
+                for(snap : DataSnapshot in dataSnapshot.child("transaksi").child("listIncome").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("wallet").value.toString()
+                    cate = "Income"
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWallet").value.toString()
+                    imgCate = snap.child("imgLinkCategory").value.toString()
 
-//                                        binding.newTransaction.setOnClickListener {
-//                                            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//                                        }
-
-//                            updateUI(user)
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w(TAG, "signInWithCredential:failure", task.exception)
-//                            updateUI(null)?
-                                    }
-                                }
-                        }
-                        else -> {
-                            // Shouldn't happen.
-                            Log.d(TAG, "No ID token!")
-                        }
-                    }
-                } catch (e: ApiException) {
-
+                    addTransaction(TransactionDialog(snap.key!!, "income", amount, date, wallet, cate, notes, imgWallet, imgCate))
                 }
+
+                for(snap : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("wallet").value.toString()
+                    cate = snap.child("cate").value.toString()
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWallet").value.toString()
+                    imgCate = snap.child("imgLinkCategory").value.toString()
+
+                    addTransaction(TransactionDialog(snap.key!!,"expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                }
+
+                for(snap : DataSnapshot in dataSnapshot.child("transaksi").child("listTransfer").children){
+                    amount = snap.child("amount").value.toString().toLong()
+                    date = snap.child("date").value.toString().toLong()
+                    wallet = snap.child("walletFrom").value.toString()
+                    cate = snap.child("walletTo").value.toString()
+                    notes = snap.child("notes").value.toString()
+                    imgWallet = snap.child("imgLinkWalletFrom").value.toString()
+                    imgCate = snap.child("imgLinkWalletTo").value.toString()
+
+                    addTransaction(TransactionDialog(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                }
+
+
+
             }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+
         }
+        postReference.addValueEventListener(postListener)
     }
 
-
-    //function to display onetap sign in
-    private fun displaySignIn(){
-        Log.d(TAG, "displaySignIn: ")
-        oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener(this) { result ->
-                try {
-                    startIntentSenderForResult(
-                        result.pendingIntent.intentSender, REQ_ONE_TAP,
-                        null, 0, 0, 0, null)
-                } catch (e: IntentSender.SendIntentException) {
-                    Log.e(TAG, "Couldn't start One Tap UI: ${e.localizedMessage}")
-                }
-            }
-            .addOnFailureListener(this) { e ->
-                // No saved credentials found. Launch the One Tap sign-up flow, or
-                // do nothing and continue presenting the signed-out UI.
-                Log.d(TAG, e.localizedMessage)
-            }
-    }
-
-    private fun signOutAuth(){
-        Firebase.auth.signOut()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,34 +151,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-            //Finding ID in act main
-//        val googleSignIn: Button = findViewById<Button>(R.id.googleSignIn)
-//        val googleSignOut: Button = findViewById<Button>(R.id.googleSignOut)
+    }
 
-
-            mAuth = Firebase.auth
-            oneTapClient = Identity.getSignInClient(this)
-            signInRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(
-                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        // Your server's client ID, not your Android client ID.
-                        .setServerClientId(getString(R.string.web_client_id))
-                        // Only show accounts previously used to sign in.
-                        .setFilterByAuthorizedAccounts(false)
-                        .build()
-                )
-                .build()
-
-//        googleSignIn.setOnClickListener {
-//            displaySignIn()
-//        }
-//
-//        googleSignOut.setOnClickListener{
-//            signOutAuth()
-//        }
-
-
+    companion object{
+        var arrayListTransactionMain: ArrayList<TransactionDialog> = ArrayList()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -187,7 +164,10 @@ class MainActivity : AppCompatActivity() {
         transc.commit()
     }
 
-
+    fun addTransaction(data: TransactionDialog){
+        arrayListTransactionMain.add(data)
+        Transaction.addTransaction(data)
+    }
 
 }
 
