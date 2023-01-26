@@ -1,5 +1,6 @@
-package Home
+package Transaction
 
+import Home.Home
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
@@ -55,7 +56,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
         }
 
         // For drop down list
-        Home.listWallet.forEachIndexed{index, w ->
+        Home.listWallet.forEachIndexed{ index, w ->
             if(index == Home.listWallet.size-1) return@forEachIndexed
             this.walletList.add(w.nameWallet)
         }
@@ -225,7 +226,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
                 }
             }
 
-            Home.listWallet.forEachIndexed {index, it ->
+            Home.listWallet.forEachIndexed { index, it ->
                 if(it.id == bindingWalletFNew){
                     amountWallet = it.saldo - balanceNew
                     Log.d("editwalletFNew", "${it.nameWallet} saldoAsal: ${it.saldo} old: $balanceOld new: $balanceNew amountwallet: $amountWallet")
@@ -245,7 +246,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
             }
             //sync data to database
             Home.listTransaction[position].amount = balanceNew
-            Home.syncTransactionDatabase(list)
+        Home.syncTransactionDatabase(list)
 
     }
 
@@ -254,7 +255,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
         var amountCate: Long = 0
 
         if(idOld != idNew){
-            Home.listCategory.forEachIndexed {index, it ->
+            Home.listCategory.forEachIndexed { index, it ->
                 if(it.id == idNew){
                     amountCate = it.expense + balanceNew
 //                    databaseReference.child("category").child("listCategory").child(idOld).child("expense").setValue(amountCate)
@@ -280,7 +281,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
 
         }
         else{
-            Home.listCategory.forEachIndexed {index, it ->
+            Home.listCategory.forEachIndexed { index, it ->
                 if(it.id == idOld){
                     amountCate = it.expense - balanceOld + balanceNew
 //                    databaseReference.child("category").child("listCategory").child(idOld).child("expense").setValue(amountCate)
@@ -296,7 +297,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
     private fun adjustWallet(idOld:String, idNew:String, balanceOld: Long , balanceNew: Long){
         var amountWallet: Long = 0
         if(idOld != idNew){
-            Home.listWallet.forEachIndexed {index, it ->
+            Home.listWallet.forEachIndexed { index, it ->
                 if(it.id == idNew){
                     if(list.type == "income") amountWallet = it.saldo + balanceNew
                     else amountWallet = it.saldo - balanceNew
@@ -320,7 +321,7 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
             }
         }
         else{
-            Home.listWallet.forEachIndexed {index, it ->
+            Home.listWallet.forEachIndexed { index, it ->
                 if(it.id == idOld){
                     if(list.type == "income") amountWallet = it.saldo - balanceOld + balanceNew
                     else amountWallet = it.saldo + balanceOld - balanceNew

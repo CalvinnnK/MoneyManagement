@@ -1,8 +1,6 @@
 package Statistics.Category
 
-import Home.AddCategoryName
 import Transaction.Transaction
-import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,10 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.moneymanagementproject.MainActivity
 import com.example.moneymanagementproject.databinding.FragmentStatisticsBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -83,7 +78,7 @@ class Statistics : Fragment() {
         }
 
         binding.addCategory.setOnClickListener{
-            val popupWindow = AddCategoryName()
+            val popupWindow = AddCategory()
             popupWindow.show((activity as AppCompatActivity).supportFragmentManager,"Pop Up Add Category" )
         }
 

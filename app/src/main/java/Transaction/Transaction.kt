@@ -1,8 +1,6 @@
 package Transaction
 
 import Home.Home
-import Home.TransactionDialog
-import Home.ViewTransactionDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +15,6 @@ import com.example.moneymanagementproject.databinding.FragmentTransactionBinding
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.util.*
 import kotlin.collections.ArrayList
 
 

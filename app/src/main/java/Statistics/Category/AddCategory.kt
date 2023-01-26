@@ -1,6 +1,5 @@
-package Home
+package Statistics.Category
 
-import Statistics.Category.Category
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
-class AddCategoryName : DialogFragment() {
+class AddCategory : DialogFragment() {
     private var _binding : FragmentAddCategoryNameBinding? = null
     private val binding get() = _binding!!
 
