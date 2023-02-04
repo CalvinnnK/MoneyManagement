@@ -15,7 +15,10 @@
         android:textAlignment="center"
         android:paddingVertical="15dp"
         android:text="Category"
-        android:textSize="28dp"/>
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/montserratregular400"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -37,6 +40,8 @@
             android:text="Tanggal"
             android:textAlignment="center"
             android:gravity="center"
+            android:fontFamily="@font/montserratregular400"
+            android:textSize="14dp"
             android:layout_weight="1"/>
 
 
@@ -60,7 +65,8 @@
         android:id="@+id/stat_cate_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_stat_wallet"/>
+        tools:listitem="@layout/item_stat_wallet"
+        android:divider="@null"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addCategory"

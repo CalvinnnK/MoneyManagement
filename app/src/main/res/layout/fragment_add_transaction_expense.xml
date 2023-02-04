@@ -63,14 +63,13 @@
             android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@drawable/input_box"
+            android:drawableStart="@drawable/calendar_img"
             android:gravity="center_horizontal"
             android:hint="Input date"
             android:inputType="none"
             android:paddingVertical="10dp"
-            android:shadowRadius="10"
-            android:focusableInTouchMode="false"
-            android:drawableStart="@drawable/calendar_img"/>
+            android:shadowRadius="10" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -63,7 +63,7 @@
             android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@drawable/input_box"
             android:gravity="center_horizontal"
             android:hint="Input date"
             android:inputType="none"
