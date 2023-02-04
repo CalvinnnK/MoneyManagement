@@ -25,7 +25,6 @@ class StatisticWallet : Fragment() {
 
     private var listStatWallet: ArrayList<StatWallet> = ArrayList()
 
-    private val databaseReference: DatabaseReference = Firebase.database.reference
     private var adapter : StatWalletAdapter? = null
 
     var calendar = Calendar.getInstance()
@@ -51,26 +50,26 @@ class StatisticWallet : Fragment() {
 
 
         binding.statWalletLeft.setOnClickListener{
-            calendar.add(Calendar.MONTH, -1)
+            reduceMonth()
             dateInput = dateFormat.format(calendar.time)
             binding.statWalletDate.text = dateInput
             listStatWallet.clear()
 
-//            addPostEventListener(databaseReference)
+
             calculateStatWallet()
         }
 
         binding.statWalletRight.setOnClickListener{
-            calendar.add(Calendar.MONTH, 1)
+            addMonth()
             dateInput = dateFormat.format(calendar.time)
             binding.statWalletDate.text = dateInput
             listStatWallet.clear()
 
-//            addPostEventListener(databaseReference)
+
             calculateStatWallet()
         }
 
-//        addPostEventListener(databaseReference)
+
         calculateStatWallet()
         checkDataIsChanged()
         binding.statWalletListView.adapter = adapter
@@ -80,14 +79,22 @@ class StatisticWallet : Fragment() {
         return binding.root
     }
 
+    private fun reduceMonth(){
+        calendar.add(Calendar.MONTH, -1)
+    }
+
+    private fun addMonth(){
+        calendar.add(Calendar.MONTH, 1)
+    }
+
+
     private fun calculateStatWallet(){
         this.listStatWallet.clear()
 
         var datefrom: Long = dateFormat.parse(dateInput).time
-        calendar.add(Calendar.MONTH, 1)
+        addMonth()
         var dateto: Long = dateFormat.parse(dateFormat.format(calendar.time)).time
-        calendar.add(Calendar.MONTH, -1)
-        Log.d("StatWallet", "" + datefrom + " " + dateto)
+        reduceMonth()
 
         var income: Long = 0
         var expense: Long = 0
@@ -119,13 +126,13 @@ class StatisticWallet : Fragment() {
                         else if(t.cate == w.id){
                             income += t.amount
                         }
-                        Log.d("StatW", "${w.nameWallet} ${w.id} wallet: ${t.wallet} cate: ${t.cate} " )
+
                     }
                 }
             }
 
             addStatWallet(StatWallet(w.nameWallet,income-expense,income, expense, w.imageLink))
-            Log.d("StatWallet", "" + w.nameWallet + " " + income + " " + expense  )
+
         }
     }
 

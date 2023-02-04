@@ -3,7 +3,7 @@ package com.example.moneymanagementproject
 
 import Add.Transaction.AddTransaction
 import Home.Home
-import Transaction.TransactionDialog
+import Transaction.TransactionData
 import Statistic.Wallet.StatisticWallet
 import Statistics.Category.Statistics
 import Transaction.Transaction
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                     imgWallet = snap.child("imgLinkWallet").value.toString()
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(TransactionDialog(snap.key!!, "income", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionData(snap.key!!, "income", amount, date, wallet, cate, notes, imgWallet, imgCate))
                 }
 
                 for(snap : DataSnapshot in dataSnapshot.child("transaksi").child("listTransaction").children){
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     imgWallet = snap.child("imgLinkWallet").value.toString()
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(TransactionDialog(snap.key!!,"expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionData(snap.key!!,"expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
                 }
 
                 for(snap : DataSnapshot in dataSnapshot.child("transaksi").child("listTransfer").children){
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                     imgWallet = snap.child("imgLinkWalletFrom").value.toString()
                     imgCate = snap.child("imgLinkWalletTo").value.toString()
 
-                    addTransaction(TransactionDialog(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionData(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
                 }
 
 
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object{
-        var arrayListTransactionMain: ArrayList<TransactionDialog> = ArrayList()
+        var arrayListTransactionMain: ArrayList<TransactionData> = ArrayList()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         transc.commit()
     }
 
-    fun addTransaction(data: TransactionDialog){
+    fun addTransaction(data: TransactionData){
         arrayListTransactionMain.add(data)
         Transaction.addTransaction(data)
     }

@@ -3,7 +3,7 @@ package Transaction
 import android.os.Parcel
 import android.os.Parcelable
 
-class TransactionDialog(
+class TransactionData(
     var id: String = "",
     var type: String = "",
     var amount: Long = 0,

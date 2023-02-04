@@ -1,6 +1,7 @@
 package Transaction
 
 import android.content.Context
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.example.moneymanagementproject.R
 import java.text.NumberFormat
 import java.util.*
 
-class TransactionDialogAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionData>, private val limit: Int) : BaseAdapter(){
+class TransactionAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionData>) : BaseAdapter() {
 
     private lateinit var notes : TextView
     private lateinit var amount : TextView
@@ -34,15 +35,16 @@ class TransactionDialogAdapter(private val context: Context?, private val arrayL
     override fun getView(position: Int, convertview: View?, parent: ViewGroup?): View {
         var convertView = convertview
         convertView = LayoutInflater.from(context).inflate(R.layout.recycler_view_transaction, parent, false)
-
-        if(position == limit) return convertView
-
         notes = convertView.findViewById(R.id.trans_text)
         amount = convertView.findViewById(R.id.trans_amount)
         wallet = convertView.findViewById(R.id.trans_wallet)
         cate = convertView.findViewById(R.id.trans_ic)
 
         notes.text = arrayList[position].notes
+        if(notes.text == ""){
+            notes.text = arrayList[position].cate
+        }
+
         amount.text = "Rp " + NumberFormat.getInstance(Locale.US).format(arrayList[position].amount)
 
         Glide.with(context!!).load(arrayList[position].imageLinkCategory).into(cate)
@@ -50,6 +52,4 @@ class TransactionDialogAdapter(private val context: Context?, private val arrayL
 
         return convertView
     }
-
-
 }

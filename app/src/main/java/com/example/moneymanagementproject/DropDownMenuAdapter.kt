@@ -1,6 +1,6 @@
 package com.example.moneymanagementproject
 
-import Transaction.TransactionDialog
+import Transaction.TransactionData
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
@@ -16,7 +16,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.ArrayList
 
-class DropDownMenuAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionDialog>) : BaseAdapter() {
+class DropDownMenuAdapter(private val context: Context?, private val arrayList: ArrayList<TransactionData>) : BaseAdapter() {
 
     private lateinit var id: TextView
     private val databaseReference = Firebase.database.reference

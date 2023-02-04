@@ -26,10 +26,9 @@ class AddTransactionTransfer : Fragment() {
     private val binding get() = _binding!!
 
     var walletList = ArrayList<String>()
-    val sdf = SimpleDateFormat("d/M/yyyy")
+    val dateFormat = SimpleDateFormat("d/M/yyyy")
 
     val databaseReference: DatabaseReference = Firebase.database.reference
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +51,8 @@ class AddTransactionTransfer : Fragment() {
         binding.walletFromAutoComplete.setAdapter(arrayAdapter1)
         binding.walletToAutoComplete.setAdapter(arrayAdapter1)
 
-        binding.dateText.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
+        binding.dateText.setOnClickListener() {
                 showCalendar()
-            }
-            true
         }
         binding.dateText.text = Editable.Factory.getInstance().newEditable(getCurrentDate())
 
@@ -91,7 +87,7 @@ class AddTransactionTransfer : Fragment() {
 
 
     private fun getCurrentDate():String{
-        return sdf.format(Date())
+        return dateFormat.format(Date())
     }
 
 
@@ -105,7 +101,7 @@ class AddTransactionTransfer : Fragment() {
         var imgLinkWalletTo = ""
         val id = Firebase.database.reference.push().key!!
 
-        var dateLong: Long = sdf.parse(a2).time
+        var dateLong: Long = dateFormat.parse(a2).time
 
 
         if(a1.isEmpty() || a3.isEmpty() || a4.isEmpty()){
@@ -143,58 +139,6 @@ class AddTransactionTransfer : Fragment() {
 
             Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
             activity?.finish()
-
-//            val changeData = object : ValueEventListener{
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    for(snap: DataSnapshot in snapshot.child("wallet").child("listWallet").children){
-//                        //Nyari child database utk wallet asal
-//                        if(snap.child("nameWallet").value.toString() == a3){
-//                            //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
-//                            addIncome = snap.child("saldo").value.toString().toLong() - a1.toLong()
-//                            key = snap.key.toString()
-//
-//                            imgLinkWallet = snap.child("imageLink").value.toString()
-//
-//                            Log.d("key", "" + key)
-//                            if(key != ""){
-//                                dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
-//                                dataRef.child("transaksi").child("listTransfer").child(id).child("imgLinkWalletFrom").setValue(imgLinkWallet)
-//                                dataRef.child("transaksi").child("listTransfer").child(id).child("walletFrom").setValue(key)
-//                            }
-//                            else{
-//                                Log.d("key", "FAILED")
-//                            }
-//                        }
-//                        else if(snap.child("nameWallet").value.toString() == a4){
-//                            //Ngambil value dari database lalu ditambah valuenya berdasarkan input transaksiIncome yang baru
-//                            addIncome = snap.child("saldo").value.toString().toLong() + a1.toLong()
-//                            key = snap.key.toString()
-//
-//                            imgLinkWallet = snap.child("imageLink").value.toString()
-//
-//                            Log.d("key", "" + key)
-//                            if(key != ""){
-//                                dataRef.child("wallet").child("listWallet").child(key).child("saldo").setValue(addIncome)
-//                                dataRef.child("transaksi").child("listTransfer").child(id).child("imgLinkWalletTo").setValue(imgLinkWallet)
-//                                dataRef.child("transaksi").child("listTransfer").child(id).child("walletTo").setValue(key)
-//
-//                            }
-//                            else{
-//                                Log.d("key", "FAILED")
-//                            }
-//                        }
-//                    }
-//
-//                    Toast.makeText(activity,"Transaction Saved", Toast.LENGTH_LONG).show()
-//                    activity?.finish()
-//                }
-//                override fun onCancelled(error: DatabaseError) {
-//                    TODO("Not yet implemented")
-//                }
-//            }
-//            dataRef.addListenerForSingleValueEvent(changeData)
-
-
         }
     }
 

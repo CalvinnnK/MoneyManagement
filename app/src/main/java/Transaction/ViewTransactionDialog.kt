@@ -18,7 +18,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ViewTransactionDialog(private val list: TransactionDialog, private var position: Int) : DialogFragment() {
+class ViewTransactionDialog(private val list: TransactionData, private var position: Int) : DialogFragment() {
 
     private var _binding : FragmentViewTransactionDialogBinding? = null
     private val binding get() = _binding!!
@@ -96,7 +96,7 @@ class ViewTransactionDialog(private val list: TransactionDialog, private var pos
         popupWindow.show((activity as AppCompatActivity).supportFragmentManager, "Pop Up View Wallet")
     }
 
-    private fun removeData(list: TransactionDialog) {
+    private fun removeData(list: TransactionData) {
         var amount: Long = 0
         if(list.type == "income"){
             Home.listWallet.forEach {

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -21,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditTransactionDialog(private var list: TransactionDialog, private var position:Int) : DialogFragment() {
+class EditTransactionDialog(private var list: TransactionData, private var position:Int) : DialogFragment() {
     private var _binding : FragmentEditTransactionDialogBinding? = null
     private val binding get() = _binding!!
     private val databaseReference = Firebase.database.reference
@@ -48,11 +47,8 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
         binding.walletAutoComplete.text = Editable.Factory.getInstance().newEditable(getWallet(list.wallet))
         binding.categoryAutoComplete.text = Editable.Factory.getInstance().newEditable(getCategory(list.cate))
 
-        binding.editTransactionDate.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
+        binding.editTransactionDate.setOnClickListener {
                 showCalendar()
-            }
-            true
         }
 
         // For drop down list
@@ -75,7 +71,6 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
             binding.categoryTV.text = "Transfer:  "
 
         }
-
 
         arrayAdapter1.notifyDataSetChanged()
         arrayAdapter2.notifyDataSetChanged()
@@ -113,9 +108,9 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
         return list.type
     }
 
-    private fun getCategoryID(nameCategory: String): String {
+    private fun getCategoryID(name: String): String {
         Home.listCategory.forEach {
-            if(it.nameCategory == nameCategory) return it.id
+            if(it.nameCategory == name) return it.id
         }
         return "-"
     }
@@ -205,11 +200,11 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
 
     }
 
-    private fun adjustTransfer(bindingWalletFOld: String, bindingWalletFNew: String, bindingWalletTOld: String, bindingWalletTNew: String, balanceOld: Long, balanceNew: Long) {
+    private fun adjustTransfer(WalletFOld: String, WalletFNew: String, WalletTOld: String, WalletTNew: String, balanceOld: Long, balanceNew: Long) {
         var amountWallet: Long = 0
 
             Home.listWallet.forEachIndexed{ index, it ->
-                if(it.id == bindingWalletFOld){
+                if(it.id == WalletFOld){
                     amountWallet = it.saldo + balanceOld
                     Home.listWallet[index].saldo = amountWallet
                     Home.syncWalletDatabase(it)
@@ -217,30 +212,30 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
                 }
 
 
-                if(it.id == bindingWalletTOld){
+                if(it.id == WalletTOld){
                         amountWallet = it.saldo - balanceOld
                     Log.d("editwalletTOLD", "${it.nameWallet} saldoAsal: ${it.saldo} old: $balanceOld new: $balanceNew amountwallet: $amountWallet")
-                    databaseReference.child("wallet").child("listWallet").child(bindingWalletTOld).child("saldo").setValue(amountWallet)
+                    databaseReference.child("wallet").child("listWallet").child(WalletTOld).child("saldo").setValue(amountWallet)
                     Home.listWallet[index].saldo = amountWallet
                     Home.syncWalletDatabase(it)
                 }
             }
 
             Home.listWallet.forEachIndexed { index, it ->
-                if(it.id == bindingWalletFNew){
+                if(it.id == WalletFNew){
                     amountWallet = it.saldo - balanceNew
                     Log.d("editwalletFNew", "${it.nameWallet} saldoAsal: ${it.saldo} old: $balanceOld new: $balanceNew amountwallet: $amountWallet")
                     Home.listWallet[index].saldo = amountWallet
                     Home.listTransaction[position].imageLinkWallet = it.imageLink
-                    Home.listTransaction[position].wallet = bindingWalletFNew
+                    Home.listTransaction[position].wallet = WalletFNew
                     Home.syncWalletDatabase(it)
                 }
-                if(it.id == bindingWalletTNew){
+                if(it.id == WalletTNew){
                     amountWallet = it.saldo + balanceNew
                     Log.d("editwalletTNew", "${it.nameWallet} saldoAsal: ${it.saldo} old: $balanceOld new: $balanceNew amountwallet: $amountWallet")
                     Home.listWallet[index].saldo = amountWallet
                     Home.listTransaction[position].imageLinkCategory = it.imageLink
-                    Home.listTransaction[position].cate = bindingWalletTNew
+                    Home.listTransaction[position].cate = WalletTNew
                     Home.syncWalletDatabase(it)
                 }
             }
@@ -258,22 +253,17 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
             Home.listCategory.forEachIndexed { index, it ->
                 if(it.id == idNew){
                     amountCate = it.expense + balanceNew
-//                    databaseReference.child("category").child("listCategory").child(idOld).child("expense").setValue(amountCate)
                     Home.listCategory[index].expense = amountCate
-//                    databaseReference.child("transaksi").child("listTransaction").child(list.id).child("imgLinkCategory").setValue(it.imgLink)
                     Home.listTransaction[position].imageLinkCategory = it.imgLink
-//                    databaseReference.child("transaksi").child("listTransaction").child(list.id).child("cate").setValue(idNew)
                     Home.listTransaction[position].cate = idNew
                     Home.syncCategoryDatabase(it)
                     //Ganti Notes jika notes sebelumny adalah default
                     if(binding.editTransactionNotes.text.toString() == list.notes){
-//                        databaseReference.child("transaksi").child("listTransaction").child(list.id).child("notes").setValue(it.nameCategory)
                         Home.listTransaction[position].notes = it.nameCategory
                     }
                 }
                 else if (it.id == idOld){
                     amountCate = it.expense - balanceOld
-//                    databaseReference.child("category").child("listCategory").child(idOld).child("expense").setValue(amountCate)
                     Home.listCategory[index].expense = amountCate
                     Home.syncCategoryDatabase(it)
                 }
@@ -301,11 +291,8 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
                 if(it.id == idNew){
                     if(list.type == "income") amountWallet = it.saldo + balanceNew
                     else amountWallet = it.saldo - balanceNew
-//                    databaseReference.child("wallet").child("listWallet").child(idNew).child("saldo").setValue(amountWallet)
                     Home.listWallet[index].saldo = amountWallet
-//                    databaseReference.child("transaksi").child("listTransaction").child(list.id).child("imgLinkWallet").setValue(it.imageLink)
                     Home.listTransaction[position].imageLinkWallet = it.imageLink
-//                    databaseReference.child("transaksi").child("listTransaction").child(list.id).child("wallet").setValue(idNew)
                     Home.listTransaction[position].wallet = idNew
 
                     Home.syncWalletDatabase(it)
@@ -313,11 +300,9 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
                 else if (it.id == idOld){
                     if(list.type == "income") amountWallet = it.saldo - balanceOld
                     else amountWallet = it.saldo + balanceOld
-//                    databaseReference.child("wallet").child("listWallet").child(idOld).child("saldo").setValue(amountWallet)
                     Home.listWallet[index].saldo = amountWallet
                     Home.syncWalletDatabase(it)
                 }
-
             }
         }
         else{
@@ -325,7 +310,6 @@ class EditTransactionDialog(private var list: TransactionDialog, private var pos
                 if(it.id == idOld){
                     if(list.type == "income") amountWallet = it.saldo - balanceOld + balanceNew
                     else amountWallet = it.saldo + balanceOld - balanceNew
-//                    databaseReference.child("wallet").child("listWallet").child(idOld).child("saldo").setValue(amountWallet)
                     Home.listWallet[index].saldo = amountWallet
                     Home.syncWalletDatabase(it)
                 }

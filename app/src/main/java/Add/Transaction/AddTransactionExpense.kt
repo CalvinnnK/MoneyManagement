@@ -28,7 +28,7 @@ class AddTransactionExpense : Fragment(){
     private var walletList = ArrayList<String>()
     private var categoryList = ArrayList<String>()
 
-    val sdf = SimpleDateFormat("d/M/yyyy")
+    val dateFormat = SimpleDateFormat("d/M/yyyy")
 
     private val databaseReference : DatabaseReference = Firebase.database.reference
 
@@ -71,11 +71,8 @@ class AddTransactionExpense : Fragment(){
         }
 
 
-        binding.dateText.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
+        binding.dateText.setOnClickListener() {
                 showCalendar()
-            }
-            true
         }
         binding.dateText.text = Editable.Factory.getInstance().newEditable(getCurrentDate())
 
@@ -90,7 +87,7 @@ class AddTransactionExpense : Fragment(){
 
 
     private fun getCurrentDate():String{
-        return sdf.format(Calendar.getInstance().time)
+        return dateFormat.format(Calendar.getInstance().time)
     }
 
     private fun showCalendar(){
@@ -124,10 +121,7 @@ class AddTransactionExpense : Fragment(){
         val id = Firebase.database.reference.push().key
 
         //convert date to long
-        var dateLong: Long = sdf.parse(a2).time
-        var dateString: String = sdf.format(dateLong)
-
-
+        var dateLong: Long = dateFormat.parse(a2).time
 
         if(a1.isEmpty() || a3.isEmpty() ){
             binding.inputAmount.error = "Please input amount!"

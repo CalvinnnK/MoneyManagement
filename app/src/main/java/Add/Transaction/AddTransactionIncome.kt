@@ -29,7 +29,7 @@ class AddTransactionIncome : Fragment(){
     private val binding get() = _binding!!
 
     var walletList = ArrayList<String>()
-    val sdf = SimpleDateFormat("d/M/yyyy")
+    val dateFormat = SimpleDateFormat("d/M/yyyy")
 
     val databaseReference: DatabaseReference = Firebase.database.reference
 
@@ -55,11 +55,8 @@ class AddTransactionIncome : Fragment(){
         binding.walletAutoComplete.setAdapter(arrayAdapter1)
 
 
-        binding.dateText.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
+        binding.dateText.setOnClickListener() {
                 showCalendar()
-            }
-            true
         }
         binding.dateText.text = Editable.Factory.getInstance().newEditable(getCurrentDate())
 
@@ -93,7 +90,7 @@ class AddTransactionIncome : Fragment(){
     }
 
     private fun getCurrentDate():String{
-        return sdf.format(Date())
+        return dateFormat.format(Date())
     }
 
     private fun saveTransaction(){
@@ -105,7 +102,7 @@ class AddTransactionIncome : Fragment(){
         val id = Firebase.database.reference.push().key!!
 
         var defaultImg = "https://firebasestorage.googleapis.com/v0/b/money-management-app-9810f.appspot.com/o/Category%2FBonus.png?alt=media&token=5e0a41ee-833e-42e0-8113-57099595d20b"
-        var dateLong: Long = sdf.parse(a2).time
+        var dateLong: Long = dateFormat.parse(a2).time
 
 
         if(a1.isEmpty() || a3.isEmpty() ){

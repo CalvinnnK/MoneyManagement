@@ -71,6 +71,7 @@
             android:inputType="none"
             android:paddingVertical="10dp"
             android:shadowRadius="10"
+            android:focusableInTouchMode="false"
             android:drawableStart="@drawable/calendar_img"/>
 
     </com.google.android.material.textfield.TextInputLayout>

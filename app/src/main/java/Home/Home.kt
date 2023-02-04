@@ -1,6 +1,6 @@
 package Home
 
-import Transaction.TransactionDialog
+import Transaction.TransactionData
 import Transaction.TransactionDialogAdapter
 import Transaction.ViewTransactionDialog
 import Statistics.Category.Category
@@ -74,8 +74,8 @@ class Home : Fragment() {
             popUpEditDialog(i)
         }
 
-        addPostEventListenerWallet(databaseReference)
-        addPostEventListenerTransaction(databaseReference.child("transaksi"))
+        EventListenerWallet(databaseReference)
+        EventListenerTransaction(databaseReference.child("transaksi"))
 
 
         //Adapter Transaction
@@ -93,9 +93,9 @@ class Home : Fragment() {
     companion object{
         var listWallet: ArrayList<Wallet> = ArrayList<Wallet>()
         var listCategory: ArrayList<Category> = ArrayList<Category>()
-        var listTransaction: ArrayList<TransactionDialog> = ArrayList<TransactionDialog>()
+        var listTransaction: ArrayList<TransactionData> = ArrayList<TransactionData>()
 
-        fun syncTransactionDatabase(data: TransactionDialog){
+        fun syncTransactionDatabase(data: TransactionData){
             var type = ""
             if(data.type == "income") type = "listIncome"
             else if (data.type == "expense") type = "listTransaction"
@@ -130,8 +130,7 @@ class Home : Fragment() {
 
         fun syncCategoryDatabase(data: Category){
             var ref = Firebase.database.reference.child("category").child("listCategory").child(data.id)
-            ref.child("saldo").setValue(data.expense)
-
+            ref.child("expense").setValue(data.expense)
         }
 
 
@@ -153,7 +152,7 @@ class Home : Fragment() {
 
 
 
-    private fun addPostEventListenerWallet(postReference: DatabaseReference) {
+    private fun EventListenerWallet(ref: DatabaseReference) {
         // [START post_value_event_listener]
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -178,10 +177,10 @@ class Home : Fragment() {
             }
 
         }
-        postReference.addValueEventListener(postListener)
+        ref.addValueEventListener(postListener)
     }
 
-    private fun addPostEventListenerTransaction(postReference: DatabaseReference) {
+    private fun EventListenerTransaction(postReference: DatabaseReference) {
         var amount: Long = 0
         var date: Long = 0
         var wallet = ""
@@ -206,7 +205,7 @@ class Home : Fragment() {
                     imgWallet = snap.child("imgLinkWallet").value.toString()
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(TransactionDialog(snap.key!!, "income", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionData(snap.key!!, "income", amount, date, wallet, cate, notes, imgWallet, imgCate))
                     Log.d("KeyTest", "" + snap.key)
                 }
 
@@ -219,7 +218,7 @@ class Home : Fragment() {
                     imgWallet = snap.child("imgLinkWallet").value.toString()
                     imgCate = snap.child("imgLinkCategory").value.toString()
 
-                    addTransaction(TransactionDialog(snap.key!!, "expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionData(snap.key!!, "expense", amount, date, wallet, cate, notes, imgWallet, imgCate))
 
                 }
 
@@ -232,7 +231,7 @@ class Home : Fragment() {
                     imgWallet = snap.child("imgLinkWalletFrom").value.toString()
                     imgCate = snap.child("imgLinkWalletTo").value.toString()
 
-                    addTransaction(TransactionDialog(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
+                    addTransaction(TransactionData(snap.key!!, "transfer", amount, date, wallet, cate, notes, imgWallet, imgCate))
 
                     sortArray()
                 }
@@ -247,7 +246,7 @@ class Home : Fragment() {
     }
 
 
-    fun addTransaction(data: TransactionDialog){
+    fun addTransaction(data: TransactionData){
         listTransaction.add(data)
         checkDataIsChanged()
     }
