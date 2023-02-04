@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="0dp"
-
+        android:backgroundTint="#CAE7D3"
         app:hideOnScroll="false"
         app:menuAlignmentMode="auto"
         app:srcCompat="@drawable/home_img">
@@ -35,7 +35,12 @@
             android:layout_marginEnd="16dp"
             android:outlineAmbientShadowColor="@android:color/transparent"
             android:outlineSpotShadowColor="@android:color/transparent"
-            app:menu="@menu/bottom_nav_menu" />
+            app:backgroundTint="#CAE7D3"
+            app:menu="@menu/bottom_nav_menu"
+            app:itemTextColor="#90B99B"
+            app:itemIconTint="#90B99B"
+
+            />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -44,12 +49,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@+id/bottomNavigationView"
+        android:backgroundTint="#ABD2B7"
         app:layout_anchorGravity="top|center"
+        app:tint="#72977C"
+        app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

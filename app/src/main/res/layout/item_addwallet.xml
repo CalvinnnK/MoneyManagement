@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    android:layout_marginHorizontal="5dp"
     >
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:minHeight="60dp">
+        android:minHeight="60dp"
+       >
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/addwalletImg"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/add_wallet_ic" />
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/plus"
+            android:tint="#3E433D"
+            android:layout_gravity="center_vertical"/>
 
         <TextView
             android:id="@+id/addWalletButton"
@@ -23,7 +30,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="10dp"
-            android:text="Add Wallet" />
+            android:fontFamily="@font/montserratregular400"
+            android:text="Add Wallet"
+            android:textSize="14dp"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

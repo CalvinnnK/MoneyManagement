@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="20dp"
-    android:orientation="vertical">
+    android:layout_margin="25dp"
+    android:orientation="vertical"
+    android:backgroundTint="#EEEEF0"
+
+    >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Wallet"
         android:textSize="28dp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -27,16 +32,43 @@
         android:paddingHorizontal="30dp"
         android:paddingVertical="5dp">
 
-        <com.google.android.material.textfield.TextInputEditText
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/wallet_name_input"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"-->
+<!--            android:shadowRadius="10"-->
+<!--            android:background="@drawable/input_box"-->
+<!--            android:paddingVertical="10dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:inputType="text" />-->
+        <EditText
             android:id="@+id/wallet_name_input"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:gravity="center_horizontal"
+            android:shadowRadius="10"
+            android:background="@drawable/input_box"
+            android:paddingVertical="10dp"
+
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <GridView
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="icon"
+        android:textSize="24dp"
+        android:textAlignment="center"></TextView>
+
+        <GridView
         android:id="@+id/icon_wallet_GV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,16 +77,32 @@
         android:horizontalSpacing="5dp"
         android:numColumns="4"
         android:verticalSpacing="5dp"
-        tools:listitem="@layout/list_icon_wallet"/>
+         tools:listitem="@layout/list_icon_wallet"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addWallet"
-        android:layout_width="wrap_content"
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add"
-        android:layout_gravity="center"/>
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:id="@+id/addWallet"
+        android:paddingHorizontal="40dp"
+        android:gravity="center_horizontal"
+        android:layout_margin="8dp"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:background="@drawable/button_box"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="5dp"
+            android:text="Add"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            />
 
-
+    </LinearLayout>
 
 </LinearLayout>

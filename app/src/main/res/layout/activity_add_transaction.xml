@@ -17,14 +17,19 @@
             android:id="@+id/exit_transaction"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:text="x"/>
+            android:backgroundTint="@color/white"
+            android:layout_margin="5dp"
+            android:text="x"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Transaction"
             android:textAlignment="center"
-            android:textSize="25sp"
+            android:textSize="20dp"
+            android:layout_margin="5dp"
+            android:fontFamily="@font/montserratregular400"
             android:textStyle="bold"
             android:textColor="@color/black"/>
         />

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="Home.ViewTransactionDialog">
+    tools:context="Home.ViewTransactionDialog"
+    android:layout_margin="50dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/edit_transaction_layout_top_bar"
@@ -18,16 +19,19 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/plus"
+            android:tint="#90B99B"
             android:background="@null"
             android:rotation="45"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+
             />
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/edit_transaction_delete"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_baseline_delete_forever_24"
+            android:tint="#90B99B"
             android:background="@null"
             app:layout_constraintEnd_toStartOf="@+id/edit_transaction_edit"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +41,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/edit"
+            android:tint="#90B99B"
             android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -46,14 +51,22 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/edit_transaction_layout_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/edit_transaction_layout_top_bar"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_width="309dp"
+        android:layout_height="292dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_transaction_layout_top_bar">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/input_box"
+            android:backgroundTint="#DFF7E6"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="15dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +75,9 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+
+                >
 
                 <ImageView
                     android:id="@+id/edit_transaction_img"
@@ -76,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingLeft="15dp"
-                    android:text="Notess" />
+                    android:text="Notess"
+                    android:textStyle="bold" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -88,7 +104,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Amount:   " />
+                    android:text="Amount  :   "
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/edit_transaction_amount"
@@ -108,7 +125,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date:         " />
+                    android:text="Date    :         "
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/edit_transaction_date"
@@ -128,7 +146,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wallet:      " />
+                    android:text="Wallet  :      "
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/edit_transaction_wallet"
@@ -148,7 +167,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Category: " />
+                    android:text="Category: "
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/edit_transaction_category"
