@@ -8,6 +8,7 @@
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/activity_add_transaction.xml" value="0.25" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/activity_main.xml" value="0.3625" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/activity_splash_screen.xml" value="0.19375" />
+        <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/add_category_dialog.xml" value="0.3625" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/add_wallet_dialog.xml" value="0.33" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/content_main.xml" value="0.3625" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_add_category_name.xml" value="0.33" />
@@ -18,7 +19,7 @@
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_edit_category_dialog.xml" value="0.67" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_edit_transaction_dialog.xml" value="0.3625" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_edit_wallet_dialog.xml" value="0.3625" />
-        <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_home.xml" value="0.9" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_statistic_wallet.xml" value="0.3625" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_statistics.xml" value="0.3625" />
         <entry key="..\:/Android_Studio_Project/MoneyManagementProject/app/src/main/res/layout/fragment_transaction.xml" value="0.21875" />
