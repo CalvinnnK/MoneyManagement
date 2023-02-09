@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_marginBottom="50dp"
-    tools:context="Statistics.Category.Statistics">
+    tools:context=".Statistics.Statistics">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -65,16 +65,9 @@
         android:id="@+id/stat_cate_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
         tools:listitem="@layout/item_stat_wallet"
         android:divider="@null"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addCategory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Category"/>
-
-
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,6 +1,6 @@
 package com.example.moneymanagementproject
 
-import Transaction.TransactionData
+import com.example.moneymanagementproject.Transaction.TransactionData
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log

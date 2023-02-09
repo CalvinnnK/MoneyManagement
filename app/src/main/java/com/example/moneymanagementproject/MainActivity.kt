@@ -1,12 +1,12 @@
 package com.example.moneymanagementproject
 
 
-import Add.Transaction.AddTransaction
-import Home.Home
-import Transaction.TransactionData
-import Statistic.Wallet.StatisticWallet
-import Statistics.Category.Statistics
-import Transaction.Transaction
+import com.example.moneymanagementproject.Transaction.AddTransaction
+import com.example.moneymanagementproject.Home.Home
+import com.example.moneymanagementproject.Transaction.TransactionData
+import com.example.moneymanagementproject.Wallet.StatisticWallet
+import com.example.moneymanagementproject.Statistics.Statistics
+import com.example.moneymanagementproject.Transaction.Transaction
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle

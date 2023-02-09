@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="Add.Transaction.AddTransactionIncome"
+    tools:context=".Transaction.AddTransactionIncome"
     android:paddingHorizontal="40dp"
     android:paddingTop="20dp">
 
@@ -130,7 +130,7 @@
             android:gravity="center_horizontal"
             android:shadowRadius="10"
             android:background="@drawable/input_box"
-            android:paddingVertical="10dp"/>
+            android:paddingVertical="10dp" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
