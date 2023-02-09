@@ -43,7 +43,7 @@ class Home : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
 
-        getIcon()
+
 
         binding.homeTransactionSeeMore.setOnClickListener{
             val targetFragment = Transaction()
@@ -90,11 +90,9 @@ class Home : Fragment() {
 
 
     companion object{
-        var listWallet: ArrayList<Wallet> = ArrayList<Wallet>()
-        var listCategory: ArrayList<Category> = ArrayList<Category>()
         var listTransaction: ArrayList<TransactionData> = ArrayList<TransactionData>()
-        var listIconWallet: ArrayList<String> = ArrayList()
-        var listIconCategory: ArrayList<String> = ArrayList()
+        var listWallet: ArrayList<Wallet> = ArrayList()
+        var listCategory: ArrayList<Category> = ArrayList()
 
         fun syncTransactionDatabase(data: TransactionData){
             var type = ""
@@ -137,30 +135,7 @@ class Home : Fragment() {
 
     }
 
-    private fun getIcon(){
-        listIconCategory.clear()
-        listIconWallet.clear()
 
-        var storageReference = Firebase.storage.reference
-        storageReference.child("wallet").listAll().addOnSuccessListener{
-            it.items.forEach(){
-                it.downloadUrl.addOnSuccessListener {
-                    listIconWallet.add(it.toString())
-                    checkDataIsChanged()
-                }
-            }
-        }
-
-        storageReference.child("Category").listAll().addOnSuccessListener{
-            it.items.forEach(){
-                it.downloadUrl.addOnSuccessListener {
-                    listIconCategory.add(it.toString())
-                    checkDataIsChanged()
-                }
-            }
-        }
-
-    }
 
     private fun calculateTotalWallet() {
         TotalBalance = 0

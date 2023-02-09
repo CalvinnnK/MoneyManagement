@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="50dp">
+    android:layout_margin="50dp">z
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/edit_transaction_layout_top_bar"
@@ -91,6 +91,7 @@
                     android:layout_gravity="center"
                     android:paddingLeft="15dp"
                     android:text="Notess"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -103,7 +104,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Amount  :   "
+                    android:text="Amount     :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold" />
 
                 <TextView
@@ -111,6 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
+                    android:fontFamily="@font/montserratregular400"
                     android:text="Rp 0" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -124,7 +127,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date    :         "
+                    android:text="Date           :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold" />
 
                 <TextView
@@ -145,7 +149,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wallet  :      "
+                    android:text="Wallet        :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold" />
 
                 <TextView
@@ -153,6 +158,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
+                    android:fontFamily="@font/montserratregular400"
                     android:text="" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -166,7 +172,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Category: "
+                    android:text="Category   :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold" />
 
                 <TextView
@@ -174,6 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
+                    android:fontFamily="@font/montserratregular400"
                     android:text="" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>

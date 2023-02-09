@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.moneymanagementproject.MainActivity
 import com.example.moneymanagementproject.R
 import com.example.moneymanagementproject.databinding.AddWalletDialogBinding
 import com.google.firebase.database.ktx.database
@@ -28,7 +29,7 @@ class AddWalletDialog: DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
+        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
 
 
     }
@@ -42,7 +43,7 @@ class AddWalletDialog: DialogFragment() {
 
         //get image link
         iconWallet.clear()
-        Home.listIconWallet.forEachIndexed { index, it ->
+        MainActivity.listIconWallet.forEachIndexed { index, it ->
             addlistWallet(it)
         }
 

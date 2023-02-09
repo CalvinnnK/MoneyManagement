@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.moneymanagementproject.Category.Category
+import com.example.moneymanagementproject.Home.Wallet
 import com.example.moneymanagementproject.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -24,19 +26,15 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNav : BottomNavigationView
-    private lateinit var mAuth: FirebaseAuth
+
     private val databaseReference = Firebase.database.reference
-
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
-
-
 
 
     public override fun onStart() {
@@ -133,6 +131,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        //get icon
+        getIcon()
+
         // Pop up window add transaction
         binding.addTransc.setOnClickListener {
             val intent = Intent(this, AddTransaction::class.java)
@@ -144,6 +145,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         var arrayListTransactionMain: ArrayList<TransactionData> = ArrayList()
+        var listIconWallet: ArrayList<String> = ArrayList<String>()
+        var listIconCategory: ArrayList<String> = ArrayList<String>()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -156,6 +159,30 @@ class MainActivity : AppCompatActivity() {
     fun addTransaction(data: TransactionData){
         arrayListTransactionMain.add(data)
         Transaction.addTransaction(data)
+    }
+
+    private fun getIcon(){
+        listIconCategory.clear()
+        listIconWallet.clear()
+
+        var storageReference = Firebase.storage.reference
+        storageReference.child("wallet").listAll().addOnSuccessListener{
+            it.items.forEach(){
+                it.downloadUrl.addOnSuccessListener {
+                    listIconWallet.add(it.toString())
+                }
+            }
+        }
+
+        storageReference.child("Category").listAll().addOnSuccessListener{
+            it.items.forEach(){
+                it.downloadUrl.addOnSuccessListener {
+                    listIconCategory.add(it.toString())
+
+                }
+            }
+        }
+
     }
 
 }

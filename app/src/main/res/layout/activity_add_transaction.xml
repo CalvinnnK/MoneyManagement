@@ -12,15 +12,24 @@
         android:id="@+id/header_add_transaction_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/exit_transaction"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:backgroundTint="@color/white"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
-            android:text="x"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:background="@android:color/transparent"
+            android:backgroundTint="@color/white"
+            android:drawableTop="@drawable/plus"
+            android:rotation="45"
+            android:drawableTint="#90B99B"
+            android:textColor="@color/purple_200"
+/>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -28,6 +37,7 @@
             android:text="Add Transaction"
             android:textAlignment="center"
             android:textSize="20dp"
+            android:gravity="center_vertical"
             android:layout_margin="5dp"
             android:fontFamily="@font/montserratregular400"
             android:textStyle="bold"

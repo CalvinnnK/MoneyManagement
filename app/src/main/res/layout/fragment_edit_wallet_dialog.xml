@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="50dp">
+    android:layout_margin="50dp"
+    android:layout_marginBottom="30dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/edit_transaction_layout_top_bar"
@@ -53,7 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/input_box"
             android:backgroundTint="#DFF7E6"
             android:gravity="center_horizontal"
@@ -65,9 +67,7 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-
-                >
+                android:paddingBottom="10dp">
 
                 <ImageView
                     android:id="@+id/edit_wallet_img"
@@ -80,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/montserratregular400"
                     android:paddingLeft="15dp"
                     android:text="Notess"
                     android:textStyle="bold" />
@@ -94,6 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular400"
                     android:text="Amount  :   "
                     android:textStyle="bold" />
 
@@ -101,17 +103,16 @@
                     android:id="@+id/edit_wallet_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular400"
                     android:paddingLeft="10dp"
                     android:text="Rp 0" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

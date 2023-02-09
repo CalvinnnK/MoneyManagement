@@ -1,5 +1,6 @@
 package com.example.moneymanagementproject.Category
 
+import android.R
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +10,15 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.moneymanagementproject.Home.Home
-import com.example.moneymanagementproject.databinding.FragmentAddCategoryNameBinding
+import com.example.moneymanagementproject.MainActivity
+import com.example.moneymanagementproject.databinding.AddCategoryDialogBinding
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class AddCategory : DialogFragment() {
-    private var _binding : FragmentAddCategoryNameBinding? = null
+    private var _binding : AddCategoryDialogBinding? = null
     private val binding get() = _binding!!
 
     private var listCategory: ArrayList<String> = ArrayList()
@@ -28,18 +30,18 @@ class AddCategory : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
+        setStyle(STYLE_NO_TITLE, R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAddCategoryNameBinding.inflate(inflater, container, false)
+        _binding = AddCategoryDialogBinding.inflate(inflater, container, false)
 
         //get image link
         listCategory.clear()
-        Home.listIconCategory.forEachIndexed { index, it ->
+        MainActivity.listIconCategory.forEachIndexed { index, it ->
             addListCategory(it)
         }
 

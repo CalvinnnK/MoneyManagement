@@ -44,7 +44,8 @@
                         android:layout_marginLeft="13dp"
                         android:paddingLeft="10dp"
                         android:inputType="number"
-                        android:text="Notes" />
+                        android:text="Notes"
+                        android:fontFamily="@font/montserratregular400"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -59,7 +60,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Amount  :   "
+                    android:text="Amount     :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
@@ -68,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:inputType="number"
+                    android:fontFamily="@font/montserratregular400"
                     android:text="Rp 0" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -82,7 +85,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="Date    :         "
+                    android:text="Date           :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -98,6 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
+                        android:fontFamily="@font/montserratregular400"
                         android:paddingVertical="10dp"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -115,7 +120,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="Wallet  :      "
+                    android:text="Wallet        :"
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -133,6 +139,7 @@
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
                         android:hint="Select a Wallet"
+                        android:fontFamily="@font/montserratregular400"
                         android:inputType="none" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -149,7 +156,8 @@
                     android:id="@+id/categoryTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Category: "
+                    android:text="Category   : "
+                    android:fontFamily="@font/montserratregular400"
                     android:textStyle="bold"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -168,6 +176,7 @@
                         android:layout_height="match_parent"
                         android:inputType="none"
                         android:hint="Select a Category"
+                        android:fontFamily="@font/montserratregular400"
                         android:background="@android:color/transparent"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -192,7 +201,8 @@
                     android:rotation="45"
                     android:src="@drawable/plus"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:tint="#90B99B"/>
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/edit_transaction_done"
@@ -202,6 +212,7 @@
                     android:background="@null"
                     android:src="@drawable/checkmark"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:tint="#90B99B"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
