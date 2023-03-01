@@ -2,7 +2,7 @@
 
 FinBuddy adalah aplikasi manajemen keuangan pribadi yang dapat mengelola pengeluaran, pemasukan, dan transfer dana. Aplikasi ini dirancang untuk membantu pengguna untuk mengelola keuangan mereka.
 
-#Fitur
+# Fitur
 - Mencatat transaksi pemasukan dan pengeluaran harian
 - Dapat menambah catatan ditiap transaksi
 - Dapat menambah wallet baru sesuai dengan kebutuhan perngguna
@@ -11,11 +11,11 @@ FinBuddy adalah aplikasi manajemen keuangan pribadi yang dapat mengelola pengelu
 - Terdapat ringkasan pengeluaran di setiap kategori
 - Ringkasan tersebut di tampilkan berdasarkan bulan dan tahun yang dipilih
 
-#Kebutuhan Minimal System
+# Kebutuhan Minimal System
 - Minimal SDK 21 (API Level 21 : Android 5.0 Lolipop)
 - Minimal JDK version 11.0.13
 
-#Instalasi
+# Instalasi
 
 Langkah-langkah dalam melakukan install aplikasi:
 - Buka dan extract file FinBuddy.rar
@@ -24,7 +24,7 @@ Langkah-langkah dalam melakukan install aplikasi:
 - Pilih "Allow" pada Install unknown apps.
 - Setelah selesai install, buka aplikasinya pada halaman utama smartphone
 
-#Penggunaan
+# Penggunaan
 
 Setelah mengunduh aplikasi FinBuddy, buka aplikasi FinBuddy. Tambahkan wallet-wallet yang dibutuhkan, lalu masuk ke halaman tambah transaksi dengan menekan tombol "+" pada bagian tengah bawah halaman utama. Lalu pilih jenis transaksi, "Income", "Expense", dan "Transfer". Setelah di pilih, masukkan data-data yang diperlukan lalu menekan tombol "Add" untuk menambahkan transaksi tersebut kedalam transaksinya. Untuk memonitor pemasukan dan pengeluaran, dapat memilih menu "Category" untuk melihat pengeluaran setiap kategori dalam satu bulan tertentu. Menu "Wallet" bertujuan untuk memonitor pemasukan dan pengeluaran setiap wallet pada satu bulan tertentu.
 
